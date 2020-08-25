@@ -13,7 +13,7 @@ def hello_world():
 
 @app.route('/test')
 def test():
-    msg = Message(f"Ontvangstbevestiging informatieaanvraag voor {name}", recipients=['mauricekingma@me.com'])
+    msg = Message(f"Ontvangstbevestiging informatieaanvraag voor", recipients=['mauricekingma@me.com'])
     msg.html = 'Hello, World!'
     job = queue.enqueue('task.send_mail', msg)
     return 'Hello, World!'
