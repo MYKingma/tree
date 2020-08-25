@@ -8,6 +8,7 @@
 from flask import Flask
 import os
 from flask_migrate import Migrate
+from flask_mail import Mail, Message
 from models import *
 
 
