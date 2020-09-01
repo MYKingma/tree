@@ -1,0 +1,117 @@
+/*
+stylesguide.scss
+
+Maurice Kingma
+
+stylesheet for tree-buy webapp
+*/
+html {
+  height: 100vh;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  position: relative;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Lexend Peta", sans-serif;
+  color: #7284A0;
+  border-bottom: 4px solid #CBD5D0;
+}
+
+p, text {
+  font-family: "Roboto", sans-serif;
+}
+
+nav {
+  background-color: white;
+}
+
+.titleFont {
+  font-family: "Lexend Peta", sans-serif;
+}
+
+.backDrop {
+  width: 100vw;
+  background-image: url("/static/img/backdrop.jpg");
+  height: 400px;
+  background-size: cover;
+}
+
+.mt {
+  margin-top: 15px;
+}
+
+.emt {
+  margin-top: 30px;
+}
+
+.container {
+  min-height: 100%;
+  padding: 0;
+  padding-top: 56px;
+  z-index: 1;
+  background-color: white;
+  padding-bottom: 8rem;
+  margin: 0;
+}
+
+.navbar-brand {
+  margin: 0;
+  margin-right: 10px;
+}
+.navbar-brand a, .navbar-brand a:hover, .navbar-brand a:visited {
+  text-decoration: none;
+  color: #9AAFA4;
+}
+.navbar-brand a i, .navbar-brand a:hover i, .navbar-brand a:visited i {
+  color: #9AAFA4;
+}
+
+.nav-link, .nav-item {
+  color: black;
+}
+
+.navbar-toggler {
+  border: none;
+}
+.navbar-toggler i {
+  color: #9AAFA4;
+}
+
+.message-container {
+  position: fixed;
+  top: 70px;
+  width: 100%;
+  z-index: 10;
+}
+
+.alert-dismissible {
+  animation: 0.2s ease-out 0s 1 slideInFromLeft;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 7rem;
+  padding: 20px;
+  background-color: #9AAFA4;
+  color: white;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

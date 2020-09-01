@@ -5,11 +5,13 @@
 #
 # python program for  the configuration of tree.mauricekingma.nl
 
-from flask import Flask
+from flask import Flask, render_template
 import os
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
 import rq
+import logging
+from logging.handlers import SMTPHandler
 from models import *
 
 
@@ -18,6 +20,9 @@ app = Flask(__name__)
 
 # configure Secret-Key
 app.secret_key = os.getenv('SECRET_KEY')
+
+# configure ADMINS
+app.config['ADMINS'] = os.getenv('ADMINS')
 
 # configure sessions
 app.config["SESSION_COOKIE_HTTPONLY"] = True
@@ -44,6 +49,24 @@ mail = Mail(app)
 
 # configure migrations
 Migrate(app, db, compare_type=True, render_as_batch=True)
+
+# email logged errors
+if not app.debug:
+    logger = logging.getLogger(__name__)
+    if app.config['MAIL_SERVER']:
+        auth = None
+        if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
+            auth = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
+        secure = None
+        if app.config['MAIL_USE_TLS']:
+            secure = ()
+        mail_handler = SMTPHandler(
+            mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
+            fromaddr=app.config['MAIL_DEFAULT_SENDER'],
+            toaddrs=app.config['ADMINS'], subject='Stadsgids error',
+            credentials=auth, secure=secure)
+        mail_handler.setLevel(logging.DEBUG)
+        logger.addHandler(mail_handler)
 
 if os.getenv("PRODUCTION_SERVER") == "True":
     # set session cookie secure

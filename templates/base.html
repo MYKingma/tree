@@ -1,0 +1,70 @@
+<!-- base.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Base layout for other pages
+-->
+
+<!DOCTYPE html>
+<html id="html" lang="nl">
+    <head>
+        <title>{%- block title -%}{%- endblock -%}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		<link href="{{ url_for('static', filename='styles/styles.css') }}" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Peta&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+			<p class="navbar-brand" href="/">
+                <a class="titleFont" href="/">
+                    <i class="fas fa-tree titleFont"></i>
+                    Studio 't Landje
+                </a>
+			</p>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+				<i class="fas fa-caret-square-down"></i>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarToggler">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Ons verhaal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Nieuws</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Ik wil een boom</a>
+                    </li>
+				</ul>
+			</div>
+		</nav>
+        <div class="message-container">
+			{%- with messages = get_flashed_messages(with_categories=true, category_filter=["success", "warning", "info"]) -%}
+				{%- if messages -%}
+					{%- for category, message in messages -%}
+			<div class="alert alert-{{ category }} alert-dismissible fade show">
+			  <a href="#" class="close noZensmooth" data-dismiss="alert" aria-label="close"><i class="fas fa-times"></i></a>
+			  {{ message }}
+			</div>
+					{%- endfor -%}
+				{%- endif -%}
+			{%- endwith -%}
+		</div>
+        <div class="container">
+            {%- block content -%}{%- endblock -%}
+        </div>
+        <div class="footer">
+            <p class="titleFont"><i class="fas fa-tree"></i> Studio 't Landje</p>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    </body>
+</html>
