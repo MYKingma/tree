@@ -1,0 +1,21 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h4>{{ post.title }}</h4>
+    <div class="postbody">
+        {{ post.body|safe }}
+    </div>
+</div>
+{% endblock %}

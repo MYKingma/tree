@@ -12,5 +12,10 @@ Website homepage layout
 
 <!-- page content -->
 {% block content %}
-
+<div class="container mt">
+    <h4>{{ update.title }}</h4>
+    <div class="postbody">
+        {{ update.body|safe }}
+    </div>
+</div>
 {% endblock %}

@@ -5,13 +5,20 @@
 #
 # python program for  the configuration of tree.mauricekingma.nl
 
-from flask import Flask, render_template
+
 import os
-from flask_migrate import Migrate
-from flask_mail import Mail, Message
 import rq
 import logging
+import locale
+from flask import Flask, render_template, request, flash, redirect, url_for
+from flask_migrate import Migrate
+from flask_mail import Mail, Message
+from flask_admin import Admin
+from flask_admin.menu import MenuLink
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from logging.handlers import SMTPHandler
+from flask_wtf.csrf import CSRFProtect
+from hashlib import blake2b
 from models import *
 
 
@@ -49,6 +56,28 @@ mail = Mail(app)
 
 # configure migrations
 Migrate(app, db, compare_type=True, render_as_batch=True)
+
+# configure admin interface tabs
+admin = Admin(app, name='Dashboard', index_view=AdminView(User, db.session, url='/admin', endpoint='admin'))
+admin.add_view(AdminView(Role, db.session))
+admin.add_view(AdminView(UserRoles, db.session))
+admin.add_view(AdminView(Order, db.session))
+admin.add_view(AdminView(Post, db.session))
+admin.add_view(AdminView(Update, db.session))
+
+# set locale to dutch
+locale.setlocale(locale.LC_ALL, "nl_NL")
+
+# configure link admin menu
+admin.add_link(MenuLink(name='Back to site', url='/dashboard'))
+
+# configure Flask-login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.session_protection = "strong"
+
+# set Flask WTF CSRFProtect
+csrf = CSRFProtect(app)
 
 # email logged errors
 if not app.debug:

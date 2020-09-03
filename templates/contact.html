@@ -12,5 +12,15 @@ Website homepage layout
 
 <!-- page content -->
 {% block content %}
-
+<div class="container mt">
+    <h4>Contact</h4>
+    <div class="contact">
+            <span class="floatright"><img src="{{ url_for('static', filename='img/forest-white.svg')}}" alt=""></span>
+            <br><br><br>
+            <p>Locatie <span class="floatright">Naarden</span></p>
+            <p>Telefoon <span class="floatright">+31 (0) 6 48 03 58 68
+    </span></p>
+            <p>Email <span class="floatright">info@studio-t-landje.nl</span></p>
+    </div>
+</div>
 {% endblock %}

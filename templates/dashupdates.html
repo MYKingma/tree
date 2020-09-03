@@ -1,0 +1,46 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <div class="floatright">
+        <form action="{{ url_for('dashupdates') }}" method="post">
+    		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    		<button type="submit" class="btn btn-outline-dark mb"><i class="far fa-file"></i> Nieuw</button>
+    	</form>
+    </div>
+	<h4 class="noborder"><i class="far fa-comment-alt"></i> Updates</h4>
+    {% if updates %}
+	<table class="table table-responsive-xs">
+		<thead class="thead-dark">
+			<th scope="col"><i class="fas fa-fingerprint"></i></th>
+			<th scope="col"><i class="fas fa-calendar-alt"></th>
+			<th scope="col"><i class="fas fa-heading"></i></th>
+            <th scope="col"><i class="fas fa-edit"></i></th>
+		</thead>
+		<tbody>
+			{% for update in updates %}
+			<tr>
+				<td>{{ update.id }}</td>
+		        <td>{{ update.date.strftime("%-d/%m/%y") }}</td>
+				<td>{{ update.title }}</td>
+                <td><a href="{{ url_for('createupdate', update_id=update.id) }}">Wijzigen</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {% else %}
+    <p>Nog geen updates gepubliceerd</p>
+    {% endif %}
+</div>
+{% endblock %}

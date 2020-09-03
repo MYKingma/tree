@@ -12,5 +12,11 @@ Website homepage layout
 
 <!-- page content -->
 {% block content %}
-
+<div class="container mt">
+    <h1>Ons verhaal</h1>
+    <p>{{ post.short }}</p>
+    <div class="postbody">
+        {{ post.body|safe }}
+    </div>
+</div>
 {% endblock %}

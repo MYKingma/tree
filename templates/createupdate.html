@@ -1,0 +1,58 @@
+<!-- createpost.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website post editor layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h6 class="noborder ml"><a class="nodec" href="{{ url_for('dashupdates') }}"><i class="fas fa-long-arrow-alt-left"></i> Updates</a></h6>
+    <form class="needs-validation box" action="{{ url_for('createupdate', update_id=update.id) }}" method="post" novalidate>
+        <h4 class="noborder">Update editor</h4>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <label>Titel</label>
+            <input id="title" type="text" name="title" class="form-control" value="{{ '' if update.title == None else update.title }}" required>
+            <p id="titleHelp" class="inputhelp"></p>
+        </div>
+        <div class="form-group">
+            <label>Datum</label>
+            <input id="date" type="text" name="date" class="form-control" value="{{ '' if update.date == None else update.date.strftime('%d-%m-%y') }}" placeholder="dd-mm-jj" required>
+            <p id="dateHelp" class="inputhelp"></p>
+        </div>
+        <div class="form-group">
+            <label>Beschrijving</label>
+            <input type="text" class="form-control" id="short" name="short" value="{{ '' if update.short == None else update.short }}" required>
+            <p id="shortHelp" class="inputhelp"></p>
+        </div>
+        <textarea id="body" name="editor1" id="editor1" required>
+            {{ '' if update.body == None else update.body }}
+        </textarea>
+        <p id="bodyHelp" class="inputhelp"></p>
+        <div class="floatright mt">
+            <div class="btn btn-outline-dark" id="unlock">
+                <i id="lock" class="fas fa-lock"></i>
+            </div>
+            <button id="locked" class="btn btn-dark" type="submit" name="action" value="delete" disabled><i class="fas fa-trash-alt"></i><span class="mobile"> Verwijderen</span></button>
+        </div>
+        <button class="btn btn-outline-secondary mt" type="submit" name="action" value="save"><i class="far fa-save"></i> Opslaan</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/ckeditor.js')}}"></script>
+<script>
+CKEDITOR.replace( 'editor1' );
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/unlock.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/checkupdate.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
+{% endblock %}

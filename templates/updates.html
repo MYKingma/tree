@@ -1,0 +1,43 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h1>Updates</h1>
+    {% if updates %}
+    <div class="timeline">
+    {% for update in updates %}
+        <div class="entry">
+            <div class="title">
+                <h6>{{ update.date.strftime("%B '%y") }}</h6>
+                <p>{{ update.title }}</p>
+            </div>
+            <div class="body">
+                <div class="d-none d-md-block">
+                    <div class="postbody">
+                        {{ update.body|safe }}
+                    </div>
+                </div>
+                <div class="d-block d-md-none">
+                    <p>{{ update.short }}</p>
+                    <a class="nodec floatright mr" href="{{ url_for('update', update_id=update.id) }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <p class="mt">Er zijn nog geen updates van Studio 't landje geplaatst.</p>
+    {% endif %}
+</div>
+{% endblock %}

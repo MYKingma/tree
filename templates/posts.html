@@ -1,0 +1,46 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <div class="floatright">
+        <form action="{{ url_for('posts') }}" method="post">
+    		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    		<button type="submit" class="btn btn-outline-dark mb"><i class="far fa-file"></i> Nieuw</button>
+    	</form>
+    </div>
+	<h4 class="noborder"><i class="far fa-comment-alt"></i> Posts</h4>
+    {% if posts %}
+	<table class="table table-responsive-xs">
+		<thead class="thead-dark">
+			<th scope="col"><i class="fas fa-fingerprint"></i></th>
+			<th scope="col"><i class="fas fa-calendar-alt"></th>
+			<th scope="col"><i class="fas fa-heading"></i></th>
+            <th scope="col"><i class="fas fa-edit"></i></th>
+		</thead>
+		<tbody>
+			{% for post in posts %}
+			<tr>
+				<td>{{ post.id }}</td>
+		        <td>{{ post.date.strftime("%-d/%m") }}</td>
+				<td>{{ post.title }}</td>
+                <td><a href="{{ url_for('createpost', post_id=post.id) }}">Wijzigen</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {% else %}
+    <p>Nog geen posts gepubliceerd</p>
+    {% endif %}
+</div>
+{% endblock %}
