@@ -15,12 +15,13 @@ Website homepage layout
 <div class="backDrop"></div>
 <div class="container nomt nopt">
     {% if post %}
-    <h4 class="mt pl">Ons verhaal</h4>
+    <h5 class="mt pl">Ons verhaal</h5>
     <p class="nomargin">{{ post.short }}</p>
     <a class="nodec floatright mr" href="{{ url_for('story') }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
     {% endif %}
     {% if lastupdate %}
-    <h4 class="emt pl">Laatste update</h4>
+    <br>
+    <h5 class="emt pl">Laatste update</h5>
     <h6 class="sub">{{ lastupdate.title }}<span class="floatright">{{ lastupdate.date.strftime("%B '%y")}}</span></h6>
     <p class="nomargin">{{ lastupdate.short }}</p>
     <a class="nodec floatright mr" href="{{ url_for('updates') }}">Alle updates <i class="fas fa-long-arrow-alt-right"></i></a>

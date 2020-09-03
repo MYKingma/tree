@@ -206,13 +206,13 @@ $dot-diameter: 15px;
   width:100%;
   max-width:800px;
   background:#fff;
-  padding: 100px 50px;
+  padding: 50px 25px;
   position: relative;
   &:before {
     content: '';
     position: absolute;
     top: 0px;
-    left:calc(33% + 20px); //$gutter/2
+    left:calc(33% + 12px); //$gutter/2
     bottom: 0px;
     width: $border-width;
     background: #ddd;
