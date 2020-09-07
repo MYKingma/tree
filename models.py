@@ -10,7 +10,7 @@ db = SQLAlchemy()
 
 class Order(db.Model):
     __tablename__ = 'orders'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
     order = db.Column(db.Text(), nullable=False)
@@ -24,9 +24,21 @@ class Order(db.Model):
         self.amount = amount
         self.paid = False
 
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(128), nullable=False)
+    price = db.Column(db.Integer(), nullable=False)
+    stock = db.Column(db.Integer(), nullable=False)
+
+    def __init__(self, name, price, stock):
+        self.name = name
+        self.price = price
+        self.stock = stock
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(128), nullable=False)
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
@@ -53,10 +65,11 @@ class UserRoles(db.Model):
 class Update(db.Model):
     __tablename__ = 'updates'
     id = db.Column(db.Integer(), primary_key=True)
-    date = db.Column(db.DateTime)
+    date = db.Column(db.DateTime())
     title = db.Column(db.String(128))
     short = db.Column(db.Text())
     body = db.Column(db.Text())
+    images = db.Column(db.String(128))
 
     def __init__(self):
         self.date = datetime.datetime.now()
@@ -64,13 +77,20 @@ class Update(db.Model):
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer(), primary_key=True)
-    date = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.DateTime(), nullable=False)
     title = db.Column(db.String(128))
     short = db.Column(db.Text())
     body = db.Column(db.Text())
+    images = db.Column(db.String(128))
 
     def __init__(self):
         self.date = datetime.datetime.now()
+
+class FAQ(db.Model):
+    __tablename__ = 'faqs'
+    id = db.Column(db.Integer(), primary_key=True)
+    question = db.Column(db.Text(), nullable=False)
+    answer = db.Column(db.Text(), nullable=False)
 
 class AdminView(ModelView):
     def __init__(self, *args, **kwargs):

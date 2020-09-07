@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#short').setCustomValidity('')
             document.querySelector('#shortHelp').innerHTML = ""
         };
-        if (document.querySelector('#body').value.length == 0) {
+        if (CKEDITOR.instances.body.wordCount.wordCount == 0) {
             document.querySelector('#body').setCustomValidity('invalid')
             document.querySelector('#bodyHelp').innerHTML = "Post mag niet leeg zijn"
         } else {

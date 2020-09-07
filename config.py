@@ -10,6 +10,7 @@ import os
 import rq
 import logging
 import locale
+import shutil
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
@@ -19,6 +20,7 @@ from flask_login import LoginManager, login_required, current_user, login_user, 
 from logging.handlers import SMTPHandler
 from flask_wtf.csrf import CSRFProtect
 from hashlib import blake2b
+from werkzeug.utils import secure_filename
 from models import *
 
 
@@ -78,6 +80,14 @@ login_manager.session_protection = "strong"
 
 # set Flask WTF CSRFProtect
 csrf = CSRFProtect(app)
+
+# configure file upload
+app.config['UPLOAD_FOLDER'] = os.getenv("UPLOAD_FOLDER")
+app.config['ALLOWED_EXTENSIONS'] = os.getenv("ALLOWED_EXTENSIONS")
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # email logged errors
 if not app.debug:

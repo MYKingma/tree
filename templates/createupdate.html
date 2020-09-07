@@ -14,7 +14,7 @@ Website post editor layout
 {% block content %}
 <div class="container mt">
     <h6 class="noborder ml"><a class="nodec" href="{{ url_for('dashupdates') }}"><i class="fas fa-long-arrow-alt-left"></i> Updates</a></h6>
-    <form class="needs-validation box" action="{{ url_for('createupdate', update_id=update.id) }}" method="post" novalidate>
+    <form enctype="multipart/form-data" class="needs-validation box" action="{{ url_for('createupdate', update_id=update.id) }}" method="post" novalidate>
         <h4 class="noborder">Update editor</h4>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="form-group">
@@ -31,6 +31,14 @@ Website post editor layout
             <label>Beschrijving</label>
             <input type="text" class="form-control" id="short" name="short" value="{{ '' if update.short == None else update.short }}" required>
             <p id="shortHelp" class="inputhelp"></p>
+        </div>
+        <div class="form-group">
+            <label>Upload afbeeldingen</label>
+            <input id="file" class="form-control-file" type="file" name="file" multiple>
+            <div class="imageLinks"></div>
+            <input id="images" type="hidden" name="images" value="{{ '' if update.images == None else update.images }}">
+            <input id="updateId" type="hidden" name="updateId" value="{{ update.id }}">
+            <input id="type" type="hidden" name="type" value="updates">
         </div>
         <textarea id="body" name="editor1" id="editor1" required>
             {{ '' if update.body == None else update.body }}
@@ -55,4 +63,5 @@ CKEDITOR.replace( 'editor1' );
 <script type="text/javascript" src="{{ url_for('static', filename='js/unlock.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/checkupdate.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/showfilename.js')}}"></script>
 {% endblock %}

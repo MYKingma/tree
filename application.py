@@ -88,7 +88,7 @@ def updates():
 def contact():
     return render_template('contact.html')
 
-@app.route('/koopnboom')
+@app.route('/koopnboom', methods=['GET', 'POST'])
 def shop():
     return render_template('shop.html')
 
@@ -113,6 +113,18 @@ def createupdate(update_id):
     if request.method == "GET":
         return render_template('createupdate.html', update=update)
 
+    files = request.files.getlist('file')
+    for file in files:
+        if file and allowed_file(file.filename):
+            if not os.path.isdir(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id)):
+                os.makedirs(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id) + '/', filename))
+    for image in request.form.get('images').split(','):
+        if update.images == None:
+            update.images = image
+        elif image not in update.images.split(','):
+            update.images = update.images + ',' + image
     update.title = request.form.get('title')
     update.date = datetime.datetime.strptime(request.form.get('date'), '%d-%m-%y')
     update.short = request.form.get('short')
@@ -124,6 +136,7 @@ def createupdate(update_id):
         return render_template('createupdate.html', update=update)
 
     if request.form.get('action') == "delete":
+        shutil.rmtree(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id), ignore_errors=True)
         db.session.delete(update)
         db.session.commit()
         flash("Update verwijderd", "success")
@@ -147,6 +160,19 @@ def createpost(post_id):
     if request.method == "GET":
         return render_template('createpost.html', post=post)
 
+    files = request.files.getlist('file')
+    for file in files:
+        if file and allowed_file(file.filename):
+            if not os.path.isdir(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id)):
+                os.makedirs(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id) + '/', filename))
+    for image in request.form.get('images').split(','):
+        if post.images == None:
+            post.images = image
+        elif image not in post.images.split(','):
+            post.images = post.images + ',' + image
+
     post.title = request.form.get('title')
     post.short = request.form.get('short')
     post.body = request.form.get('editor1')
@@ -157,6 +183,7 @@ def createpost(post_id):
         return render_template('createpost.html', post=post)
 
     if request.form.get('action') == "delete":
+        shutil.rmtree(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id), ignore_errors=True)
         db.session.delete(post)
         db.session.commit()
         flash("Post verwijderd", "success")

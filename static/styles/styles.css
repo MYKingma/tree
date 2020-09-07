@@ -139,6 +139,20 @@ nav img {
   margin: 10px;
 }
 
+.smallbox {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  padding: 10px;
+  padding-top: 0px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.smallbox label {
+  font-weight: bold;
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
 .noborder {
   border: none;
   border-bottom: none;
@@ -280,7 +294,19 @@ nav img {
   margin: 0 0 3em;
   float: right;
   width: 66%;
+  max-width: 66%;
   padding-left: 20px;
+}
+.entry .body input {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+.entry .body input:hover {
+  cursor: default;
 }
 .entry .body p {
   line-height: 1.4em;
