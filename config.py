@@ -19,7 +19,7 @@ from flask_mail import Mail, Message
 from flask_admin import Admin
 from flask_admin.menu import MenuLink
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
-from github import Github
+# from github import Github
 from logging.handlers import SMTPHandler
 from flask_wtf.csrf import CSRFProtect
 from hashlib import blake2b
@@ -89,8 +89,8 @@ app.config['UPLOAD_FOLDER'] = os.getenv("UPLOAD_FOLDER")
 app.config['ALLOWED_EXTENSIONS'] = os.getenv("ALLOWED_EXTENSIONS")
 
 # set up GitHub for file upload
-g = Github(os.getenv("GITHUB_ACCESS_TOKEN"))
-repo = g.get_repo("MYKingma/tree")
+# g = Github(os.getenv("GITHUB_ACCESS_TOKEN"))
+# repo = g.get_repo("MYKingma/tree")
 
 def allowed_file(filename):
     return '.' in filename and \
