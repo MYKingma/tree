@@ -16,7 +16,7 @@ Website homepage layout
 <div class="container mt">
     <h6 class="noborder ml">Log in voor het Administrator Dashboard</h6>
     <form class="needs-validation col-lg-6 box" action="{{ url_for('login') }}" method="post" novalidate>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <!-- <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> -->
         <div class="form-group">
             <label>Gebruikersnaam</label>
             <input class="form-control" type="text" name="username" required>
