@@ -9,7 +9,7 @@ function newLink() {
     document.querySelectorAll('#sPath').forEach(link => {
         link.onclick = () => {
             console.log(link.dataset.link);
-            // navigator.clipboard.writeText(link.dataset.link);
+            navigator.clipboard.writeText(link.dataset.link);
             link.childNodes[0].className = "fas fa-check"
             setTimeout(function(){
                 link.childNodes[0].className = "fas fa-copy"
