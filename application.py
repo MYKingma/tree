@@ -119,7 +119,7 @@ def createupdate(update_id):
     update.short = request.form.get('short')
     update.body = request.form.get('editor1')
     db.session.commit()
-    # print(repo.create_file("test.jpg", "test", "test", branch="master"))
+
     for file in files:
         if file and allowed_file(file.filename):
             try:
