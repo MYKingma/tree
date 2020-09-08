@@ -90,7 +90,7 @@ app.config['ALLOWED_EXTENSIONS'] = os.getenv("ALLOWED_EXTENSIONS")
 
 # set up GitHub for file upload
 g = Github(os.getenv("GITHUB_ACCESS_TOKEN"))
-repo = g.get_repo("tree")
+# repo = g.get_repo("MYKingma/tree")
 
 def allowed_file(filename):
     return '.' in filename and \
