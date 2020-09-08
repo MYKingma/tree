@@ -114,21 +114,27 @@ def createupdate(update_id):
         return render_template('createupdate.html', update=update)
 
     files = request.files.getlist('file')
+    update.title = request.form.get('title')
+    update.date = datetime.datetime.strptime(request.form.get('date'), '%d-%m-%y')
+    update.short = request.form.get('short')
+    update.body = request.form.get('editor1')
+    db.session.commit()
+    # print(repo.create_file("test.jpg", "test", "test", branch="master"))
     for file in files:
         if file and allowed_file(file.filename):
-            if not os.path.isdir(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id)):
-                os.makedirs(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id))
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id) + '/', filename))
+            try:
+                repo.create_file("static/img/uploads/posts/" + str(update.id) + '/' + file.filename, "file upload", file.stream._file.getvalue(), branch='master')
+            except:
+                flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap bij deze update.", "danger")
+                return render_template('createupdate.html', update=update)
+
     for image in request.form.get('images').split(','):
         if update.images == None:
             update.images = image
         elif image not in update.images.split(','):
             update.images = update.images + ',' + image
-    update.title = request.form.get('title')
-    update.date = datetime.datetime.strptime(request.form.get('date'), '%d-%m-%y')
-    update.short = request.form.get('short')
-    update.body = request.form.get('editor1')
+
+
     db.session.commit()
 
     if request.form.get('action') == "save":
@@ -136,7 +142,10 @@ def createupdate(update_id):
         return render_template('createupdate.html', update=update)
 
     if request.form.get('action') == "delete":
-        shutil.rmtree(app.config['UPLOAD_FOLDER'] + '/updates/' + str(update.id), ignore_errors=True)
+        if update.images:
+            for image in update.images.split(','):
+                contents = repo.get_contents("static/img/uploads/updates/" + str(update.id) + '/' + image)
+                repo.delete_file("static/img/uploads/updates/" + str(update.id) + '/' + image, "delete uploaded file", contents.sha)
         db.session.delete(update)
         db.session.commit()
         flash("Update verwijderd", "success")
@@ -161,21 +170,25 @@ def createpost(post_id):
         return render_template('createpost.html', post=post)
 
     files = request.files.getlist('file')
+    post.title = request.form.get('title')
+    post.short = request.form.get('short')
+    post.body = request.form.get('editor1')
+    db.session.commit()
     for file in files:
         if file and allowed_file(file.filename):
-            if not os.path.isdir(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id)):
-                os.makedirs(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id))
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id) + '/', filename))
+            # try:
+            repo.create_file("static/img/uploads/posts/" + str(post.id) + '/' + file.filename, "file upload", file.stream._file.getvalue(), branch='master')
+            # except:
+            #     flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap bij deze post.", "danger")
+            #     return render_template('createpost.html', post=post)
+
+
     for image in request.form.get('images').split(','):
         if post.images == None:
             post.images = image
         elif image not in post.images.split(','):
             post.images = post.images + ',' + image
 
-    post.title = request.form.get('title')
-    post.short = request.form.get('short')
-    post.body = request.form.get('editor1')
     db.session.commit()
 
     if request.form.get('action') == "save":
@@ -183,7 +196,10 @@ def createpost(post_id):
         return render_template('createpost.html', post=post)
 
     if request.form.get('action') == "delete":
-        shutil.rmtree(app.config['UPLOAD_FOLDER'] + '/posts/' + str(post.id), ignore_errors=True)
+        if post.images:
+            for image in post.images.split(','):
+                contents = repo.get_contents("static/img/uploads/updates/" + str(post.id) + '/' + image)
+                repo.delete_file("static/img/uploads/posts/" + str(post.id) + '/' + image, "delete uploaded file", contents.sha)
         db.session.delete(post)
         db.session.commit()
         flash("Post verwijderd", "success")

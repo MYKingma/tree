@@ -8,6 +8,7 @@ Javascript for checking input when editing update
 // wait for page to load
 document.addEventListener('DOMContentLoaded', () => {
 
+
     // show links already uploaded images
     var images = document.getElementById('images');
     var updateId = document.getElementById('updateId').value;
@@ -23,17 +24,26 @@ document.addEventListener('DOMContentLoaded', () => {
         div.appendChild(br);
         div.appendChild(label);
         for (var i = 0; i < uploadedImages.length; ++i) {
-            var path = './static/img/uploads' + type + updateId + '/' + uploadedImages[i];
+            var path = 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads' + type + updateId + '/' + uploadedImages[i];
             pName = document.createElement('P');
             sPath = document.createElement('SPAN');
+            sPath.id = "sPath"
             pName.innerHTML = uploadedImages[i];
-            sPath.innerHTML = path;
+            icon = document.createElement("I");
+            icon.className = "fas fa-copy";
+            text = document.createTextNode(" Kopieer link")
+            sPath.appendChild(icon);
+            sPath.appendChild(text);
+            sPath.dataset.link = path
             sPath.className = 'floatright';
+            sPath.style.cursor = "pointer";
             pName.appendChild(sPath);
             div.appendChild(pName);
         }
     }
-
+    document.dispatchEvent(new CustomEvent("NewLinks", {
+      bubbles: true
+    }))
     // select file upload input
     document.getElementById('file').onchange = () => {
         var input = document.getElementById('file');
@@ -51,24 +61,38 @@ document.addEventListener('DOMContentLoaded', () => {
         div.appendChild(label);
         if (uploadedImages) {
             for (var i = 0; i < uploadedImages.length; ++i) {
-                var path = './static/img/uploads' + type + updateId + '/' + uploadedImages[i];
+                var path = 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads' + type + updateId + '/' + uploadedImages[i];
                 pName = document.createElement('P');
                 sPath = document.createElement('SPAN');
+                sPath.id = "sPath"
                 pName.innerHTML = uploadedImages[i];
-                sPath.innerHTML = path;
+                icon = document.createElement("I");
+                icon.className = "fas fa-copy";
+                text = document.createTextNode(" Kopieer link")
+                sPath.appendChild(icon);
+                sPath.appendChild(text);
+                sPath.dataset.link = path
                 sPath.className = 'floatright';
+                sPath.style.cursor = "pointer";
                 pName.appendChild(sPath);
                 div.appendChild(pName);
             }
         }
         for (var i = 0; i < input.files.length; ++i) {
             var name = input.files.item(i).name;
-            var path = './static/img/uploads' + type + updateId + '/' + name;
+            var path = 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads' + type + updateId + '/' + name;
             pName = document.createElement('P');
             sPath = document.createElement('SPAN');
+            sPath.id = "sPath"
             pName.innerHTML = name;
-            sPath.innerHTML = path;
+            icon = document.createElement("I");
+            icon.className = "fas fa-copy";
+            text = document.createTextNode(" Kopieer link")
+            sPath.appendChild(icon);
+            sPath.appendChild(text);
+            sPath.dataset.link = path
             sPath.className = 'floatright';
+            sPath.style.cursor = "pointer";
             pName.appendChild(sPath);
             div.appendChild(pName);
             if (images.value.length == 0) {
@@ -80,5 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (prevImages) {
             images.value = images.value + ',' + prevImages
         }
+        document.dispatchEvent(new CustomEvent("NewLinks", {
+          bubbles: true
+        }))
     }
 });
