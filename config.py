@@ -116,7 +116,7 @@ if not app.debug:
 
 if os.getenv("PRODUCTION_SERVER") == "True":
     # set session cookie secure
-    app.config["SESSION_COOKIE_SECURE"] = True
+    # app.config["SESSION_COOKIE_SECURE"] = True
 
     # import worker
     from runworker import conn
