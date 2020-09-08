@@ -176,11 +176,11 @@ def createpost(post_id):
     db.session.commit()
     for file in files:
         if file and allowed_file(file.filename):
-            # try:
-            repo.create_file("static/img/uploads/posts/" + str(post.id) + '/' + file.filename, "file upload", file.stream._file.getvalue(), branch='master')
-            # except:
-            #     flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap bij deze post.", "danger")
-            #     return render_template('createpost.html', post=post)
+            try:
+                repo.create_file("static/img/uploads/posts/" + str(post.id) + '/' + file.filename, "file upload", file.stream._file.getvalue(), branch='master')
+            except:
+                flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap bij deze post.", "danger")
+                return render_template('createpost.html', post=post)
 
 
     for image in request.form.get('images').split(','):
