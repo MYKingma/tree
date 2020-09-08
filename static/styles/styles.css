@@ -219,7 +219,7 @@ nav img {
   margin-right: 10px;
 }
 
-.postbody img {
+.postbody img, .postbody input {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -229,6 +229,9 @@ nav img {
 }
 .postbody h1, .postbody h2, .postbody h3, .postbody h4, .postbody h5, .postbody h6 {
   font-size: 15px;
+}
+.postbody img:hover, .postbody input:hover {
+  cursor: default;
 }
 
 .timeline {

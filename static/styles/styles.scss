@@ -197,7 +197,7 @@ nav {
 
 /// post body
 .postbody {
-    img {
+    img, input {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
@@ -208,6 +208,9 @@ nav {
     h1, h2, h3, h4, h5, h6 {
         font-size: 15px;
     }
+	img:hover, input:hover {
+		cursor: default;
+	}
 }
 
 /// timeline
@@ -308,7 +311,6 @@ $dot-diameter: 15px;
     }
   }
 }
-
 .dark {
 
 }
