@@ -80,6 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
             var path = 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads' + type + updateId + '/' + name;
             pName = document.createElement('P');
             sPath = document.createElement('SPAN');
+
+            // to delete when site is published on https
+            sPathtest = document.createElement('INPUT');
+            sPathtest.className = "form-control col-1 floatright"
+            sPathtest.value = path
+
+
+
             sPath.id = "sPath"
             pName.innerHTML = name;
             icon = document.createElement("I");
@@ -90,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
             sPath.dataset.link = path
             sPath.className = 'floatright';
             sPath.style.cursor = "pointer";
+
+            pName.appendChild(sPathtest);
+            
             pName.appendChild(sPath);
             div.appendChild(pName);
             if (images.value.length == 0) {

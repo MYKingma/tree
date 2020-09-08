@@ -123,7 +123,7 @@ def createupdate(update_id):
     for file in files:
         if file and allowed_file(file.filename):
             try:
-                repo.create_file("static/img/uploads/posts/" + str(update.id) + '/' + file.filename, "file upload", file.stream._file.getvalue(), branch='master')
+                repo.create_file("static/img/uploads/updates/" + str(update.id) + '/' + file.filename, "file upload", file.read(), branch='master')
             except:
                 flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap bij deze update.", "danger")
                 return render_template('createupdate.html', update=update)
@@ -177,7 +177,7 @@ def createpost(post_id):
     for file in files:
         if file and allowed_file(file.filename):
             try:
-                repo.create_file("static/img/uploads/posts/" + str(post.id) + '/' + file.filename, "file upload", file.stream._file.getvalue(), branch='master')
+                repo.create_file("static/img/uploads/posts/" + str(post.id) + '/' + file.filename, "file upload", file.read(), branch='master')
             except:
                 flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap bij deze post.", "danger")
                 return render_template('createpost.html', post=post)
