@@ -198,7 +198,7 @@ def createpost(post_id):
     if request.form.get('action') == "delete":
         if post.images:
             for image in post.images.split(','):
-                contents = repo.get_contents("static/img/uploads/updates/" + str(post.id) + '/' + image)
+                contents = repo.get_contents("static/img/uploads/posts/" + str(post.id) + '/' + image)
                 repo.delete_file("static/img/uploads/posts/" + str(post.id) + '/' + image, "delete uploaded file", contents.sha)
         db.session.delete(post)
         db.session.commit()
