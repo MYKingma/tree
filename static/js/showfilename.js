@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     var type = '/' + document.getElementById('type').value + '/'
     if (images.value.length > 0) {
         var uploadedImages = document.getElementById('images').value.split(',');
-        console.log(uploadedImages);
         label = document.createElement('LABEL');
         br = document.createElement('BR');
         label.innerHTML = 'Links naar afbeeldingen';
@@ -40,10 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pName.appendChild(sPath);
             div.appendChild(pName);
         }
+        newLink()
     }
-    document.dispatchEvent(new CustomEvent("NewLinks", {
-      bubbles: true
-    }))
     // select file upload input
     document.getElementById('file').onchange = () => {
         var input = document.getElementById('file');
@@ -101,11 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 images.value = images.value + ',' + name
             }
         }
+        newLink()
         if (prevImages) {
             images.value = images.value + ',' + prevImages
         }
-        document.dispatchEvent(new CustomEvent("NewLinks", {
-          bubbles: true
-        }))
     }
 });
