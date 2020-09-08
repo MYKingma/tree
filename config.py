@@ -21,7 +21,7 @@ from flask_admin.menu import MenuLink
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 # from github import Github
 from logging.handlers import SMTPHandler
-from flask_wtf.csrf import CSRFProtect
+# from flask_wtf.csrf import CSRFProtect
 from hashlib import blake2b
 from werkzeug.utils import secure_filename
 from models import *
@@ -82,7 +82,7 @@ login_manager.init_app(app)
 login_manager.session_protection = "strong"
 
 # set Flask WTF CSRFProtect
-csrf = CSRFProtect(app)
+# csrf = CSRFProtect(app)
 
 # configure file upload
 app.config['UPLOAD_FOLDER'] = os.getenv("UPLOAD_FOLDER")
