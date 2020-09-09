@@ -35,16 +35,16 @@ Base layout for other pages
 			<div class="collapse navbar-collapse" id="navbarToggler">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('story') }}">Ons verhaal</a>
+                        <a class="nav-link" href="{{ url_for('story') }}">Updates</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('updates') }}">Updates</a>
+                        <a class="nav-link" href="{{ url_for('updates') }}">Tijdslijn</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a id="treelink" class="nav-link" href="{{ url_for('shop') }}"><i class="fas fa-tree"></i>Ik wil een boom!</a>
+                        <a id="treelink" class="nav-link" href="{{ url_for('shop') }}"><i class="fab fa-pagelines"></i>Doneer een boom!</a>
                     </li>
                     {% for role in current_user.roles %}
                 	{% if role.name == 'Owner' %}

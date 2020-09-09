@@ -50,13 +50,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
 # configure Flask-Mail
-app.config['MAIL_SERVER']='smtp.mail.me.com'
+app.config['MAIL_SERVER']='smtp.strato.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = "mauricekingma@me.com"
+app.config['MAIL_DEFAULT_SENDER'] = "noreply@studio-t-landje.nl"
 mail = Mail(app)
 
 # configure migrations
@@ -67,6 +67,8 @@ admin = Admin(app, name='Dashboard', index_view=AdminView(User, db.session, url=
 admin.add_view(AdminView(Role, db.session))
 admin.add_view(AdminView(UserRoles, db.session))
 admin.add_view(AdminView(Order, db.session))
+admin.add_view(AdminView(Product, db.session))
+admin.add_view(AdminView(Item, db.session))
 admin.add_view(AdminView(Post, db.session))
 admin.add_view(AdminView(Update, db.session))
 

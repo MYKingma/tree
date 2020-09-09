@@ -1,0 +1,40 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h6 class="noborder ml"><a class="nodec" href="{{ url_for('dashfaqs', product_id=product.id ) }}"><i class="fas fa-long-arrow-alt-left"></i> FAQ's voor {{ product.name }}</a></h6>
+    <form class="needs-validation box" action="{{ url_for('createfaq', product_id=product.id, faq_id=faq.id if faq else 0) }}" method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <label>Vraag</label>
+            <input class="form-control" type="text" name="question" value="{{ faq.question if product }}">
+        </div>
+        <div class="form-group">
+            <label>Antwoord</label>
+            <input class="form-control" type="text" name="answer" value="{{ faq.answer if product }}">
+        </div>
+        <div class="floatright mt">
+            <div class="btn btn-outline-dark" id="unlock">
+                <i id="lock" class="fas fa-lock"></i>
+            </div>
+            <button id="locked" class="btn btn-dark" type="submit" name="action" value="delete" disabled><i class="fas fa-trash-alt"></i><span class="mobile"> Verwijderen</span></button>
+        </div>
+        <button class="btn btn-outline-secondary mt" type="submit" name="action" value="save"><i class="far fa-save"></i> Opslaan</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/unlock.js')}}"></script>
+{% endblock %}

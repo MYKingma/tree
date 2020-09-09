@@ -14,7 +14,7 @@ Website homepage layout
 {% block content %}
 <div class="container mt">
     <div class="floatright">
-        <form action="{{ url_for('posts') }}" method="post">
+        <form action="{{ url_for('dashposts') }}" method="post">
     		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     		<button type="submit" class="btn btn-outline-dark mb"><i class="far fa-file"></i> Nieuw</button>
     	</form>

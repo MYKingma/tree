@@ -234,6 +234,14 @@ nav img {
   cursor: default;
 }
 
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
 .timeline {
   width: 100%;
   max-width: 800px;

@@ -1,8 +1,8 @@
-<!-- index.html for implementing a tree-buy webapp
+<!-- shop.html for implementing a tree-buy webapp
 
 Maurice Kingma
 
-Website homepage layout
+Website shop layout
 -->
 
 {% extends "base.html" %}
@@ -12,6 +12,20 @@ Website homepage layout
 
 <!-- page content -->
 {% block content %}
-<div class="container">
+<div class="container mt">
+    <!-- <div class="row">
+        <div class="col-8">
+            {% if products %}
+            {% for product in products %}
+            <div class="box">
+                <h2>{{ product.name }}</h2>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-4 box">
+            <label>Winkelwagen</label>
+        </div>
+    </div> -->
 </div>
 {% endblock %}

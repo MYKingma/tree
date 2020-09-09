@@ -16,7 +16,10 @@ Website homepage layout
 <div class="container nomt nopt">
     {% if post %}
     <h5 class="mt pl">Ons verhaal</h5>
-    <p class="nomargin">{{ post.short }}</p>
+    <p class="nomargin mb">{{ post.short }}</p>
+    <div class="postbody nomargin">
+        {{ post.body|safe }}
+    </div>
     <a class="nodec floatright mr" href="{{ url_for('story') }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
     {% endif %}
     {% if lastupdate %}

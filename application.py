@@ -72,6 +72,23 @@ def logout():
 def index():
     post = Post.query.filter_by(title="Verhaal").first()
     lastupdate = Update.query.order_by(Update.date.desc()).first()
+
+
+    # order = Order(firstname="Maurice", lastname="Kingma", email="mauricekingma@me.com")
+    # db.session.add(order)
+    # db.session.commit()
+    #
+    # product = Product.query.first()
+    # order.add_product(product, 6)
+    # db.session.commit()
+
+    # msg = Message("Bevestig je e-mailadres om je account te activeren", recipients=['mauricekingma@me.com'])
+    # msg.html = "Hallooooooooo"
+    # mail.send(msg)
+
+
+
+
     return render_template('index.html', post=post, lastupdate=lastupdate)
 
 @app.route('/onsverhaal')
@@ -90,7 +107,8 @@ def contact():
 
 @app.route('/koopnboom', methods=['GET', 'POST'])
 def shop():
-    return render_template('shop.html')
+    products = Product.query.all()
+    return render_template('shop.html', products=products)
 
 @app.route('/faq')
 def faq():
@@ -153,10 +171,10 @@ def createupdate(update_id):
 
 
 @app.route('/dashboard/posts', methods=["GET", "POST"])
-def posts():
+def dashposts():
     if request.method == "GET":
         posts = Post.query.order_by(Post.id).all()
-        return render_template('posts.html', posts=posts)
+        return render_template('dashposts.html', posts=posts)
     newpost = Post()
     db.session.add(newpost)
     db.session.commit()
@@ -205,14 +223,130 @@ def createpost(post_id):
         flash("Post verwijderd", "success")
         return redirect(url_for('posts'))
 
+@app.route('/dashboard/winkel', methods=["GET", "POST"])
+def dashshop():
+    if request.method == "GET":
+        products = Product.query.all()
+        orders = Order.query.order_by(Order.date.desc()).all()
+        return render_template('dashshop.html', products=products, orders=orders)
+
+    if request.form.get('action') == "newproduct":
+        return redirect(url_for('createproduct', product_id=0))
+
+    if request.form.get('action') == "paycode":
+        paycode = int(request.form.get('paycode'))
+        if paycode <= 10000:
+            flash(f"Foutieve Tikkie code: {paycode}", "warning")
+            return redirect(url_for('dashshop'))
+        paycode = paycode - 10000
+        order = Order.query.get(paycode)
+        if not order:
+            flash(f"Bestelling niet gevonden", "warning")
+            return redirect(url_for('dashshop'))
+        if not order.sendpayment:
+            flash("Van deze bestelling is nog geen betaallink verzonden, verstuur eerst de betaallink. Hierna kan je de betaling verwerken.", "warning")
+            return redirect(url_for('dashshop'))
+
+        order.paid = True
+        db.session.commit()
+        flash(f"Betaling van de bestelling van {order.firstname} is verwerkt", "success")
+        return redirect(url_for('dashshop'))
+
+@app.route('/dashboard/winkel/stuurtikkie', methods=["GET", "POST"])
+def sendpayment():
+    if request.method == "GET":
+        orders = Order.query.filter_by(sendpayment=False).order_by(Order.date.desc()).all()
+        return render_template('sendpayment.html', orders=orders)
+
+    checked = request.form.getlist('checked')
+    for check in checked:
+        order = Order.query.get(check)
+        order.sendpayment = True
+        db.session.commit()
+    flash("bestellingen verwerkt", "success")
+    return redirect(url_for('sendpayment'))
+
+@app.route('/dashboard/productwijzigen/<product_id>', methods=["GET", "POST"])
+def createproduct(product_id):
+    product = None
+    if not product_id == 0:
+        product = Product.query.get(product_id)
+
+    if request.method == "GET":
+        return render_template('createproduct.html', product=product)
+    name = request.form.get('name')
+    description = request.form.get('description')
+    stock = request.form.get('stock')
+    price = float(request.form.get('price'))
+    if not product:
+        product = Product(name=name, description=description, stock=stock, price=price)
+        db.session.add(product)
+        db.session.commit()
+        flash(f"Product {product.name} toegevoegd", "success")
+        return render_template('createproduct.html', product=product)
+    else:
+        product.name = name
+        product.description = description
+        product.stock = stock
+        product.price = price
+        db.session.commit()
+        if request.form.get('action') == "save":
+            flash("Wijzigingen opgeslagen", "succes")
+            return render_template('createproduct.html', product=product)
+        if request.form.get('action') == "delete":
+            db.session.delete(product)
+            db.session.commit()
+            flash("Product verwijderd", "succes")
+            return redirect(url_for('dashshop'))
+
+@app.route('/dashboard/product/faq/<product_id>', methods=["GET", "POST"])
+def dashfaqs(product_id):
+    product = Product.query.get(product_id)
+    if request.method == "GET":
+        return render_template('dashfaqs.html', product=product)
+
+    return redirect(url_for('createfaq', faq_id=0, product_id=product_id))
+
+@app.route('/dashboard/product/faq/opstellen/<faq_id>/<product_id>', methods=["GET", "POST"])
+def createfaq(faq_id, product_id):
+    faq = None
+    product = Product.query.get(product_id)
+    if not faq_id == 0:
+        faq = FAQ.query.get(faq_id)
+    if request.method == "GET":
+        return render_template('createfaq.html', faq=faq, product=product)
+
+    question = request.form.get('question')
+    answer = request.form.get('answer')
+
+    if not faq:
+        faq = FAQ(question=question, answer=answer, product_id=product.id)
+        db.session.add(faq)
+        db.session.commit()
+        flash(f"FAQ toegevoegd", "success")
+        return render_template('createfaq.html', faq=faq, product=product)
+    else:
+        faq.question = question
+        faq.answer = answer
+        db.session.commit()
+        if request.form.get('action') == "save":
+            flash("Wijzigingen opgeslagen", "succes")
+            return render_template('createfaq.html', faq=faq, product=product)
+        if request.form.get('action') == "delete":
+            db.session.delete(faq)
+            db.session.commit()
+            flash("FAQ verwijderd", "success")
+            return redirect(url_for('dashfaqs', product_id=product.id))
+
+
 @app.route('/update/<update_id>')
 def update(update_id):
-    update = Update.query.filter_by(id=update_id).first()
+    update = Update.query.get(update_id)
     return render_template('update.html', update=update)
 
 @app.route('/blog/<post_id>')
 def post(post_id):
-    post = Post.query.filter_by(id=post_id).first()
+    post = Post.query.get(post_id)
     otherposts = Post.query.filter(Post.id!=post_id).first()
     return render_template('post.html', post=post, otherposts=otherposts)
 

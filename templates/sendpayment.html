@@ -1,0 +1,44 @@
+<!-- sendpayment.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+send payment link page layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+	<h4 class="noborder"><i class="far fa-paper-plane"></i> Stuur betaallinks</h4>
+    {% if orders %}
+	<form action="{{ url_for('sendpayment') }}" method="post">
+		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+		<table class="table table-responsive-xs">
+			<thead class="thead-dark">
+				<th scope="col"><i class="fas fa-signature"></i></th>
+				<th scope="col"><i class="fas fa-envelope"></th>
+				<th scope="col"><i class="fas fa-terminal"></i></th>
+				<th scope="col"><i class="fas fa-clipboard-list"></i></th>
+			</thead>
+			<tbody>
+				{% for order in orders %}
+				<tr>
+			        <td>{{ order.firstname }} {{ order.lastname }}</td>
+					<td>{{ order.email }}</td>
+	                <td>{{ order.id + 10000 }}</td>
+					<td><input type="checkbox" name="checked" value="{{ order.id }}"></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<button type="submit" class="btn btn-outline-dark mb"><i class="far fa-cogs"></i> Verwerken</button>
+	</form>
+    {% else %}
+    <p>Nog geen bestellingen geplaatst</p>
+    {% endif %}
+</div>
+{% endblock %}

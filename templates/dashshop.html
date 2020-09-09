@@ -1,0 +1,105 @@
+<!-- shop.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Shop page layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <div class="floatright">
+        <a class="btn btn-outline-dark mb" href="{{ url_for('sendpayment')}}"><i class="fas fa-paper-plane"></i> Stuur betaallinks</a>
+    </div>
+	<h4 class="noborder"><i class="far fa-boxes"></i> Bestellingen</h4>
+    {% if orders %}
+	<table class="table table-responsive-xs">
+		<thead class="thead-dark">
+			<th scope="col"><i class="fas fa-signature"></i></th>
+			<th scope="col"><i class="fas fa-calendar"></th>
+			<th scope="col"><i class="fas fa-boxes"></i></th>
+            <th scope="col"><i class="fas fa-euro-sign"></i></th>
+            <th scope="col"><i class="fas fa-paper-plane"></i></th>
+            <th scope="col"><i class="fas fa-receipt"></i></th>
+		</thead>
+		<tbody>
+			{% for order in orders %}
+			<tr>
+		        <td>{{ order.firstname }} {{ order.lastname }}</td>
+				<td>{{ order.date.strftime("%d-%m-%y") }}</td>
+                <td>
+                    {% for item in order.items %}
+                        {{ item.name }}: {{ item.amount }}<br>
+                    {% endfor %}
+                </td>
+                <td>{{ order.get_total() }}</td>
+                <td>
+                    {% if order.sendpayment %}
+                    <i class="fas fa-check-circle green"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle red"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if order.paid %}
+                    <i class="fas fa-check-circle green"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle red"></i>
+                    {% endif %}
+                </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    <form class="box" action="{{ url_for('dashshop') }}" method="post">
+        <label>Betaling verwerken</label>
+        <div class="row">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input class="form-control col-4 ml" type="text" name="paycode" placeholder="Tikkie code">
+    		<button name="action" value="paycode" type="submit" class="btn btn-outline-dark ml"><i class="far fa-cash-register"></i> Verwerken</button>
+        </div>
+	</form>
+    {% else %}
+    <p>Nog geen bestellingen geplaatst</p>
+    {% endif %}
+    <br>
+    <div class="floatright">
+        <form action="{{ url_for('dashshop') }}" method="post">
+    		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    		<button name="action" value="newproduct" type="submit" class="btn btn-outline-dark mb"><i class="far fa-tag"></i> Nieuw</button>
+    	</form>
+    </div>
+	<h4 class="noborder"><i class="far fa-shopping-basket"></i> Producten</h4>
+    {% if products %}
+	<table class="table table-responsive-xs">
+		<thead class="thead-dark">
+			<th scope="col"><i class="fas fa-box-open"></i></th>
+			<th scope="col"><i class="fas fa-tag"></th>
+			<th scope="col"><i class="fas fa-boxes"></i></th>
+            <th scope="col"><i class="fas fa-cash-register"></i></th>
+            <th scope="col"><i class="fas fa-question-circle"></i></th>
+            <th scope="col"><i class="fas fa-edit"></i></th>
+		</thead>
+		<tbody>
+			{% for product in products %}
+			<tr>
+		        <td>{{ product.name }}</td>
+				<td>{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.get_sold_amount() }}</td>
+                <td><a href="{{ url_for('dashfaqs', product_id=product.id) }}">FAQ</a></td>
+                <td><a href="{{ url_for('createproduct', product_id=product.id) }}">Wijzigen</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {% else %}
+    <p>Nog geen producten aan winkel toegevoegd</p>
+    {% endif %}
+</div>
+{% endblock %}

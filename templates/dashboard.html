@@ -15,11 +15,12 @@ Website homepage layout
 <div class="container mt">
     {% for role in current_user.roles %}
 	{% if role.name == 'Administrator' %}
-    <a class="btn btn-warning" href="{{ url_for('admin.index_view') }}">Database <i class="fas fa-server"></i></a>
+    <a class="btn btn-warning mb" href="{{ url_for('admin.index_view') }}">Database <i class="fas fa-server"></i></a>
     {% endif %}
     {% endfor %}
-    <a class="btn btn-success" href="{{ url_for('posts') }}">Posts <i class="fas fa-newspaper"></i></a>
-    <a class="btn btn-danger" href="{{ url_for('dashupdates') }}">Updates <i class="fas fa-calendar"></i></a>
-    <a class="btn btn-danger" href="{{ url_for('logout') }}">Log uit <i class="fas fa-sign-out-alt"></i></a>
+    <a class="btn btn-success mb" href="{{ url_for('dashposts') }}">Posts <i class="fas fa-newspaper"></i></a>
+    <a class="btn btn-danger mb" href="{{ url_for('dashupdates') }}">Updates <i class="fas fa-calendar"></i></a>
+    <a class="btn btn-info mb" href="{{ url_for('dashshop') }}">Winkel <i class="fas fa-shopping-basket"></i></a>
+    <a class="btn btn-dark mb" href="{{ url_for('logout') }}">Log uit <i class="fas fa-sign-out-alt"></i></a>
 </div>
 {% endblock %}

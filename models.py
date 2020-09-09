@@ -4,6 +4,7 @@ from flask_login import UserMixin, current_user
 from flask_admin.contrib.sqla import ModelView
 from functools import wraps
 import datetime
+import ast
 
 
 db = SQLAlchemy()
@@ -13,28 +14,71 @@ class Order(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
-    order = db.Column(db.Text(), nullable=False)
-    amount = db.Column(db.Float(), nullable=False)
+    email = db.Column(db.String(128), nullable=False)
+    date = db.Column(db.DateTime())
     paid = db.Column(db.Boolean(), nullable=False)
+    sendpayment = db.Column(db.Boolean(), nullable=False)
+    items = db.relationship('Item', cascade="all, delete-orphan")
 
-    def __init__(self, firstname, lastname, order, amount):
+    def __init__(self, firstname, lastname, email):
         self.firstname = firstname
         self.lastname = lastname
-        self.order = orders
-        self.amount = amount
+        self.email = email
+        self.date = datetime.datetime.now()
         self.paid = False
+        self.sendpayment = False
+
+    def add_product(self, product, amount):
+        item = Item(order_id=self.id, name=product.name, amount=amount, price=product.price)
+        db.session.add(item)
+        db.session.commit()
+
+    def get_total(self):
+        amount = 0.00
+        for item in self.items:
+            amount = amount + (item.amount * item.price)
+        return format(amount, '.2f')
 
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(128), nullable=False)
-    price = db.Column(db.Integer(), nullable=False)
+    description = db.Column(db.Text(), nullable=False)
+    price = db.Column(db.Float(), nullable=False)
     stock = db.Column(db.Integer(), nullable=False)
+    faqs = db.relationship('FAQ', cascade="all, delete-orphan")
 
-    def __init__(self, name, price, stock):
+    def __init__(self, name, price, stock, description):
         self.name = name
         self.price = price
         self.stock = stock
+        self.description = description
+
+    def get_sold_amount(self):
+        amount = 0
+        orders = Order.query.all()
+        for order in orders:
+            for item in order.items:
+                if item.name == self.name:
+                    amount = amount + item.amount
+        return amount
+
+    def get_percentage_sold(self):
+        amount = self.get_sold_amount()
+        percentage = amount / self.stock
+        return percentage
+
+class Item(db.Model):
+    __tablename__ = 'items'
+    id = db.Column(db.Integer(), primary_key=True)
+    order_id = db.Column(db.Integer(), db.ForeignKey('orders.id', ondelete='CASCADE'), nullable=False)
+    name = db.Column(db.String(128), nullable=False)
+    amount = db.Column(db.Integer(), nullable=False)
+    price = db.Column(db.Float(), nullable=False)
+    order = db.relationship('Order')
+
+    def get_item_total(self):
+        return format(self.amount * self.price, '.2f')
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -89,8 +133,10 @@ class Post(db.Model):
 class FAQ(db.Model):
     __tablename__ = 'faqs'
     id = db.Column(db.Integer(), primary_key=True)
+    product_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     question = db.Column(db.Text(), nullable=False)
     answer = db.Column(db.Text(), nullable=False)
+    product = db.relationship('Product')
 
 class AdminView(ModelView):
     def __init__(self, *args, **kwargs):

@@ -1,0 +1,44 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <div class="floatright">
+        <form action="{{ url_for('dashfaqs', product_id=product.id) }}" method="post">
+    		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    		<button type="submit" class="btn btn-outline-dark mb"><i class="far fa-file"></i> Nieuw</button>
+    	</form>
+    </div>
+	<h4 class="noborder"><i class="far fa-question-circle"></i> FAQ's voor {{ product.name }}</h4>
+    {% if product.faqs %}
+	<table class="table table-responsive-xs">
+		<thead class="thead-dark">
+			<th scope="col"><i class="fas fa-question-circle"></i></th>
+			<th scope="col"><i class="fas fa-comment-dots"></th>
+            <th scope="col"><i class="fas fa-edit"></i></th>
+		</thead>
+		<tbody>
+			{% for faq in product.faqs %}
+			<tr>
+				<td>{{ faq.question }}</td>
+		        <td>{{ faq.answer }}</td>
+                <td><a href="{{ url_for('createfaq', product_id=product.id, faq_id=faq.id) }}">Wijzigen</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {% else %}
+    <p>Nog geen FAQ voor {{ product.name }} gepubliceerd</p>
+    {% endif %}
+</div>
+{% endblock %}

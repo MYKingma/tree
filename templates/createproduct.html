@@ -1,0 +1,48 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h6 class="noborder ml"><a class="nodec" href="{{ url_for('dashshop') }}"><i class="fas fa-long-arrow-alt-left"></i> Winkel</a></h6>
+    <form class="needs-validation box" action="{{ url_for('createproduct', product_id=product.id if product else 0) }}" method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <label>Naam</label>
+            <input class="form-control" type="text" name="name" value="{{ product.name if product }}">
+        </div>
+        <div class="form-group">
+            <label>Beschrijving</label>
+            <textarea class="form-control" type="text" name="description">{{ product.description if product }}</textarea>
+        </div>
+        <div class="form-group">
+            <label>Aantal beschikbaar</label>
+            <input class="form-control" type="text" name="stock" value="{{ product.stock if product }}">
+        </div>
+        <div class="form-group">
+            <label>Prijs</label>
+            <input class="form-control" type="text" name="price" value="{{ product.price if product }}">
+        </div>
+        <div class="floatright mt">
+            <div class="btn btn-outline-dark" id="unlock">
+                <i id="lock" class="fas fa-lock"></i>
+            </div>
+            <button id="locked" class="btn btn-dark" type="submit" name="action" value="delete" disabled><i class="fas fa-trash-alt"></i><span class="mobile"> Verwijderen</span></button>
+        </div>
+        <button class="btn btn-outline-secondary mt" type="submit" name="action" value="save"><i class="far fa-save"></i> Opslaan</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/unlock.js')}}"></script>
+{% endblock %}
