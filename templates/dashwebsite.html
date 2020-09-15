@@ -1,0 +1,42 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h6 class="emb"><a class="nodec" href="{{ url_for('dashboard') }}"><i class="fas fa-long-arrow-alt-left"></i> Dashboard</a></h6>
+    <h4 class="noborder"><i class="fas fa-wrench"></i> Website instellingen</h4>
+    <form class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
+        <h6 class="noborder"><i class="fas fa-key"></i> Wachtwoord wijzigen</h6>
+        <p>Gebruik dit formulier om het wachtwoord van het beheerdersaccount te wijzigen</p>
+        <br>
+        <div class="form-group">
+            <label>Nieuw wachtwoord</label>
+            <input class="form-control" type="password" name="password1" value="">
+        </div>
+        <div class="form-group">
+            <label>Herhaal nieuw wachtwoord</label>
+            <input class="form-control" type="password" name="password2" value="">
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button class="btn btn-outline-secondary mt" type="submit" name="action" value="password"><i class="far fa-save"></i> Opslaan</button>
+    </form>
+    <br>
+    <form enctype="multipart/form-data" class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
+        <h6 class="noborder"><i class="far fa-image"></i> Homepagina afbeelding</h6>
+        <p>Upload hier een nieuwe afbeelding om de homepagina-afbeelding te wijzigen (.jpg/.jpeg/.svg/.png).</p>
+        <input type="file" name="file" class="form-control-file mt">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button class="btn btn-outline-secondary emt" type="submit" name="action" value="img"><i class="far fa-save"></i> Opslaan</button>
+    </form>
+</div>
+{% endblock %}

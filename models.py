@@ -46,13 +46,15 @@ class Product(db.Model):
     description = db.Column(db.Text(), nullable=False)
     price = db.Column(db.Float(), nullable=False)
     stock = db.Column(db.Integer(), nullable=False)
+    image = db.Column(db.String(128))
     faqs = db.relationship('FAQ', cascade="all, delete-orphan")
 
-    def __init__(self, name, price, stock, description):
+    def __init__(self, name, price, stock, description, image):
         self.name = name
         self.price = price
         self.stock = stock
         self.description = description
+        self.image = image
 
     def get_sold_amount(self):
         amount = 0
@@ -87,6 +89,7 @@ class User(db.Model, UserMixin):
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    website_img = db.Column(db.String(128))
     roles = db.relationship('Role', secondary='user_roles')
 
     def get_user_roles(self):

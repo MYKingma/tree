@@ -35,10 +35,10 @@ Base layout for other pages
 			<div class="collapse navbar-collapse" id="navbarToggler">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('story') }}">Updates</a>
+                        <a class="nav-link" href="{{ url_for('story') }}">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('updates') }}">Tijdslijn</a>
+                        <a class="nav-link" href="{{ url_for('updates') }}">Tijdlijn</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
@@ -76,6 +76,9 @@ Base layout for other pages
                 </div>
                 <div class="ml smt">Studio<br>'t Landje</div>
             </div>
+            <a href="https://www.mauricekingma.nl/" class="watermark floatright">
+                <img src="{{ url_for('static', filename='img/watermark-light.png')}}">
+            </a>
         </div>
         <script type="text/javascript">
 			var csrf_token = "{{ csrf_token() }}";

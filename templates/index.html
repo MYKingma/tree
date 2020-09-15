@@ -13,22 +13,65 @@ Website homepage layout
 <!-- page content -->
 {% block content %}
 <div class="backDrop"></div>
+<div class="backDropLink" data-background="{{ background }}"></div>
+<div class="videolink" data-link="https://www.youtube.com/embed/{{ videolink }}?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&mute=1" data-length="{{ videolength }}"></div>
 <div class="container nomt nopt">
-    {% if post %}
-    <h5 class="mt pl">Ons verhaal</h5>
-    <p class="nomargin mb">{{ post.short }}</p>
-    <div class="postbody nomargin">
-        {{ post.body|safe }}
+    <div class="row">
+        <div class="d-block d-md-none mt">
+            <div class="ml emt">
+                <h6 class="noborder">Welkom op de website van Studio 't Landje!</h6>
+                <p>Hier vind je alle informatie over ons duurzaamheidsproject in het Naardermeer, en hoe jij kan bedragen aan het succes daarvan!</p>
+            </div>
+        </div>
+        <div class="col-md-7">
+            {% if post %}
+            <h5 class="mt pl">Ons verhaal</h5>
+            <p class="nomargin mb">{{ post.short }}</p>
+            <br>
+            <div class="postbody nomargin">
+                {{ post.body|safe }}
+            </div>
+            <a class="nodec floatright mr" href="{{ url_for('story') }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
+            <br>
+            {% endif %}
+            <div class="d-block d-md-none">
+                {% if lastposts %}
+                <h5 class="mt pl">Laatste berichten</h5>
+                {% for post in lastposts %}
+                <a class="postlink" href="#">
+                    <div class="postbox">
+                        <h6 class="noborder">{{ post.title }}</h6>
+                        <p class="postdate nomargin">{{ post.date.strftime('%-d %B %Y %R') }}</p>
+                        <p>{{ post.short }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-5 d-none d-xs-block d-md-block">
+            <div class="sidebox emt">
+                <h6 class="noborder">Welkom op de website van Studio 't Landje!</h6>
+                <br>
+                <p>Hier vind je alle informatie over ons duurzaamheidsproject in het Naardermeer, en hoe jij kan bedragen aan het succes daarvan!</p>
+                {% if lastposts %}
+                {% for post in lastposts %}
+                <a class="postlink" href="#">
+                    <div class="postbox">
+                        <h6 class="noborder">{{ post.title }}</h6>
+                        <p class="postdate nomargin">{{ post.date.strftime('%-d %B %Y %R') }}</p>
+                        <p>{{ post.short }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <a class="nodec floatright mr" href="{{ url_for('story') }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
-    {% endif %}
-    {% if lastupdate %}
-    <br>
-    <h5 class="emt pl">Laatste update</h5>
-    <h6 class="sub">{{ lastupdate.title }}<span class="floatright">{{ lastupdate.date.strftime("%B '%y")}}</span></h6>
-    <p class="nomargin">{{ lastupdate.short }}</p>
-    <a class="nodec floatright mr" href="{{ url_for('updates') }}">Alle updates <i class="fas fa-long-arrow-alt-right"></i></a>
-    <br>
-    {% endif %}
 </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/background.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/videoplayer.js')}}"></script>
 {% endblock %}

@@ -51,12 +51,29 @@ nav img {
   padding: 0;
 }
 
+.videobox {
+  position: relative;
+  overflow: hidden;
+  padding-top: 56.25%;
+}
+.videobox iframe {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .backDrop {
   width: 100vw;
   background-image: url("/static/img/sheep-back.jpg");
-  height: 400px;
+  max-height: 400px;
+  margin-top: 87px;
   background-size: cover;
   background-position: center center;
+  overflow: hidden;
 }
 
 .mt {
@@ -137,6 +154,50 @@ nav img {
   border-radius: 3px;
   padding: 20px;
   margin: 10px;
+}
+
+.sidebox {
+  border-left: 1px solid lightgrey;
+  padding-left: 20px;
+}
+
+.postbox {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  padding-left: 20px;
+  padding-right: 5px;
+  padding-top: 10px;
+  margin-bottom: 5px;
+}
+.postbox h6 {
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+.postlink p, .postlink:active p, .postlink:visited p {
+  color: black;
+}
+.postlink .postdate, .postlink:active .postdate, .postlink:visited .postdate {
+  color: grey;
+  font-size: 7px;
+  font-weight: bold;
+}
+.postlink h6, .postlink:active h6, .postlink:visited h6 {
+  color: #7284A0;
+}
+
+.postlink:hover {
+  text-decoration: none;
+}
+.postlink:hover h6, .postlink:hover p {
+  color: grey;
+}
+
+.boxnomar {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  padding: 20px;
+  margin: 0;
 }
 
 .smallbox {
@@ -334,6 +395,11 @@ nav img {
 .entry .body ul li:before {
   content: "–";
   margin-right: 0.5em;
+}
+
+.watermark img {
+  width: 100px;
+  bottom: 20px;
 }
 
 .contact {

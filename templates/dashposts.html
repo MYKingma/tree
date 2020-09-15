@@ -13,6 +13,7 @@ Website homepage layout
 <!-- page content -->
 {% block content %}
 <div class="container mt">
+    <h6 class="emb"><a class="nodec" href="{{ url_for('dashboard') }}"><i class="fas fa-long-arrow-alt-left"></i> Dashboard</a></h6>
     <div class="floatright">
         <form action="{{ url_for('dashposts') }}" method="post">
     		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

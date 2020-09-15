@@ -72,6 +72,9 @@ def logout():
 def index():
     post = Post.query.filter_by(title="Verhaal").first()
     lastupdate = Update.query.order_by(Update.date.desc()).first()
+    user = User.query.filter_by(firstname="Jozien").first()
+    background = user.website_img
+    lastposts = Post.query.filter(Post.title!="Verhaal").order_by(Post.date.desc()).limit(3).all()
 
 
     # order = Order(firstname="Maurice", lastname="Kingma", email="mauricekingma@me.com")
@@ -89,7 +92,7 @@ def index():
 
 
 
-    return render_template('index.html', post=post, lastupdate=lastupdate)
+    return render_template('index.html', post=post, lastupdate=lastupdate, background=background, lastposts=lastposts, videolink="niNfiC1omzs", videolength=20)
 
 @app.route('/onsverhaal')
 def story():
@@ -162,8 +165,18 @@ def createupdate(update_id):
     if request.form.get('action') == "delete":
         if update.images:
             for image in update.images.split(','):
-                contents = repo.get_contents("static/img/uploads/updates/" + str(update.id) + '/' + image)
-                repo.delete_file("static/img/uploads/updates/" + str(update.id) + '/' + image, "delete uploaded file", contents.sha)
+                try:
+                    contents = repo.get_contents("static/img/uploads/updates/" + str(update.id) + '/' + image)
+                    repo.delete_file("static/img/uploads/updates/" + str(update.id) + '/' + image, "delete uploaded file", contents.sha)
+                except:
+                    message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file.filename} van update {update.id}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                    linktext = "Klik hier om naar de GitHub map te gaan"
+                    sender = "Het brein van de website"
+                    link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/updates/" + str(update.id)
+                    msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                    msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                    mail.send(msg)
+
         db.session.delete(update)
         db.session.commit()
         flash("Update verwijderd", "success")
@@ -216,12 +229,22 @@ def createpost(post_id):
     if request.form.get('action') == "delete":
         if post.images:
             for image in post.images.split(','):
-                contents = repo.get_contents("static/img/uploads/posts/" + str(post.id) + '/' + image)
-                repo.delete_file("static/img/uploads/posts/" + str(post.id) + '/' + image, "delete uploaded file", contents.sha)
+                try:
+                    contents = repo.get_contents("static/img/uploads/posts/" + str(post.id) + '/' + image)
+                    repo.delete_file("static/img/uploads/posts/" + str(post.id) + '/' + image, "delete uploaded file", contents.sha)
+                except:
+                    message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file.filename} van post {post.id}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                    linktext = "Klik hier om naar de GitHub map te gaan"
+                    sender = "Het brein van de website"
+                    link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/posts/" + str(post.id)
+                    msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                    msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                    mail.send(msg)
+
         db.session.delete(post)
         db.session.commit()
         flash("Post verwijderd", "success")
-        return redirect(url_for('posts'))
+        return redirect(url_for('dashposts'))
 
 @app.route('/dashboard/winkel', methods=["GET", "POST"])
 def dashshop():
@@ -278,26 +301,64 @@ def createproduct(product_id):
     description = request.form.get('description')
     stock = request.form.get('stock')
     price = float(request.form.get('price'))
+    file = request.files.get('file')
+    image = file.filename if file else None
+
     if not product:
-        product = Product(name=name, description=description, stock=stock, price=price)
+        product = Product(name=name, description=description, stock=stock, price=price, image=image)
+        oldfile = None
         db.session.add(product)
         db.session.commit()
-        flash(f"Product {product.name} toegevoegd", "success")
-        return render_template('createproduct.html', product=product)
     else:
         product.name = name
         product.description = description
         product.stock = stock
         product.price = price
+        if image:
+            oldfile = product.image
+            product.image = image
         db.session.commit()
-        if request.form.get('action') == "save":
-            flash("Wijzigingen opgeslagen", "succes")
-            return render_template('createproduct.html', product=product)
-        if request.form.get('action') == "delete":
-            db.session.delete(product)
-            db.session.commit()
-            flash("Product verwijderd", "succes")
-            return redirect(url_for('dashshop'))
+
+    if file and allowed_file(file.filename):
+        try:
+            repo.create_file("static/img/uploads/products/" + str(product.id) + "/" + file.filename, "file upload", file.read(), branch='master')
+        except:
+            flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap.", "danger")
+            return redirect(url_for('createproduct', product_id=0))
+
+        if oldfile:
+            try:
+                contents = repo.get_contents("static/img/uploads/products/" + str(product.id) + "/" + oldfile)
+                repo.delete_file("static/img/uploads/products/" + str(product.id) + "/" + oldfile, "delete uploaded file", contents.sha)
+            except:
+                message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file.filename} als foto bij {product.name}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                linktext = "Klik hier om naar de GitHub map te gaan"
+                sender = "Het brein van de website"
+                link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
+                msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                mail.send(msg)
+
+    if request.form.get('action') == "save":
+        flash("Wijzigingen opgeslagen", "succes")
+        return render_template('createproduct.html', product=product)
+    if request.form.get('action') == "delete":
+        if product.image:
+            try:
+                contents = repo.get_contents("static/img/uploads/products/" + str(product.id) + "/" + oldfile)
+                repo.delete_file("static/img/uploads/products/" + str(product.id) + "/" + oldfile, "delete uploaded file", contents.sha)
+            except:
+                message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file.filename} als foto bij {product.name}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                linktext = "Klik hier om naar de GitHub map te gaan"
+                sender = "Het brein van de website"
+                link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
+                msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                mail.send(msg)
+        db.session.delete(product)
+        db.session.commit()
+        flash("Product verwijderd", "succes")
+        return redirect(url_for('dashshop'))
 
 @app.route('/dashboard/product/faq/<product_id>', methods=["GET", "POST"])
 def dashfaqs(product_id):
@@ -380,3 +441,85 @@ def login():
 @role_required('Owner')
 def dashboard():
     return render_template('dashboard.html')
+
+@app.route('/dashboard/website', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
+def dashwebsite():
+    if request.method == "GET":
+        return render_template('dashwebsite.html')
+
+    if request.form.get('action') == "password":
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        if password1 != password2:
+            flash("Wachtwoorden komen niet overeen", "warning")
+        else:
+            # hash password
+            password = blake2b(password1.encode()).hexdigest()
+            user = User.query.get(current_user.id)
+            user.password = password
+            db.session.commit()
+            flash("Wachtwoord gewijzigd", "success")
+
+    if request.form.get('action') == "img":
+        file = request.files.get('file')
+        if file and allowed_file(file.filename):
+            try:
+                repo.create_file("static/img/" + file.filename, "file upload", file.read(), branch='master')
+            except:
+                flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap.", "danger")
+                return render_template('dashwebsite.html')
+
+            user = User.query.filter_by(firstname="Jozien").first()
+            oldfile = user.website_img
+            user.website_img = file.filename
+            db.session.commit()
+            try:
+                contents = repo.get_contents("static/img/" + oldfile)
+                repo.delete_file("static/img/" + oldfile, "delete uploaded file", contents.sha)
+            except:
+                message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file.filename} als oude achtergrond. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                linktext = "Klik hier om naar de GitHub map te gaan"
+                sender = "Het brein van de website"
+                link = "https://github.com/MYKingma/tree/tree/master/static/img"
+                msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                mail.send(msg)
+            flash("Nieuwe homepagina afbeelding opgeslagen", "success")
+
+    return render_template('dashwebsite.html')
+
+@app.route('/dashboard/wachtwoordvergeten')
+def forgot():
+    user = User.query.filter_by(username="Jozien").first()
+    # generate token reset password email
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    token = serializer.dumps(user.firstname, salt=app.config['SECURITY_PASSWORD_SALT'])
+    message = "Onderstaande link brengt je naar de pagina om je wachtwoord opnieuw in te stellen. Deze link is 1 uur geldig, zodra deze is verlopen moet je een nieuwe link aanvragen via de website."
+    linktext = "Klik hier om je wachtwoord te resetten"
+    sender = "Het brein van de website"
+    link = request.url_root + "dashboard/wachtwoordherstellen/" + token
+    msg = Message("Reset je wachtwoord", recipients=["mauricekingma@me.com"])
+    msg.html = render_template('emailbase.html', name=user.firstname, link=link, message=message, linktext=linktext, sender=sender)
+
+    mail.send(msg)
+
+    flash("Link verstuurd naar jozien@studio-t-landje.nl voor het resetten van het emailadres", "success")
+    return redirect(url_for('login'))
+
+@app.route('/dashboard/wachtwoordherstellen/<token>')
+def resetpass(token):
+    # configure serializer and check token (3600s is 1h)
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    expiration = 3600
+    try:
+        firstname = serializer.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=expiration)
+    except:
+        flash("Link verlopen, vraag een nieuwe link aan", "warning")
+        return redirect(url_for('login'))
+    user = User.query.filter_by(firstname=firstname).first()
+    login_user(user)
+    flash("Maak via onderstaand formulier een nieuw wachtwoord aan", "info")
+    return redirect(url_for('dashwebsite'))

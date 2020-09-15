@@ -13,6 +13,7 @@ Website homepage layout
 <!-- page content -->
 {% block content %}
 <div class="container mt">
+    <h4 class="mb"><i class="far fa-tachometer-alt"></i> Dashboard</h4>
     {% for role in current_user.roles %}
 	{% if role.name == 'Administrator' %}
     <a class="btn btn-warning mb" href="{{ url_for('admin.index_view') }}">Database <i class="fas fa-server"></i></a>
@@ -21,6 +22,7 @@ Website homepage layout
     <a class="btn btn-success mb" href="{{ url_for('dashposts') }}">Posts <i class="fas fa-newspaper"></i></a>
     <a class="btn btn-danger mb" href="{{ url_for('dashupdates') }}">Updates <i class="fas fa-calendar"></i></a>
     <a class="btn btn-info mb" href="{{ url_for('dashshop') }}">Winkel <i class="fas fa-shopping-basket"></i></a>
+    <a class="btn btn-light mb" href="{{ url_for('dashwebsite') }}">Website <i class="fas fa-wrench"></i></a>
     <a class="btn btn-dark mb" href="{{ url_for('logout') }}">Log uit <i class="fas fa-sign-out-alt"></i></a>
 </div>
 {% endblock %}

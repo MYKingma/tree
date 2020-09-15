@@ -1,0 +1,55 @@
+<!-- base.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Base layout for other pages
+-->
+
+<!DOCTYPE html>
+<html id="html" lang="nl">
+    <head>
+        <style media="screen">
+            .header {
+                background-color: #9AAFA4;
+                padding: 15px;
+            }
+            img {
+                max-width: 60px;
+                float: right;
+            }
+            h1 {
+                color: white;
+                font-family:'Roboto', sans-serif;
+            }
+            p {
+                font-family:'Roboto', sans-serif;
+            }
+            .body {
+                padding: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <img src="{{ request.url_root }}static/img/forest-white.svg" alt="logo">
+            <h1>Studio 't Landje</h1>
+        </div>
+        <div class="body">
+            <p>Beste {{ name }}</p>
+            <br>
+            <p>{{ message }}</p>
+            <br>
+            {% if link %}
+            <a href="{{ link }}">{{ linktext }}</a>
+            {% endif %}
+            {% if receipt %}
+            {{ receipt|safe }}
+            {% endif %}
+            <br>
+            <br>
+            <p>Met vriendelijke groet,</p>
+            <br>
+            <p>{{ sender }}</p>
+        </div>
+    </body>
+</html>

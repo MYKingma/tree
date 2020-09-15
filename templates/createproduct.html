@@ -14,7 +14,7 @@ Website homepage layout
 {% block content %}
 <div class="container mt">
     <h6 class="noborder ml"><a class="nodec" href="{{ url_for('dashshop') }}"><i class="fas fa-long-arrow-alt-left"></i> Winkel</a></h6>
-    <form class="needs-validation box" action="{{ url_for('createproduct', product_id=product.id if product else 0) }}" method="post" novalidate>
+    <form class="needs-validation box" enctype="multipart/form-data" action="{{ url_for('createproduct', product_id=product.id if product else 0) }}" method="post" novalidate>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="form-group">
             <label>Naam</label>
@@ -23,6 +23,14 @@ Website homepage layout
         <div class="form-group">
             <label>Beschrijving</label>
             <textarea class="form-control" type="text" name="description">{{ product.description if product }}</textarea>
+        </div>
+        <div class="form-group">
+            <label>Upload afbeeldingen</label>
+            {% if product.image %}
+            <p>Huidige afbeelding: {{ product.image }}</p>
+            {% endif %}
+            <input id="file" class="form-control-file" type="file" name="file">
+            <input id="images" type="hidden" name="images" value="{{ '' if product.image == None else product.image }}">
         </div>
         <div class="form-group">
             <label>Aantal beschikbaar</label>

@@ -24,6 +24,8 @@ from logging.handlers import SMTPHandler
 from flask_wtf.csrf import CSRFProtect
 from hashlib import blake2b
 from werkzeug.utils import secure_filename
+from itsdangerous import URLSafeTimedSerializer
+from hashlib import blake2b
 from models import *
 
 
@@ -57,6 +59,7 @@ app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_DEFAULT_SENDER'] = "noreply@studio-t-landje.nl"
+app.config['SECURITY_PASSWORD_SALT'] = os.getenv("SECURITY_PASSWORD_SALT")
 mail = Mail(app)
 
 # configure migrations
