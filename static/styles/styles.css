@@ -408,7 +408,9 @@ nav img {
 
 .watermark img {
   width: 100px;
-  bottom: 20px;
+  position: absolute;
+  bottom: 45px;
+  right: 30px;
 }
 
 .contact {
