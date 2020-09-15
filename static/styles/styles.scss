@@ -255,6 +255,10 @@ nav {
 
 /// post body
 .postbody {
+	text-align: center;
+	p {
+		text-align: left;
+	}
     img, input {
 		display: block;
 		margin-left: auto;
@@ -268,6 +272,9 @@ nav {
     }
 	img:hover, input:hover {
 		cursor: default;
+	}
+	iframe {
+		max-width: 100%;
 	}
 }
 

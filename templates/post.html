@@ -13,9 +13,46 @@ Website homepage layout
 <!-- page content -->
 {% block content %}
 <div class="container mt">
-    <h4>{{ post.title }}</h4>
-    <div class="postbody">
-        {{ post.body|safe }}
+    <div class="row">
+        <div class="col-md-7">
+            <h4>{{ post.title }}</h4>
+            <div class="postbody">
+                <p>{{ post.short }}</p>
+                {{ post.body|safe }}
+            </div>
+            <div class="d-block d-md-none">
+                {% if otherposts %}
+                <br>
+                <br>
+                <h5 class="mt pl">Andere berichten</h5>
+                {% for post in otherposts %}
+                <a class="postlink" href="{{ url_for('post', post_id=post.id) }}">
+                    <div class="postbox">
+                        <h6 class="noborder">{{ post.title }}</h6>
+                        <p class="postdate nomargin">{{ post.date.strftime('%-d %B %Y %R') }}</p>
+                        <p>{{ post.short }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-5 d-none d-xs-block d-md-block">
+            <div class="sidebox emt">
+                {% if otherposts %}
+                <h6 class="noborder">Andere berichten</h6>
+                {% for post in otherposts %}
+                <a class="postlink" href="{{ url_for('post', post_id=post.id) }}">
+                    <div class="postbox">
+                        <h6 class="noborder">{{ post.title }}</h6>
+                        <p class="postdate nomargin">{{ post.date.strftime('%-d %B %Y %R') }}</p>
+                        <p>{{ post.short }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

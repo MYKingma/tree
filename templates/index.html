@@ -31,14 +31,12 @@ Website homepage layout
             <div class="postbody nomargin">
                 {{ post.body|safe }}
             </div>
-            <a class="nodec floatright mr" href="{{ url_for('story') }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
-            <br>
             {% endif %}
             <div class="d-block d-md-none">
                 {% if lastposts %}
                 <h5 class="mt pl">Laatste berichten</h5>
                 {% for post in lastposts %}
-                <a class="postlink" href="#">
+                <a class="postlink" href="{{ url_for('post', post_id=post.id) }}">
                     <div class="postbox">
                         <h6 class="noborder">{{ post.title }}</h6>
                         <p class="postdate nomargin">{{ post.date.strftime('%-d %B %Y %R') }}</p>
@@ -56,7 +54,7 @@ Website homepage layout
                 <p>Hier vind je alle informatie over ons duurzaamheidsproject in het Naardermeer, en hoe jij kan bedragen aan het succes daarvan!</p>
                 {% if lastposts %}
                 {% for post in lastposts %}
-                <a class="postlink" href="#">
+                <a class="postlink" href="{{ url_for('post', post_id=post.id) }}">
                     <div class="postbox">
                         <h6 class="noborder">{{ post.title }}</h6>
                         <p class="postdate nomargin">{{ post.date.strftime('%-d %B %Y %R') }}</p>

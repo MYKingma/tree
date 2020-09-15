@@ -280,6 +280,12 @@ nav img {
   margin-right: 10px;
 }
 
+.postbody {
+  text-align: center;
+}
+.postbody p {
+  text-align: left;
+}
 .postbody img, .postbody input {
   display: block;
   margin-left: auto;
@@ -293,6 +299,9 @@ nav img {
 }
 .postbody img:hover, .postbody input:hover {
   cursor: default;
+}
+.postbody iframe {
+  max-width: 100%;
 }
 
 .green {

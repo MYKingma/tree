@@ -71,7 +71,6 @@ def logout():
 @app.route('/')
 def index():
     post = Post.query.filter_by(title="Verhaal").first()
-    lastupdate = Update.query.order_by(Update.date.desc()).first()
     user = User.query.filter_by(firstname="Jozien").first()
     background = user.website_img
     lastposts = Post.query.filter(Post.title!="Verhaal").order_by(Post.date.desc()).limit(3).all()
@@ -92,12 +91,7 @@ def index():
 
 
 
-    return render_template('index.html', post=post, lastupdate=lastupdate, background=background, lastposts=lastposts, videolink="niNfiC1omzs", videolength=20)
-
-@app.route('/onsverhaal')
-def story():
-    post = Post.query.filter_by(title="Verhaal").first()
-    return render_template('story.html', post=post)
+    return render_template('index.html', post=post, background=background, lastposts=lastposts, videolink="niNfiC1omzs", videolength=20)
 
 @app.route('/updates')
 def updates():
@@ -407,8 +401,11 @@ def update(update_id):
 
 @app.route('/blog/<post_id>')
 def post(post_id):
-    post = Post.query.get(post_id)
-    otherposts = Post.query.filter(Post.id!=post_id).first()
+    if post_id == "0":
+        post = Post.query.filter(Post.title!="Verhaal").order_by(Post.date.desc()).first()
+    else:
+        post = Post.query.get(post_id)
+    otherposts = Post.query.filter(Post.id!=post_id).filter(Post.title!="Verhaal").order_by(Post.date.desc()).all()
     return render_template('post.html', post=post, otherposts=otherposts)
 
 @app.route('/test')
