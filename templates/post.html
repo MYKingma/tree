@@ -14,13 +14,13 @@ Website homepage layout
 {% block content %}
 <div class="container mt">
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-lg-7">
             <h4>{{ post.title }}</h4>
             <div class="postbody">
                 <p>{{ post.short }}</p>
                 {{ post.body|safe }}
             </div>
-            <div class="d-block d-md-none">
+            <div class="d-block d-lg-none">
                 {% if otherposts %}
                 <br>
                 <br>
@@ -37,7 +37,7 @@ Website homepage layout
                 {% endif %}
             </div>
         </div>
-        <div class="col-md-5 d-none d-xs-block d-md-block">
+        <div class="col-lg-5 d-none d-xs-block d-lg-block">
             <div class="sidebox emt">
                 {% if otherposts %}
                 <h6 class="noborder">Andere berichten</h6>
