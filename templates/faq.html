@@ -13,15 +13,30 @@ Website homepage layout
 <!-- page content -->
 {% block content %}
 <div class="container mt">
-    <h2>Veelgestelde vragen voor {{ product.name }}</h2>
-    <br>
+    <h5>Veelgestelde vragen voor {{ product.name }}</h5>
+    <ul class="list-unstyled">
+        <li class="listitem">
+            <div class="row">
+                <div class="col-5">
+                    <div class="thumbnail" style="background-image: url('{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}');"></div>
+                </div>
+                <div class="col-7 list-body">
+                        <h5>{{ product.name }}</h5>
+                        <p>{{ product.description }}</p>
+                </div>
+            </div>
+            <br>
+            <p class="floatright info">Prijs per stuk <i class="fas fa-euro-sign"></i> {{'%0.2f'| format(product.price|float)}}</p>
+            <br>
+        </li>
+    </ul>
     {% for faq in product.faqs %}
-    <div class="row mb">
+    <div class="row mb ml mr">
         <a class="btn btn-primary btn-block" data-toggle="collapse" href="#{{ faq.id }}" role="button" aria-expanded="false" aria-controls="{{ faq.id }}">
         {{ faq.question }}
         </a>
     </div>
-    <div class="row mb">
+    <div class="row mb ml mr">
         <div class="collapse" id="{{ faq.id }}">
             <div class="card card-body">
                 {{ faq.answer }}
