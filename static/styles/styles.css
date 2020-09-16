@@ -66,9 +66,55 @@ nav img {
   border: 0;
 }
 
+#myProgress {
+  margin: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 10px;
+}
+
+#myBar {
+  width: 1%;
+  height: 10px;
+  border-radius: 10px;
+  background-color: #7284A0;
+}
+
+.listitem {
+  padding: 15px;
+  border: 0.5px solid grey;
+  border-radius: 5px;
+}
+.listitem .thumbnail {
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+}
+.listitem h5 {
+  border: none;
+}
+.listitem .boxnomar {
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+.listitem input, .listitem p, .listitem label {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.info {
+  color: grey;
+  font-weight: bold;
+}
+
 .backDrop {
   width: 100vw;
   background-image: url("/static/img/sheep-back.jpg");
+  min-height: 250px;
   max-height: 400px;
   margin-top: 87px;
   background-size: cover;

@@ -67,14 +67,57 @@ nav {
 	}
 }
 
+#myProgress {
+	margin: 10px;
+	margin-left: 15px;
+	margin-right: 15px;
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 10px;
+}
+
+#myBar {
+  width: 1%;
+  height: 10px;
+  border-radius: 10px;
+  background-color: $blue;
+}
+.listitem {
+	.thumbnail {
+		width: 100%;
+		height: 100%;
+		background-position: center center;
+		background-size: cover;
+	}
+	h5 {
+		border: none;
+	}
+	padding: 15px;
+	border: 0.5px solid grey;
+	border-radius: 5px;
+	.boxnomar {
+		padding-top: 10px;
+		padding-bottom: 5px;
+	}
+	input, p, label {
+		margin: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+}
+.info {
+	color: grey;
+	font-weight: bold;
+}
 .backDrop {
     width: 100vw;
     background-image: url("/static/img/sheep-back.jpg");
+	min-height: 250px;
     max-height: 400px;
 	margin-top: 87px;
     background-size: cover;
     background-position: center center;
-	overflow: hidden
+	overflow: hidden;
 }
 .mt {
     margin-top: 15px;

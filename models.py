@@ -70,6 +70,11 @@ class Product(db.Model):
         percentage = amount / self.stock
         return percentage
 
+    def get_current_stock(self):
+        amount = self.get_sold_amount()
+        current_stock = self.stock - amount
+        return current_stock
+
 class Item(db.Model):
     __tablename__ = 'items'
     id = db.Column(db.Integer(), primary_key=True)
