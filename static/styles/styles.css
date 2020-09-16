@@ -111,6 +111,15 @@ nav img {
   font-weight: bold;
 }
 
+.btn-primary {
+  background-color: #7284A0;
+  border-color: #7284A0;
+}
+
+.card {
+  border: none;
+}
+
 .backDrop {
   width: 100vw;
   background-image: url("/static/img/sheep-back.jpg");

@@ -12,5 +12,23 @@ Website homepage layout
 
 <!-- page content -->
 {% block content %}
+<div class="container mt">
+    <h2>Veelgestelde vragen voor {{ product.name }}</h2>
+    <br>
+    {% for faq in product.faqs %}
+    <div class="row mb">
+        <a class="btn btn-primary btn-block" data-toggle="collapse" href="#{{ faq.id }}" role="button" aria-expanded="false" aria-controls="{{ faq.id }}">
+        {{ faq.question }}
+        </a>
+    </div>
+    <div class="row mb">
+        <div class="collapse" id="{{ faq.id }}">
+            <div class="card card-body">
+                {{ faq.answer }}
+            </div>
+        </div>
+    </div>
 
+    {% endfor %}
+</div>
 {% endblock %}

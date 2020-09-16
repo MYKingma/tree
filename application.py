@@ -107,9 +107,10 @@ def shop():
     products = Product.query.all()
     return render_template('shop.html', products=products)
 
-@app.route('/faq')
-def faq():
-    return render_template('faq.html')
+@app.route('/faq/<product_id>/<product_name>')
+def faq(product_id, product_name):
+    product = Product.query.get(product_id)
+    return render_template('faq.html', product=product)
 
 @app.route('/dashboard/updates', methods=["GET", "POST"])
 def dashupdates():

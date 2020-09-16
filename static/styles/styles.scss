@@ -109,6 +109,13 @@ nav {
 	color: grey;
 	font-weight: bold;
 }
+.btn-primary {
+	background-color: $blue;
+	border-color: $blue;
+}
+.card {
+	border: none;
+}
 .backDrop {
     width: 100vw;
     background-image: url("/static/img/sheep-back.jpg");
