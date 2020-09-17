@@ -1,0 +1,52 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <div class="row">
+        <div class="col-md-8">
+            <h4 class="noborder ml">Bestelling bevestigen</h4>
+            <form class="needs-validation box" action="{{ url_for('confirm', orderstring=orderstring) }}" method="post">
+                <div class="boxnomar">
+                    <h6 class="noborder">Bestelling</h6>
+                    {% for key, value in order.items() %}
+                    <p class="floatright">{{ value }}</p>
+                    <p>{{ key }}</p>
+                    {% endfor %}
+                    <p class="info floatright">€ {{ total }}</p>
+                    <p class="info border-top">Totaal</p>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Voornaam</label>
+                    <input type="text" name="firstname" value="" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Achternaam</label>
+                    <input type="text" name="lastname" value="" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" name="email" value="" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Herhaal email</label>
+                    <input type="text" name="email2" value="" class="form-control" required>
+                </div>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="submit" class="buybutton btn btn-outline-dark btn-sm" value="Bestelling plaatsen">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

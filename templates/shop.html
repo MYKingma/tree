@@ -41,15 +41,16 @@ Website shop layout
                     <form class="productForm boxnomar noborder border-top" action="" method="">
                         <div class="row">
                             <p class="info col-4 nomargin">Aantal</p>
-                            <input type="number" name="amount" class="form-control-sm col-2 pl">
+                            <input id="amount" type="number" name="amount" class="form-control-sm col-2 pl" data-id="{{ product.id }}" min=0>
                             <p class="col-6"></p>
                         </div>
                         <br>
                         <div class="row">
                             <p class="info col-4">Totaal</p>
-                            <p class="col-2 info">€0,00</p>
+                            <p data-priceid="{{ product.id }}" class="col-2 info" data-price="{{ product.price }}" data-name="{{ product.name }}">€0.00</p>
                             <div class="col-6">
-                                <button type="submit" class="btn btn-sm btn-outline-dark floatright"><i class="fas fa-plus"></i> Toevoegen</button>
+                                <input type="hidden" name="orderstring" value="">
+                                <div class="btn btn-sm btn-outline-dark floatright" data-button="{{ product.id }}"><i class="fas fa-plus"></i> Toevoegen</div>
                             </div>
                         </div>
                     </form>
@@ -57,32 +58,37 @@ Website shop layout
                 {% endfor %}
                 </ul>
                 {% endif %}
-                <div class="d-block d-md-none emt">
+                <!-- <div class="d-block d-md-none emt">
                     <h6 class="noborder">Winkelwagen</h6>
-                    <div class="items">
+                    <div class="items1">
                         <p>De winkelwagen is nog leeg</p>
                     </div>
                     <br>
                     <div class="border-top mb"></div>
-                    <p class="floatright total">€ 0,00</p>
+                    <p class="floatright total">€0,00</p>
                     <p class="info">Totaal</p>
                     <form action="{{ url_for('shop') }}" method="post">
                         <input type="submit" class="btn btn-outline-dark" value="Afrekenen">
                     </form>
-                </div>
+                </div> -->
             </div>
-            <div class="col-md-4 d-none d-xs-block d-md-block">
+            <div class="col-md-4">
                 <div class="sidebox emt">
-                    <h6 class="noborder">Winkelwagen</h6>
+                    <h6 class="noborder">Winkelmadje</h6>
                     <div class="items">
-                        <p>De winkelwagen is nog leeg</p>
+                        <p class="empty">De winkelwagen is nog leeg</p>
                     </div>
                     <br>
                     <div class="border-top mb"></div>
-                    <p class="floatright total">€ 0,00</p>
+                    <p class="floatright total">€0.00</p>
                     <p class="info">Totaal</p>
+                    <div class="floatright btn btn-outline-dark emptycart btn-sm">
+                        Legen
+                    </div>
                     <form action="{{ url_for('shop') }}" method="post">
-                        <input type="submit" class="btn btn-outline-dark" value="Afrekenen">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input class="orderdict" type="hidden" name="orderdict" value="">
+                        <input type="submit" class="buybutton btn btn-outline-dark btn-sm" value="Afrekenen" disabled>
                     </form>
                 </div>
             </div>
@@ -120,4 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/changeprice.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/shoppingcart.js')}}"></script>
 {% endblock %}

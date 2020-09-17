@@ -120,6 +120,10 @@ nav img {
   border: none;
 }
 
+.emptycart {
+  display: none;
+}
+
 .backDrop {
   width: 100vw;
   background-image: url("/static/img/sheep-back.jpg");

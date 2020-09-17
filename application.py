@@ -102,10 +102,40 @@ def updates():
 def contact():
     return render_template('contact.html')
 
-@app.route('/koopnboom', methods=['GET', 'POST'])
+@app.route('/winkel', methods=['GET', 'POST'])
 def shop():
-    products = Product.query.all()
-    return render_template('shop.html', products=products)
+    if request.method == "GET":
+        products = Product.query.all()
+        return render_template('shop.html', products=products)
+
+    orderstring = request.form.get('orderdict')
+
+    return redirect(url_for('confirm', orderstring=orderstring))
+
+@app.route('/winkel/bevestigen/<orderstring>', methods=['GET', 'POST'])
+def confirm(orderstring):
+    if request.method == "GET":
+        orderdict = ast.literal_eval(orderstring)
+        order = {}
+        total = 0.00
+        for key, value in orderdict.items():
+            item = Product.query.get(key)
+            order[str(value) + 'x ' + item.name] = "€ " + str("{:.2f}".format(int(value) * int(item.price)))
+            total = "{:.2f}".format(total + (int(value) * int(item.price)))
+        return render_template('confirm.html', orderstring=orderstring, order=order, total=total)
+
+    order = ast.literal_eval(orderstring)
+    firstname = request.form.get('firstname')
+    lastname = request.form.get('lastname')
+    email = request.form.get('email')
+
+    print(order)
+    print(firstname)
+    print(lastname)
+    print(email)
+    return render_template('confirmed.html', order=order)
+
+
 
 @app.route('/faq/<product_id>/<product_name>')
 def faq(product_id, product_name):
@@ -408,6 +438,12 @@ def post(post_id):
         post = Post.query.get(post_id)
     otherposts = Post.query.filter(Post.id!=post_id).filter(Post.title!="Verhaal").order_by(Post.date.desc()).all()
     return render_template('post.html', post=post, otherposts=otherposts)
+
+@app.route('/algemenevoorwaarden')
+def policy():
+    post = post.query.filter(Post.title=="Voorwaarden").first()
+    return render_template('post.html', post=post)
+
 
 @app.route('/test')
 def test():

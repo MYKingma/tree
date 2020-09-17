@@ -1,0 +1,31 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <div class="row">
+        <div class="col-md-8">
+            <h4 class="noborder ml">Bestelling bevestigd!</h4>
+            <div class="boxnomar">
+                <h6 class="noborder">Bestelling</h6>
+                {% for key, value in order.items() %}
+                <p class="floatright">{{ value }}</p>
+                <p>{{ key }}</p>
+                {% endfor %}
+                <p class="info floatright">€ {{ total }}</p>
+                <p class="info border-top">Totaal</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
