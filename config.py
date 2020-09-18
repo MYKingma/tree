@@ -114,7 +114,7 @@ if not app.debug:
         mail_handler = SMTPHandler(
             mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
             fromaddr=app.config['MAIL_DEFAULT_SENDER'],
-            toaddrs=app.config['ADMINS'], subject='Stadsgids error',
+            toaddrs=app.config['ADMINS'], subject="Studio 't Landje error",
             credentials=auth, secure=secure)
         mail_handler.setLevel(logging.DEBUG)
         logger.addHandler(mail_handler)

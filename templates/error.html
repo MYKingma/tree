@@ -1,16 +1,22 @@
-<!-- error.html for implementing a tree-buy webapp
+<!-- index.html for implementing a tree-buy webapp
 
 Maurice Kingma
 
-Base layout for error pages
+Website homepage layout
 -->
 
-<!DOCTYPE html>
-<html id="html" lang="nl">
-    <head>
-        <title>Error {{ status_code }}</title>
-    </head>
-    <body>
-        <h1>{{ message }}</h1>
-    </body>
-</html>
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje - Fout{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container">
+    <h4 class="noborder">Oeps.. dat ging niet helemaal goed</h4>
+    <p>De applicatie heeft een fout opgelopen, deze is automatisch doorgegeven aan de beheerder.</p>
+    <br>
+    <br>
+    <p>{{ status_code }}: {{ message }}</p>
+</div>
+{% endblock %}
