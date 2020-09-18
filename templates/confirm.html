@@ -16,7 +16,7 @@ Website homepage layout
     <div class="row">
         <div class="col-md-8">
             <h4 class="noborder ml">Bestelling bevestigen</h4>
-            <form class="needs-validation box" action="{{ url_for('confirm', orderstring=orderstring) }}" method="post">
+            <form class="needs-validation box" action="{{ url_for('confirm', orderstring=orderstring) }}" method="post" novalidate>
                 <div class="boxnomar">
                     <h6 class="noborder">Bestelling</h6>
                     {% for key, value in order.items() %}
@@ -29,24 +29,43 @@ Website homepage layout
                 <br>
                 <div class="form-group">
                     <label>Voornaam</label>
-                    <input type="text" name="firstname" value="" class="form-control" required>
+                    <input id="firstname" type="text" name="firstname" value="" class="form-control" required>
+                    <p id="firstnameHelp" class="inputhelp"></p>
                 </div>
                 <div class="form-group">
                     <label>Achternaam</label>
-                    <input type="text" name="lastname" value="" class="form-control" required>
+                    <input id="lastname" type="text" name="lastname" value="" class="form-control" required>
+                    <p id="lastnamehelp" class="inputhelp"></p>
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" name="email" value="" class="form-control" required>
+                    <label>E-mail</label>
+                    <input id="email" type="text" name="email" value="" class="form-control" required>
+                    <p id="emailHelp" class="inputhelp"></p>
                 </div>
                 <div class="form-group">
-                    <label>Herhaal email</label>
-                    <input type="text" name="email2" value="" class="form-control" required>
+                    <label>Herhaal e-mail</label>
+                    <input id="email2" type="text" name="email2" value="" class="form-control" required>
+                    <p id="email2Help" class="inputhelp"></p>
                 </div>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <p>Bij het plaatsen van de bestelling ga je akkoord met onze <a class="nodec" href="{{ url_for('policy')}}" target="_blank">algemene voorwaarden en privacyverklaring</a>.</p>
                 <input type="submit" class="buybutton btn btn-outline-dark btn-sm" value="Bestelling plaatsen">
             </form>
         </div>
+        <div class="col-md-4 emt">
+            <div class="box">
+                <h6 class="noborder">Betaalinformatie</h6>
+                <p>Wij gebruiken Tikkie voor het verwerken van betalingen. Dit is gratis voor zowel de afnemer als voor ons. Op deze manier kunnen we ervoor zorgen dat zoveel mogelijk geld gebruikt kan worden voor ons doel.</p>
+                <h6 class="noborder">Hoe gaat het in zijn werk?</h6>
+                <p>Nadat de bestelling is geplaatst en door ons is verwerkt ontvangt u een e-mail met de Tikkie betaallink van noreply@studio-t-landje.nl.</p>
+                <p>Na het betalen via deze link onvangt u een betaalbevestiging via e-mail en weet u zeker dat de bestelling is afgehandeld.</p>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/checkconfirm.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
 {% endblock %}

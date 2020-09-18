@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             var cartpricediv = document.querySelector('.total');
             var currentamount = parseFloat(cartpricediv.innerHTML.replace('€', ''));
             if (total + currentamount > 750) {
-                alert("Het maximale totaalbedrag per bestelling is €750")
+                alert("Het maximale totaalbedrag per bestelling is €750,-, dit is de limiet van tikkie betalingen. Wil je meer bestellen? Plaats dan een andere bestelling.")
             } else {
                 var name = pricediv.dataset.name;
                 document.querySelector('[data-id="' + id + '"]').value = 0

@@ -171,6 +171,7 @@ nav {
 .nodec, .nodec:visited, .nodec:hover {
     text-decoration: none;
     color: $blue;
+	font-weight: bold;
 }
 .nomt {
     margin-top: 0;
@@ -198,7 +199,7 @@ nav {
 	border: 1px solid lightgrey;
 	border-radius: 3px;
 	padding-left: 20px;
-	padding-right: 5px;
+	padding-right: 10px;
 	padding-top: 10px;
 	margin-bottom: 5px;
 	h6 {
@@ -309,7 +310,7 @@ nav {
 /// post body
 .postbody {
 	text-align: center;
-	p {
+	p, h1, h2, h3, h4, h5, h6 {
 		text-align: left;
 	}
     img, input {
@@ -322,6 +323,7 @@ nav {
 	}
     h1, h2, h3, h4, h5, h6 {
         font-size: 15px;
+		border: none;
     }
 	img:hover, input:hover {
 		cursor: default;

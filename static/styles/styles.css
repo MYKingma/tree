@@ -190,6 +190,7 @@ nav img {
 .nodec, .nodec:visited, .nodec:hover {
   text-decoration: none;
   color: #7284A0;
+  font-weight: bold;
 }
 
 .nomt {
@@ -224,7 +225,7 @@ nav img {
   border: 1px solid lightgrey;
   border-radius: 3px;
   padding-left: 20px;
-  padding-right: 5px;
+  padding-right: 10px;
   padding-top: 10px;
   margin-bottom: 5px;
 }
@@ -342,7 +343,7 @@ nav img {
 .postbody {
   text-align: center;
 }
-.postbody p {
+.postbody p, .postbody h1, .postbody h2, .postbody h3, .postbody h4, .postbody h5, .postbody h6 {
   text-align: left;
 }
 .postbody img, .postbody input {
@@ -355,6 +356,7 @@ nav img {
 }
 .postbody h1, .postbody h2, .postbody h3, .postbody h4, .postbody h5, .postbody h6 {
   font-size: 15px;
+  border: none;
 }
 .postbody img:hover, .postbody input:hover {
   cursor: default;

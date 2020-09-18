@@ -38,5 +38,20 @@ Website homepage layout
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <button class="btn btn-outline-secondary emt" type="submit" name="action" value="img"><i class="far fa-save"></i> Opslaan</button>
     </form>
+    <br>
+    <form class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
+        <h6 class="noborder"><i class="far fa-video"></i> Homepagina video</h6>
+        <p>Vervang hier de homepagina foto door een YouTube video welke na het ingevoerde aantal seconden weer terugveranderd naar de foto (Verstuur een leeg veld om de video te verwijderen).</p>
+        <div class="form-group">
+            <label>YouTube link</label>
+            <input type="text" name="videolink" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Duur tonen video in seconden (De video is pas zichtbaar na 5 seconden afspelen).</label>
+            <input type="text" name="videolength" class="form-control">
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button class="btn btn-outline-secondary emt" type="submit" name="action" value="video"><i class="far fa-save"></i> Opslaan</button>
+    </form>
 </div>
 {% endblock %}

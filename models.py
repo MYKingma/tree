@@ -95,6 +95,8 @@ class User(db.Model, UserMixin):
     lastname = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
     website_img = db.Column(db.String(128))
+    youtube_link = db.Column(db.String(128))
+    youtube_length = db.Column(db.Integer())
     roles = db.relationship('Role', secondary='user_roles')
 
     def get_user_roles(self):

@@ -13,9 +13,9 @@ Website post editor layout
 <!-- page content -->
 {% block content %}
 <div class="container mt">
-    <h6 class="noborder ml"><a class="nodec" href="{{ url_for('dashupdates') }}"><i class="fas fa-long-arrow-alt-left"></i> Updates</a></h6>
+    <h6 class="noborder ml"><a class="nodec" href="{{ url_for('dashupdates') }}"><i class="fas fa-long-arrow-alt-left"></i> Tijdlijn</a></h6>
     <form enctype="multipart/form-data" class="needs-validation box" action="{{ url_for('createupdate', update_id=update.id) }}" method="post" novalidate>
-        <h4 class="noborder">Update editor</h4>
+        <h4 class="noborder">Tijdlijn editor</h4>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="form-group">
             <label>Titel</label>

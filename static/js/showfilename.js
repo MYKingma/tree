@@ -81,10 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pName = document.createElement('P');
             sPath = document.createElement('SPAN');
 
-            // to delete when site is published on https
-            sPathtest = document.createElement('INPUT');
-            sPathtest.className = "form-control col-1 floatright"
-            sPathtest.value = path
+
 
 
 
@@ -99,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
             sPath.className = 'floatright';
             sPath.style.cursor = "pointer";
 
-            pName.appendChild(sPathtest);
             
             pName.appendChild(sPath);
             div.appendChild(pName);

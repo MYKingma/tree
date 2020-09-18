@@ -12,7 +12,8 @@ function mobileCheck() {
 };
 function videoplayersetup() {
 	if (document.querySelector('.videolink')) {
-		if (document.querySelector('.videolink').dataset.link.length > 83) {
+        console.log(document.querySelector('.videolink').dataset.link.length);
+		if (document.querySelector('.videolink').dataset.link.length > 87) {
             var backDrop = document.querySelector('.backDrop')
 			var iframe = document.createElement('iframe');
             var videobox = document.createElement('div');
@@ -27,11 +28,10 @@ function videoplayersetup() {
 			var length = document.querySelector('.videolink').dataset.length
 			setTimeout(function() {
 				document.querySelector('.video').style.display = "block";
-				// img.style.display = "none"
 			}, 4500);
 			setTimeout(function() {
 				document.querySelector('.video').style.display = "none";
-			}, (length * 1000) - 4000);
+			}, (length * 1000));
 		}
 	}
 }

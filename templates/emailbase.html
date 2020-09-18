@@ -13,6 +13,10 @@ Base layout for other pages
                 background-color: #9AAFA4;
                 padding: 15px;
             }
+            a {
+                text-decoration: none;
+                color: black;
+            }
             img {
                 max-width: 60px;
                 float: right;
@@ -21,11 +25,40 @@ Base layout for other pages
                 color: white;
                 font-family:'Roboto', sans-serif;
             }
+            h6 {
+                font-family:'Roboto', sans-serif;
+                color: #7284A0;
+                margin: 0;
+                margin-bottom: 5px;
+                padding: 0;
+                font-size: 15px;
+            }
             p {
                 font-family:'Roboto', sans-serif;
             }
             .body {
                 padding: 15px;
+            }
+            .box {
+                border: 1px solid lightgrey;
+                border-radius: 3px;
+                padding: 15px;
+            }
+            .floatright {
+                float: right;
+            }
+            .border-top {
+                border-top: 2px solid grey;
+                margin: 0;
+                padding: 0;
+            }
+            .footer {
+                font-size: 10px;
+                color: grey;
+            }
+            .link {
+                font-weight: bold;
+                color: #9AAFA4;
             }
         </style>
     </head>
@@ -35,21 +68,44 @@ Base layout for other pages
             <h1>Studio 't Landje</h1>
         </div>
         <div class="body">
-            <p>Beste {{ name }}</p>
+            <p>Beste {{ name }},</p>
             <br>
             <p>{{ message }}</p>
             <br>
             {% if link %}
-            <a href="{{ link }}">{{ linktext }}</a>
+            <a class="link" href="{{ link }}">{{ linktext }}</a>
+            <br>
+            <br>
             {% endif %}
-            {% if receipt %}
-            {{ receipt|safe }}
+            {% if order %}
+            <br>
+            <h6>Details van uw bestelling</h6>
+            <div class="box">
+                <p>Naam:<span class="floatright">{{ order.firstname }} {{ order.lastname }}</span></p>
+                <p>E-mail:<span class="floatright">{{ order.email }}</span></p>
+                <div class="box">
+                    <p>Producten</p>
+                    {% for item in order.items %}
+                    <p>{{ item.amount }}x {{ item.name }} (€ {{ '%0.2f'| format(item.price|float) }} p/s)<span class="floatright">€ {{ item.get_item_total() }}</span></p>
+                    {% endfor %}
+                    <div class="border-top">
+                        <p class="floatright">€ {{ order.get_total() }}</p>
+                        <p>Totaal</p>
+                    </div>
+                </div>
+            </div>
+
             {% endif %}
             <br>
             <br>
             <p>Met vriendelijke groet,</p>
             <br>
             <p>{{ sender }}</p>
+            {% if footer %}
+            <br>
+            <br>
+            <p class="footer">{{ footer }}</p>
+            {% endif %}
         </div>
     </body>
 </html>

@@ -14,6 +14,16 @@ Shop page layout
 {% block content %}
 <div class="container mt">
     <h6 class="emb"><a class="nodec" href="{{ url_for('dashboard') }}"><i class="fas fa-long-arrow-alt-left"></i> Dashboard</a></h6>
+    <h4 class="noborder"><i class="far fa-euro-sign"></i> Betalingen</h4>
+    <form class="boxnomar" action="{{ url_for('dashshop') }}" method="post">
+        <label>Betaling verwerken</label>
+        <div class="row">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input class="form-control col-4 ml" type="text" name="paycode" placeholder="Tikkie code">
+    		<button name="action" value="paycode" type="submit" class="btn btn-outline-dark ml"><i class="far fa-cash-register"></i> Verwerken</button>
+        </div>
+	</form>
+    <br>
     <div class="floatright">
         <a class="btn btn-outline-dark mb" href="{{ url_for('sendpayment')}}"><i class="fas fa-paper-plane"></i> Stuur betaallinks</a>
     </div>
@@ -57,14 +67,6 @@ Shop page layout
 			{% endfor %}
 		</tbody>
 	</table>
-    <form class="box" action="{{ url_for('dashshop') }}" method="post">
-        <label>Betaling verwerken</label>
-        <div class="row">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input class="form-control col-4 ml" type="text" name="paycode" placeholder="Tikkie code">
-    		<button name="action" value="paycode" type="submit" class="btn btn-outline-dark ml"><i class="far fa-cash-register"></i> Verwerken</button>
-        </div>
-	</form>
     {% else %}
     <p>Nog geen bestellingen geplaatst</p>
     {% endif %}

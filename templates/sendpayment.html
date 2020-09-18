@@ -13,30 +13,29 @@ send payment link page layout
 <!-- page content -->
 {% block content %}
 <div class="container mt">
+	<h6><a class="nodec" href="{{ url_for('dashshop') }}"><i class="fas fa-long-arrow-alt-left"></i> Winkel</a></h6>
 	<h4 class="noborder"><i class="far fa-paper-plane"></i> Stuur betaallinks</h4>
     {% if orders %}
-	<form action="{{ url_for('sendpayment') }}" method="post">
-		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 		<table class="table table-responsive-xs">
 			<thead class="thead-dark">
-				<th scope="col"><i class="fas fa-signature"></i></th>
-				<th scope="col"><i class="fas fa-envelope"></th>
 				<th scope="col"><i class="fas fa-terminal"></i></th>
-				<th scope="col"><i class="fas fa-clipboard-list"></i></th>
+				<th scope="col"><i class="fas fa-link"></i></th>
 			</thead>
 			<tbody>
 				{% for order in orders %}
 				<tr>
-			        <td>{{ order.firstname }} {{ order.lastname }}</td>
-					<td>{{ order.email }}</td>
 	                <td>{{ order.id + 10000 }}</td>
-					<td><input type="checkbox" name="checked" value="{{ order.id }}"></td>
+					<td>
+						<form action="{{ url_for('sendpayment') }}" method="post">
+							<input class="form-control form-control-sm" type="text" name="link">
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+							<input type="hidden" name="order" value="{{ order.id }}"/>
+						</form>
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
-		<button type="submit" class="btn btn-outline-dark mb"><i class="far fa-cogs"></i> Verwerken</button>
-	</form>
     {% else %}
     <p>Nog geen bestellingen geplaatst</p>
     {% endif %}

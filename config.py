@@ -121,10 +121,18 @@ if not app.debug:
 
 if os.getenv("PRODUCTION_SERVER") == "True":
     # set session cookie secure
-    # app.config["SESSION_COOKIE_SECURE"] = True
+    app.config["SESSION_COOKIE_SECURE"] = True
 
     # import worker
     from runworker import conn
 
     # set worker Queue
     queue = rq.Queue('default', connection=conn)
+
+    # set redirect to https
+    @app.before_request
+    def before_request():
+        if request.url.startswith('http://'):
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)

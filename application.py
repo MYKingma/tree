@@ -73,27 +73,12 @@ def index():
     post = Post.query.filter_by(title="Verhaal").first()
     user = User.query.filter_by(firstname="Jozien").first()
     background = user.website_img
-    lastposts = Post.query.filter(Post.title!="Verhaal").order_by(Post.date.desc()).limit(3).all()
+    videolink = user.youtube_link
+    videolength = user.youtube_length
+    lastposts = Post.query.filter(Post.title!="Verhaal").filter(Post.title!="Algemene voorwaarden").order_by(Post.date.desc()).limit(3).all()
+    return render_template('index.html', post=post, background=background, lastposts=lastposts, videolink=videolink, videolength=videolength)
 
-
-    # order = Order(firstname="Maurice", lastname="Kingma", email="mauricekingma@me.com")
-    # db.session.add(order)
-    # db.session.commit()
-    #
-    # product = Product.query.first()
-    # order.add_product(product, 6)
-    # db.session.commit()
-
-    # msg = Message("Bevestig je e-mailadres om je account te activeren", recipients=['mauricekingma@me.com'])
-    # msg.html = "Hallooooooooo"
-    # mail.send(msg)
-
-
-
-
-    return render_template('index.html', post=post, background=background, lastposts=lastposts, videolink="niNfiC1omzs", videolength=20)
-
-@app.route('/updates')
+@app.route('/blog')
 def updates():
     updates = Update.query.order_by(Update.date).all()
     return render_template('updates.html', updates=updates)
@@ -124,25 +109,34 @@ def confirm(orderstring):
             total = "{:.2f}".format(total + (int(value) * int(item.price)))
         return render_template('confirm.html', orderstring=orderstring, order=order, total=total)
 
-    order = ast.literal_eval(orderstring)
+    orderdict = ast.literal_eval(orderstring)
     firstname = request.form.get('firstname')
     lastname = request.form.get('lastname')
     email = request.form.get('email')
 
-    print(order)
-    print(firstname)
-    print(lastname)
-    print(email)
-    return render_template('confirmed.html', order=order)
-
-
+    neworder = Order(firstname=firstname, lastname=lastname, email=email)
+    db.session.add(neworder)
+    db.session.commit()
+    for key, value in orderdict.items():
+        product = Product.query.get(key)
+        neworder.add_product(product, value)
+    db.session.commit()
+    message = f"U heeft zojuist een bestelling geplaatst op de website van Studio 't Landje. In deze e-mail een overzicht van uw bestelling. Zodra de bestelling is verwerkt ontvankt u nogmaals een email met betaalinstructies."
+    sender = "Studio 't Landje"
+    name = neworder.firstname
+    msg = Message("Bevestiging van uw bestelling bij Studio 't Landje", recipients=[neworder.email])
+    msg.html = render_template('emailbase.html', name=name, message=message, sender=sender, order=neworder)
+    mail.send(msg)
+    return render_template('confirmed.html', order=neworder)
 
 @app.route('/faq/<product_id>/<product_name>')
 def faq(product_id, product_name):
     product = Product.query.get(product_id)
     return render_template('faq.html', product=product)
 
-@app.route('/dashboard/updates', methods=["GET", "POST"])
+@app.route('/dashboard/tijdlijn', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def dashupdates():
     if request.method == "GET":
         updates = Update.query.order_by(Update.date).all()
@@ -152,7 +146,9 @@ def dashupdates():
     db.session.commit()
     return redirect(url_for('createupdate', update_id=newupdate.id))
 
-@app.route('/dashboard/updates/opstellen/<update_id>', methods=["GET", "POST"])
+@app.route('/dashboard/tijdlijn/opstellen/<update_id>', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def createupdate(update_id):
     update = Update.query.filter_by(id=update_id).first()
 
@@ -207,8 +203,9 @@ def createupdate(update_id):
         flash("Update verwijderd", "success")
         return redirect(url_for('dashupdates'))
 
-
-@app.route('/dashboard/posts', methods=["GET", "POST"])
+@app.route('/dashboard/blog', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def dashposts():
     if request.method == "GET":
         posts = Post.query.order_by(Post.id).all()
@@ -218,7 +215,9 @@ def dashposts():
     db.session.commit()
     return redirect(url_for('createpost', post_id=newpost.id))
 
-@app.route('/dashboard/posts/opstellen/<post_id>', methods=["GET", "POST"])
+@app.route('/dashboard/blog/opstellen/<post_id>', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def createpost(post_id):
     post = Post.query.filter_by(id=post_id).first()
 
@@ -272,6 +271,8 @@ def createpost(post_id):
         return redirect(url_for('dashposts'))
 
 @app.route('/dashboard/winkel', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def dashshop():
     if request.method == "GET":
         products = Product.query.all()
@@ -297,24 +298,44 @@ def dashshop():
 
         order.paid = True
         db.session.commit()
+        message = "De betaling van uw bestelling bij Studio 't Landje is verwerkt, u hoeft verder niets meer te doen. Hieronder de details van uw afgeronde bestelling."
+        sender = "Studio 't Landje"
+        msg = Message("Betaling verwerkt van uw bestelling bij Studio 't Landje", recipients=[order.email])
+        msg.html = render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender)
+        mail.send(msg)
         flash(f"Betaling van de bestelling van {order.firstname} is verwerkt", "success")
         return redirect(url_for('dashshop'))
 
-@app.route('/dashboard/winkel/stuurtikkie', methods=["GET", "POST"])
+@app.route('/dashboard/winkel/stuurlink', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def sendpayment():
     if request.method == "GET":
         orders = Order.query.filter_by(sendpayment=False).order_by(Order.date.desc()).all()
         return render_template('sendpayment.html', orders=orders)
 
-    checked = request.form.getlist('checked')
-    for check in checked:
-        order = Order.query.get(check)
-        order.sendpayment = True
-        db.session.commit()
-    flash("bestellingen verwerkt", "success")
+    order_id = request.form.get('order')
+    order = Order.query.get(order_id)
+    link = str(request.form.get('link')).split(' ')
+    for part in link:
+        if part.startswith('https://'):
+            link = str(part)
+            break
+    message = "Uw bestelling bij Studio 't Landje is verwerkt en er is een betaallink voor u aangemaakt. Klik op onderstaande link om uw bestelling af te ronden."
+    footer = f"Werkt de link niet? Kopieer dan de volgende link en plak deze in uw browser: {link}"
+    linktext = "Klik hier om via Tikkie te betalen"
+    sender = "Studio 't Landje"
+    msg = Message("Betaalverzoek voor uw bestelling bij Studio 't Landje", recipients=[order.email])
+    msg.html = render_template('emailbase.html', name=order.firstname, link=link, message=message, order=order, linktext=linktext, sender=sender, footer=footer)
+    mail.send(msg)
+    flash("Betaallink verstuurd", "success")
+    order.sendpayment = True
+    db.session.commit()
     return redirect(url_for('sendpayment'))
 
 @app.route('/dashboard/productwijzigen/<product_id>', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def createproduct(product_id):
     product = None
     if not product_id == 0:
@@ -386,6 +407,8 @@ def createproduct(product_id):
         return redirect(url_for('dashshop'))
 
 @app.route('/dashboard/product/faq/<product_id>', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def dashfaqs(product_id):
     product = Product.query.get(product_id)
     if request.method == "GET":
@@ -394,6 +417,8 @@ def dashfaqs(product_id):
     return redirect(url_for('createfaq', faq_id=0, product_id=product_id))
 
 @app.route('/dashboard/product/faq/opstellen/<faq_id>/<product_id>', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
 def createfaq(faq_id, product_id):
     faq = None
     product = Product.query.get(product_id)
@@ -436,18 +461,13 @@ def post(post_id):
         post = Post.query.filter(Post.title!="Verhaal").order_by(Post.date.desc()).first()
     else:
         post = Post.query.get(post_id)
-    otherposts = Post.query.filter(Post.id!=post_id).filter(Post.title!="Verhaal").order_by(Post.date.desc()).all()
+    otherposts = Post.query.filter(Post.id!=post_id).filter(Post.title!="Verhaal").filter(Post.title!="Algemene voorwaarden").order_by(Post.date.desc()).all()
     return render_template('post.html', post=post, otherposts=otherposts)
 
 @app.route('/algemenevoorwaarden')
 def policy():
-    post = post.query.filter(Post.title=="Voorwaarden").first()
+    post = Post.query.filter(Post.title=="Algemene voorwaarden").first()
     return render_template('post.html', post=post)
-
-
-@app.route('/test')
-def test():
-    return redirect(url_for('index'))
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -522,6 +542,24 @@ def dashwebsite():
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
                 mail.send(msg)
             flash("Nieuwe homepagina afbeelding opgeslagen", "success")
+
+    if request.form.get('action') == "video":
+        user = User.query.filter_by(firstname="Jozien").first()
+        videolink = request.form.get('videolink')
+        if not videolink:
+            user.youtube_link = None
+            user.youtube_length = None
+            db.session.commit()
+            flash("Video verwijderd", "success")
+            return(redirect(url_for('dashwebsite')))
+        videolength = request.form.get('videolength')
+        if videolink and not videolength:
+            flash("Geen afspeelduur opgegeven", "warning")
+            return(redirect(url_for('dashwebsite')))
+        user.youtube_link = videolink.split('?v=')[1]
+        user.youtube_length = int(videolength) + 5
+        db.session.commit()
+        flash("Youtube video toegevoegd", "success")
 
     return render_template('dashwebsite.html')
 
