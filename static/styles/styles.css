@@ -443,7 +443,7 @@ nav img {
 }
 .entry .title p {
   margin: 0;
-  font-size: 15px;
+  font-size: 10px !important;
   color: #9AAFA4;
   font-weight: bold;
 }
@@ -538,6 +538,10 @@ nav img {
 
   .mobile {
     display: none;
+  }
+
+  .smalltitle {
+    font-size: 5px;
   }
 }
 @media (min-width: 489px) {

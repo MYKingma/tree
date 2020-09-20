@@ -410,7 +410,7 @@ $dot-diameter: 15px;
     }
     p {
       margin: 0;
-      font-size: 15px;
+      font-size: 10px !important;
       color: $darkGreen;
       font-weight: bold;
     }
@@ -512,6 +512,9 @@ $dot-diameter: 15px;
     }
 	.mobile {
 		display: none;
+	}
+	.smalltitle {
+		font-size: 5px;
 	}
 }
 

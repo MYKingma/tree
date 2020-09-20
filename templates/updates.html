@@ -13,13 +13,13 @@ Website homepage layout
 <!-- page content -->
 {% block content %}
 <div class="container mt">
-    <h1>Tijdlijn</h1>
+    <h4>Tijdlijn</h4>
     {% if updates %}
     <div class="timeline">
     {% for update in updates %}
         <div class="entry">
             <div class="title">
-                <h6>{{ update.date.strftime("%B '%y") }}</h6>
+                <h6>{{ update.date.strftime("%b '%y") }}</h6>
                 <p>{{ update.title }}</p>
             </div>
             <div class="body">
@@ -30,7 +30,7 @@ Website homepage layout
                 </div>
                 <div class="d-block d-md-none">
                     <p>{{ update.short }}</p>
-                    <a class="nodec floatright mr" href="{{ url_for('update', update_id=update.id) }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
+                    <a class="nodec floatright mr small" href="{{ url_for('update', update_id=update.id) }}">Lees verder <i class="fas fa-long-arrow-alt-right"></i></a>
                 </div>
             </div>
         </div>
