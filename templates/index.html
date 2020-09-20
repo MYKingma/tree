@@ -33,7 +33,7 @@ Website homepage layout
             {% endif %}
             <div class="d-block d-md-none">
                 {% if lastposts %}
-                <h5 class="mt pl">Laatste berichten</h5>
+                <h5 class="mt pl">Laatste blogposts</h5>
                 {% for post in lastposts %}
                 <a class="postlink" href="{{ url_for('post', post_id=post.id) }}">
                     <div class="postbox">
@@ -52,7 +52,7 @@ Website homepage layout
                 <br>
                 <p>Hier vind je alle informatie over ons duurzaamheidsproject in het Naardermeer, en hoe jij kan bedragen aan het succes daarvan!</p>
                 {% if lastposts %}
-                <h5 class="mt pl">Laatste berichten</h5>
+                <h5 class="mt pl">Laatste blogposts</h5>
                 {% for post in lastposts %}
                 <a class="postlink" href="{{ url_for('post', post_id=post.id) }}">
                     <div class="postbox">
