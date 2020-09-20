@@ -19,14 +19,16 @@ Base layout for other pages
     <body>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
 			<div class="navbar-brand">
-                <div class="row">
-                    <div class="ml">
-                        <img src="{{ url_for('static', filename='img/forest.svg')}}">
+                <a href="/">
+                    <div class="row">
+                        <div class="ml">
+                            <img src="{{ url_for('static', filename='img/forest.svg')}}">
+                        </div>
+                        <div class="ml titleFont">
+                            Studio<br>'t Landje
+                        </div>
                     </div>
-                    <div class="ml">
-                        <a class="titleFont" href="/">Studio<br>'t Landje</a>
-                    </div>
-                </div>
+                </a>
 			</div>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
 				<i class="fas fa-caret-square-down"></i>
@@ -70,13 +72,15 @@ Base layout for other pages
 		</div>
         {%- block content -%}{%- endblock -%}
         <div class="footer">
-            <div class="row">
-                <div class="ml">
-                    <img src="{{ url_for('static', filename='img/forest-white.svg')}}">
+            <a class="nonodec" href="/">
+                <div class="row">
+                    <div class="ml">
+                        <img src="{{ url_for('static', filename='img/forest-white.svg')}}">
+                    </div>
+                    <div class="ml smt">Studio<br>'t Landje</div>
                 </div>
-                <div class="ml smt">Studio<br>'t Landje</div>
-            </div>
-            <a href="https://www.mauricekingma.nl/" class="watermark floatright">
+            </a>
+            <a href="https://www.mauricekingma.nl/" target="_blank" class="watermark floatright">
                 <img src="{{ url_for('static', filename='img/watermark-light.png')}}">
             </a>
         </div>

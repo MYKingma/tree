@@ -121,7 +121,7 @@ def confirm(orderstring):
         product = Product.query.get(key)
         neworder.add_product(product, value)
     db.session.commit()
-    message = f"U heeft zojuist een bestelling geplaatst op de website van Studio 't Landje. In deze e-mail een overzicht van uw bestelling. Zodra de bestelling is verwerkt ontvankt u nogmaals een email met betaalinstructies."
+    message = f"Bedankt voor uw bestelling bij Studio 't Landje. In deze e-mail ontvangt u een overzicht van uw bestelling. Zodra deze is verwerkt ontvangt u een aparte e-mail met de betaalinstructies. Verwerken van de bestelling duurt doorgaans een dag."
     sender = "Studio 't Landje"
     name = neworder.firstname
     msg = Message("Bevestiging van uw bestelling bij Studio 't Landje", recipients=[neworder.email])
@@ -228,6 +228,8 @@ def createpost(post_id):
     post.title = request.form.get('title')
     post.short = request.form.get('short')
     post.body = request.form.get('editor1')
+    if request.form.get('date'):
+        post.date = datetime.datetime.strptime(request.form.get('date'), '%d-%m-%y %I:%M')
     db.session.commit()
     for file in files:
         if file and allowed_file(file.filename):
@@ -458,10 +460,10 @@ def update(update_id):
 @app.route('/blog/<post_id>')
 def post(post_id):
     if post_id == "0":
-        post = Post.query.filter(Post.title!="Verhaal").order_by(Post.date.desc()).first()
+        post = Post.query.filter(Post.title!="Verhaal").filter(Post.title!="Algemene voorwaarden").order_by(Post.date.desc()).first()
     else:
         post = Post.query.get(post_id)
-    otherposts = Post.query.filter(Post.id!=post_id).filter(Post.title!="Verhaal").filter(Post.title!="Algemene voorwaarden").order_by(Post.date.desc()).all()
+    otherposts = Post.query.filter(Post.id!=post_id).filter(Post.title!="Verhaal").filter(Post.title!="Algemene voorwaarden").filter(Post.id!=post.id).order_by(Post.date.desc()).all()
     return render_template('post.html', post=post, otherposts=otherposts)
 
 @app.route('/algemenevoorwaarden')

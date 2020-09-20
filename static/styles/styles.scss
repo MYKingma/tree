@@ -38,6 +38,14 @@ nav {
         margin: 0;
     }
 }
+.tablediv {
+	table {
+		min-width: 100%;
+		white-space: nowrap;
+	}
+	max-width: 100%;
+	overflow: scroll;
+}
 // class styling
 /// container and page settings
 .container {
@@ -173,6 +181,11 @@ nav {
     color: $blue;
 	font-weight: bold;
 }
+.nonodec, .nonodec:visited, .nonodec:hover {
+    text-decoration: none;
+	font-weight: bold;
+	color: white;
+}
 .nomt {
     margin-top: 0;
 }
@@ -213,7 +226,7 @@ nav {
 	}
 	.postdate {
 		color: grey;
-		font-size: 7px;
+		font-size: 11px;
 		font-weight: bold;
 	}
 	h6 {
@@ -497,6 +510,9 @@ $dot-diameter: 15px;
     .body p, .body ul li {
         font-size: 14px !important;
     }
+	.mobile {
+		display: none;
+	}
 }
 
 /// large
@@ -504,4 +520,14 @@ $dot-diameter: 15px;
     .navbar-brand {
         margin-right: 100px;
     }
+	.mobile {
+		display: block;
+	}
+	.btn {
+		overflow: visible;
+		white-space: nowrap;
+		span, i {
+			display: inline-block;
+		}
+	}
 }

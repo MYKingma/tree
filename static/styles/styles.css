@@ -37,6 +37,15 @@ nav img {
   margin: 0;
 }
 
+.tablediv {
+  max-width: 100%;
+  overflow: scroll;
+}
+.tablediv table {
+  min-width: 100%;
+  white-space: nowrap;
+}
+
 .container {
   min-height: 100%;
   padding-top: 87px;
@@ -193,6 +202,12 @@ nav img {
   font-weight: bold;
 }
 
+.nonodec, .nonodec:visited, .nonodec:hover {
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+}
+
 .nomt {
   margin-top: 0;
 }
@@ -239,7 +254,7 @@ nav img {
 }
 .postlink .postdate, .postlink:active .postdate, .postlink:visited .postdate {
   color: grey;
-  font-size: 7px;
+  font-size: 11px;
   font-weight: bold;
 }
 .postlink h6, .postlink:active h6, .postlink:visited h6 {
@@ -520,10 +535,26 @@ nav img {
   .body p, .body ul li {
     font-size: 14px !important;
   }
+
+  .mobile {
+    display: none;
+  }
 }
 @media (min-width: 489px) {
   .navbar-brand {
     margin-right: 100px;
+  }
+
+  .mobile {
+    display: block;
+  }
+
+  .btn {
+    overflow: visible;
+    white-space: nowrap;
+  }
+  .btn span, .btn i {
+    display: inline-block;
   }
 }
 
