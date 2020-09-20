@@ -8,6 +8,7 @@ Base layout for other pages
 <!DOCTYPE html>
 <html id="html" lang="nl">
     <head>
+        <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
         <style media="screen">
             .header {
                 background-color: #9AAFA4;
@@ -21,9 +22,8 @@ Base layout for other pages
                 max-width: 60px;
                 float: right;
             }
-            h1 {
-                color: white;
-                font-family:'Roboto', sans-serif;
+            h1, h2, h3, h4, h5 {
+                font-family: 'Comfortaa', cursive;
             }
             h6 {
                 font-family:'Roboto', sans-serif;
@@ -60,12 +60,18 @@ Base layout for other pages
                 font-weight: bold;
                 color: #9AAFA4;
             }
+            .titlefont {
+                font-family: 'Nothing You Could Do', cursive;
+            }
+            .white {
+                color: white;
+            }
         </style>
     </head>
     <body>
         <div class="header">
             <img src="{{ request.url_root }}static/img/forest-white.svg" alt="logo">
-            <h1>Studio 't Landje</h1>
+            <h1 class="titlefont white">Studio 't Landje</h1>
         </div>
         <div class="body">
             <p>Beste {{ name }},</p>
