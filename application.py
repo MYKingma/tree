@@ -80,7 +80,7 @@ def index():
 
 @app.route('/blog')
 def updates():
-    updates = Update.query.order_by(Update.date).all()
+    updates = Update.query.order_by(Update.date.desc()).all()
     return render_template('updates.html', updates=updates)
 
 @app.route('/contact')
