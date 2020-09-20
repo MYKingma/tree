@@ -24,6 +24,8 @@ Base layout for other pages
         <meta name="msapplication-TileColor" content="#00a300">
         <meta name="msapplication-config" content="/static/favicon/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
@@ -86,7 +88,9 @@ Base layout for other pages
                     <div class="ml">
                         <img src="{{ url_for('static', filename='img/forest-white.svg')}}">
                     </div>
-                    <div class="ml smt">Studio<br>'t Landje</div>
+                    <div class="ml smt titleFont">
+                        Studio<br>'t Landje
+                    </div>
                 </div>
             </a>
             <a href="https://www.mauricekingma.nl/" target="_blank" class="watermark floatright">

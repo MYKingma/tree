@@ -558,8 +558,8 @@ def dashwebsite():
         if videolink and not videolength:
             flash("Geen afspeelduur opgegeven", "warning")
             return(redirect(url_for('dashwebsite')))
-        user.youtube_link = videolink.split('?v=')[1]
-        user.youtube_length = int(videolength) + 5
+        user.youtube_link = videolink
+        user.youtube_length = int(videolength) - 5
         db.session.commit()
         flash("Youtube video toegevoegd", "success")
 
