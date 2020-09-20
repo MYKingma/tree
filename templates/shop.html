@@ -58,25 +58,12 @@ Website shop layout
                 {% endfor %}
                 </ul>
                 {% endif %}
-                <!-- <div class="d-block d-md-none emt">
-                    <h6 class="noborder">Winkelwagen</h6>
-                    <div class="items1">
-                        <p>De winkelwagen is nog leeg</p>
-                    </div>
-                    <br>
-                    <div class="border-top mb"></div>
-                    <p class="floatright total">€0,00</p>
-                    <p class="info">Totaal</p>
-                    <form action="{{ url_for('shop') }}" method="post">
-                        <input type="submit" class="btn btn-outline-dark" value="Afrekenen">
-                    </form>
-                </div> -->
             </div>
             <div class="col-md-4">
                 <div class="sidebox emt">
                     <h6 class="noborder">Winkelmandje</h6>
                     <div class="items">
-                        <p class="empty">De winkelwagen is nog leeg</p>
+                        <p class="empty">Het winkelmandje is nog leeg</p>
                     </div>
                     <br>
                     <div class="border-top mb"></div>
@@ -106,7 +93,7 @@ function move(productId) {
     var elem = document.querySelector("[data-product='" + productId + "']");
     console.log(elem);
     var width = 1;
-    var id = setInterval(frame, 10);
+    var id = setInterval(frame, 20);
     function frame() {
       if (width >= document.querySelector("[data-product='" + productId + "']").dataset.percentage) {
         clearInterval(id);
