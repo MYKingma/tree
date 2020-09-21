@@ -228,8 +228,7 @@ def createpost(post_id):
     post.title = request.form.get('title')
     post.short = request.form.get('short')
     post.body = request.form.get('editor1')
-    if request.form.get('date'):
-        post.date = datetime.datetime.strptime(request.form.get('date'), '%d-%m-%y %I:%M')
+    post.date = datetime.datetime.strptime(request.form.get('date'), '%d-%m-%y %I:%M')
     db.session.commit()
     for file in files:
         if file and allowed_file(file.filename):
