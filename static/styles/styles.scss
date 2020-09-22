@@ -194,7 +194,15 @@ nav {
     padding-top: 0;
 }
 .nodec:hover {
-    color: grey;
+    color: $darkGreen;
+}
+.notif {
+	color: white;
+	font-weight: bold;
+	background-color: $blue;
+	border-radius: 40%;
+	padding-left: 7px;
+	padding-right: 7px;
 }
 .floatright {
     float: right;
@@ -235,8 +243,8 @@ nav {
 	}
 }
 .postlink:hover {
-	h6, p {
-		color: grey;
+	h6, p, .postdate {
+		color: $darkGreen;
 	}
 	text-decoration: none;
 }
@@ -344,6 +352,14 @@ nav {
 	}
 	iframe {
 		max-width: 100%;
+	}
+	a, a:visited, a:active {
+		font-weight: bold;
+		color: $blue
+	}
+	a:hover {
+		color: $darkGreen;
+		text-decoration: none;
 	}
 }
 

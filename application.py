@@ -127,6 +127,7 @@ def confirm(orderstring):
     msg = Message("Bevestiging van uw bestelling bij Studio 't Landje", recipients=[neworder.email])
     msg.html = render_template('emailbase.html', name=name, message=message, sender=sender, order=neworder)
     job = queue.enqueue('task.send_mail_tree', msg)
+    socketio.emit("refresh", broadcast=True)
     return render_template('confirmed.html', order=neworder)
 
 @app.route('/faq/<product_id>/<product_name>')
@@ -278,7 +279,8 @@ def dashshop():
     if request.method == "GET":
         products = Product.query.all()
         orders = Order.query.order_by(Order.date.desc()).all()
-        return render_template('dashshop.html', products=products, orders=orders)
+        amount = len(Order.query.filter_by(sendpayment=False).all())
+        return render_template('dashshop.html', products=products, orders=orders, amount=amount)
 
     if request.form.get('action') == "newproduct":
         return redirect(url_for('createproduct', product_id=0))
@@ -596,3 +598,6 @@ def resetpass(token):
     login_user(user)
     flash("Maak via onderstaand formulier een nieuw wachtwoord aan", "info")
     return redirect(url_for('dashwebsite'))
+
+if __name__ == '__main__':
+    socketio.run(app)

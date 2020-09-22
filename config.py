@@ -26,10 +26,14 @@ from hashlib import blake2b
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
 from hashlib import blake2b
+from flask_socketio import SocketIO, emit
 from models import *
 
 
 app = Flask(__name__)
+
+# configure websocket
+socketio = SocketIO(app)
 
 
 # configure Secret-Key

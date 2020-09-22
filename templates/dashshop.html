@@ -23,7 +23,11 @@ Shop page layout
         </div>
         <div class="row mt">
             <button name="action" value="paycode" type="submit" class="btn btn-outline-dark btn-sm ml"><i class="far fa-cash-register"></i> <span class="mobile">Verwerken</span></button>
-            <a class="btn btn-outline-dark btn-sm ml" href="{{ url_for('sendpayment')}}"><i class="fas fa-paper-plane"></i> Stuur betaallinks</a>
+            <a class="btn btn-outline-dark btn-sm ml" href="{{ url_for('sendpayment')}}"><i class="fas fa-paper-plane"></i> Stuur betaallinks
+                {% if amount %}
+                <span class="notif">{{ amount }}</span>
+                {% endif %}
+            </a>
         </div>
 	</form>
     <br>
@@ -107,4 +111,9 @@ Shop page layout
     <p>Nog geen producten aan winkel toegevoegd</p>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/socket.js')}}"></script>
 {% endblock %}
