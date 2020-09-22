@@ -127,6 +127,15 @@ def confirm(orderstring):
     msg = Message("Bevestiging van uw bestelling bij Studio 't Landje", recipients=[neworder.email])
     msg.html = render_template('emailbase.html', name=name, message=message, sender=sender, order=neworder)
     job = queue.enqueue('task.send_mail_tree', msg)
+
+    message = f"Er is zojuist een nieuwe bestelling geplaatst op de website van Studio 't Landje, klik op onderstaande link om een de betaling voor te bereiden."
+    sender = "Studio 't Landje"
+    link = "https://www.studio-t-landje.nl/dashboard"
+    linktext = "Klik hier om naar het dashboard te gaan"
+    msg = Message("Nieuwe bestelling bij Studio 't Landje", recipients=['jozien@studio-t-landje.nl'])
+    msg.html = render_template('emailbase.html', name="Jozien", message=message, sender=sender, order=neworder, link=link, linktext=linktext)
+    job = queue.enqueue('task.send_mail_tree', msg)
+
     socketio.emit("refresh", broadcast=True)
     return render_template('confirmed.html', order=neworder)
 
