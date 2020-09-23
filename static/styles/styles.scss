@@ -285,6 +285,12 @@ nav {
         color: grey;
     }
 }
+.menubutton {
+	font-family: 'Comfortaa', cursive;
+	color: $darkGreen;
+	font-size: 13px;
+	margin-right: 5px;
+}
 
 #treelink {
     color: darkgreen;
@@ -313,6 +319,7 @@ nav {
     border: none;
     i {
         color: $darkGreen;
+		font-size: 15px;
     }
 }
 
