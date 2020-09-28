@@ -76,7 +76,7 @@ Base layout for other pages
         <div class="body">
             <p>Beste {{ name }},</p>
             <br>
-            <p>{{ message }}</p>
+            <p>{{ message|safe }}</p>
             <br>
             {% if link %}
             <a class="link" href="{{ link }}">{{ linktext }}</a>

@@ -67,6 +67,11 @@ def logout():
     flash("Successvol uitgelogd", 'success')
     return redirect(url_for('index'))
 
+# test routes
+@app.route('/test')
+def test():
+    return redirect(url_for('index'))
+
 # page routes
 @app.route('/')
 def index():
