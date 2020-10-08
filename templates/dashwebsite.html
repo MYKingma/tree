@@ -31,7 +31,7 @@ Website homepage layout
         <button class="btn btn-outline-secondary mt" type="submit" name="action" value="password"><i class="far fa-save"></i> Opslaan</button>
     </form>
     <br>
-    <form enctype="multipart/form-data" class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
+    <!-- <form enctype="multipart/form-data" class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
         <h6 class="noborder"><i class="far fa-image"></i> Homepagina afbeelding</h6>
         <p>Upload hier een nieuwe afbeelding om de homepagina-afbeelding te wijzigen</p>
         <input type="file" name="file" class="form-control-file mt">
@@ -39,8 +39,8 @@ Website homepage layout
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <button class="btn btn-outline-secondary mt" type="submit" name="action" value="img"><i class="far fa-save"></i> Opslaan</button>
     </form>
-    <br>
-    <form class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
+    <br> -->
+    <!-- <form class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
         <h6 class="noborder"><i class="far fa-video"></i> Homepagina video</h6>
         <div class="form-group">
             <label>YouTube video-ID</label>
@@ -53,6 +53,6 @@ Website homepage layout
         </div>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <button class="btn btn-outline-secondary mt" type="submit" name="action" value="video"><i class="far fa-save"></i> Opslaan</button>
-    </form>
+    </form> -->
 </div>
 {% endblock %}

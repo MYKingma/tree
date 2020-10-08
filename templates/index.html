@@ -12,12 +12,15 @@ Website homepage layout
 
 <!-- page content -->
 {% block content %}
-<div class="backDrop"></div>
-<div class="backDropLink" data-background="{{ background }}"></div>
-<div class="videolink" data-link="https://www.youtube.com/embed/{{ videolink }}?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&mute=1" data-length="{{ videolength }}"></div>
+<!-- <div class="backDrop"></div> -->
+<video class="backVideo" playsinline autoplay loop muted>
+    <source src="{{ url_for('static', filename='video/backvideo.mp4')}}" type="video/mp4">
+</video>
+<!-- <div class="backDropLink" data-background="{{ background }}"></div>
+<div class="videolink" data-link="https://www.youtube.com/embed/{{ videolink }}?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&mute=1" data-length="{{ videolength }}"></div> -->
 <div class="container nomt nopt">
     <div class="row">
-        <div class="d-block d-md-none mt">
+        <div class="d-block d-md-none">
             <div class="ml mr emt">
                 <h6 class="noborder">Welkom op de website van Studio 't Landje!</h6>
                 <p>Hier vind je alle informatie over ons duurzaamheidsproject in het Naardermeer, en hoe jij kan bijdragen aan het succes daarvan!</p>
