@@ -9,11 +9,17 @@ Javascript for checking and changeing background index.html
 document.addEventListener('DOMContentLoaded', () => {
 
 	// select checkbox and activate delete button if checked
-	const background = document.querySelector('.backDrop');
+	if (document.querySelector('.backDrop')) {
+		var background = document.querySelector('.backDrop');
+
+	} else {
+		var background = document.querySelector('.backDrop2');
+
+	}
 	const image = document.querySelector('.backDropLink').dataset.background;
 	console.log(image);
 	if (image === "None") {
-		
+
 	} else {
 		background.style.backgroundImage = 'url(https://raw.githubusercontent.com/MYKingma/tree/master/static/img/' + image + ')';
 	}
