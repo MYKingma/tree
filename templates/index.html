@@ -13,9 +13,11 @@ Website homepage layout
 <!-- page content -->
 {% block content %}
 <!-- <div class="backDrop"></div> -->
-<video class="backVideo" playsinline autoplay loop muted>
-    <source src="{{ url_for('static', filename='video/backvideo.mp4')}}" type="video/mp4">
-</video>
+<div class="backDrop2">
+    <video class="backVideo" playsinline autoplay loop muted>
+        <source src="{{ url_for('static', filename='video/backvideo.mp4')}}" type="video/mp4">
+    </video>
+</div>
 <!-- <div class="backDropLink" data-background="{{ background }}"></div>
 <div class="videolink" data-link="https://www.youtube.com/embed/{{ videolink }}?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&mute=1" data-length="{{ videolength }}"></div> -->
 <div class="container nomt nopt">

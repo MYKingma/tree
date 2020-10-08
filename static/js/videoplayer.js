@@ -39,4 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (!mobileCheck()) {
 		videoplayersetup()
 	}
+    if (document.querySelector('.backDrop2')) {
+        document.querySelector('.backDrop2').style.backgroundImage = "None";
+    }
 })
