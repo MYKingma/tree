@@ -6,6 +6,7 @@ Javascript for displaing video instead of image on front page
 */
 function hideBackground() {
     document.querySelector('.backDrop2').style.backgroundImage = "None";
+    document.querySelector('.backDrop2').style.marginTop = 0;
 }
 
 function mobileCheck() {
