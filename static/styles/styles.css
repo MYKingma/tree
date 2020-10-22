@@ -92,6 +92,11 @@ nav img {
   background-color: #7284A0;
 }
 
+.namecolumn {
+  max-width: 150px;
+  overflow-x: scroll;
+}
+
 .listitem {
   padding: 15px;
   border: 0.5px solid grey;

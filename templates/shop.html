@@ -16,10 +16,11 @@ Website shop layout
     <div class="container nomt nopt">
         <div class="row">
             <div class="col-md-8">
-                <h5 class="noborder">Winkel</h5>
+                <h5 class="noborder">Doneer aan Studio 't Landje</h5>
                 {% if products %}
                 <ul class="list-unstyled">
                 {% for product in products %}
+                {% if product.donation %}
                 <li class="listitem">
                     <div class="row">
                         <div class="col-5">
@@ -55,6 +56,7 @@ Website shop layout
                         </div>
                     </form>
                 </li>
+                {% endif %}
                 {% endfor %}
                 </ul>
                 {% endif %}

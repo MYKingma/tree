@@ -21,6 +21,11 @@ Website homepage layout
 <div class="backDropLink" data-background="{{ background }}"></div>
 <!-- <div class="videolink" data-link="https://www.youtube.com/embed/{{ videolink }}?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&mute=1" data-length="{{ videolength }}"></div> -->
 <div class="container nomt nopt">
+    {% for role in current_user.roles %}
+	{% if role.name == 'Administrator' %}
+    <a href="{{ url_for('test') }}">TEST</a>
+    {% endif %}
+    {% endfor %}
     <div class="row">
         <div class="d-block d-md-none">
             <div class="ml mr emt">

@@ -21,13 +21,35 @@ Website homepage layout
             <input class="form-control" type="text" name="name" value="{{ product.name if product }}">
         </div>
         <div class="form-group">
+            <label>Categorie</label>
+            {% if categories %}
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option value="">Geen categorie</option>
+                {% for category in categories %}
+                {% if product %}
+                {% if category.name in product.categories.name %}
+                <option value="{{ category.name }}" selected>{{ category.name }}</option>
+                {% else %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+                {% endif %}
+                {% else %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            {% endif %}
+            <br>
+            <input class="form-control" type="text" name="category">
+            <p class="inputhelp">Voeg hier een nieuwe categorie toe, deze is dan geselecteerd</p>
+        </div>
+        <div class="form-group">
             <label>Beschrijving</label>
             <textarea class="form-control" type="text" name="description">{{ product.description if product }}</textarea>
         </div>
         <div class="form-group">
             <label>Upload afbeeldingen</label>
             {% if product.image %}
-            <p>Huidige afbeelding: {{ product.image }}</p>
+            <p class="small">Huidige afbeelding: {{ product.image }}</p>
             {% endif %}
             <input id="file" class="form-control-file" type="file" name="file">
             <input id="images" type="hidden" name="images" value="{{ '' if product.image == None else product.image }}">
@@ -40,11 +62,19 @@ Website homepage layout
             <label>Prijs</label>
             <input class="form-control" type="text" name="price" value="{{ product.price if product }}">
         </div>
+        <div class="form-check">
+            {% if product.donation %}
+            <input class="form-check-input" type="checkbox" name="donation" id="Check" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="donation" id="Check">
+            {% endif %}
+            <label class="form-check-label" for="Check">Dit is een donatie</label>
+        </div>
         <div class="floatright mt">
             <div class="btn btn-outline-dark" id="unlock">
                 <i id="lock" class="fas fa-lock"></i>
             </div>
-            <button id="locked" class="btn btn-dark" type="submit" name="action" value="delete" disabled><i class="fas fa-trash-alt"></i><span class="mobile"> Verwijderen</span></button>
+            <button id="locked" class="btn btn-dark" type="submit" name="action" value="delete" disabled><i class="fas fa-trash-alt"></i> <span class="mobile">Verwijderen</span></button>
         </div>
         <button class="btn btn-outline-secondary mt" type="submit" name="action" value="save"><i class="far fa-save"></i> Opslaan</button>
     </form>

@@ -15,6 +15,10 @@ class Order(db.Model):
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
+    street = db.Column(db.String(128), nullable=True)
+    number = db.Column(db.String(128), nullable=True)
+    location = db.Column(db.String(128), nullable=True)
+    zipcode = db.Column(db.String(128), nullable=True)
     date = db.Column(db.DateTime())
     paid = db.Column(db.Boolean(), nullable=False)
     sendpayment = db.Column(db.Boolean(), nullable=False)
@@ -42,12 +46,15 @@ class Order(db.Model):
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer(), primary_key=True)
+    category_id = db.Column(db.Integer(), db.ForeignKey('categories.id'))
     name = db.Column(db.String(128), nullable=False)
     description = db.Column(db.Text(), nullable=False)
     price = db.Column(db.Float(), nullable=False)
     stock = db.Column(db.Integer(), nullable=False)
     image = db.Column(db.String(128))
+    donation = db.Column(db.Boolean(), nullable=False)
     faqs = db.relationship('FAQ', cascade="all, delete-orphan")
+    categories = db.relationship('Category', back_populates="products")
 
     def __init__(self, name, price, stock, description, image):
         self.name = name
@@ -74,6 +81,12 @@ class Product(db.Model):
         amount = self.get_sold_amount()
         current_stock = self.stock - amount
         return current_stock
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(128), nullable=False)
+    products = db.relationship('Product', back_populates="categories")
 
 class Item(db.Model):
     __tablename__ = 'items'

@@ -292,9 +292,35 @@ def createpost(post_id):
 def dashshop():
     if request.method == "GET":
         products = Product.query.all()
-        orders = Order.query.order_by(Order.date.desc()).all()
+        orders = Order.query.filter_by(paid=False).order_by(Order.date.desc()).all()
         amount = len(Order.query.filter_by(sendpayment=False).all())
         return render_template('dashshop.html', products=products, orders=orders, amount=amount)
+
+    if request.form.get('action') == "undo":
+        id = request.form.get('id')
+        order = Order.query.get(id)
+        if order.sendpayment:
+            order.sendpayment = False
+            db.session.commit()
+            flash(f"Bestelling {order.id + 10000} gereset", "success")
+        return redirect(url_for('dashshop'))
+
+    if request.form.get('action') == "delete":
+        id = request.form.get('id')
+        order = Order.query.get(id)
+        db.session.delete(order)
+        db.session.commit()
+        flash(f"Bestelling {order.id + 10000} verwijderd", "success")
+        return redirect(url_for('dashshop'))
+
+    if request.form.get('action') == "fastforward":
+        id = request.form.get('id')
+        order = Order.query.get(id)
+        order.sendpayment = True
+        order.paid = True
+        db.session.commit()
+        flash(f"Bestelling {order.id + 10000} verwerkt", "success")
+        return redirect(url_for('dashshop'))
 
     if request.form.get('action') == "newproduct":
         return redirect(url_for('createproduct', product_id=0))
@@ -350,25 +376,62 @@ def sendpayment():
     db.session.commit()
     return redirect(url_for('sendpayment'))
 
+@app.route('/dashboard/bestellingen', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
+def orders():
+    if request.method == "GET":
+        orders = Order.query.filter_by(paid=True).order_by(Order.id.desc()).all()
+        return render_template('orders.html', orders=orders)
+
+    if request.form.get('action') == "undo":
+        id = request.form.get('id')
+        order = Order.query.get(id)
+        order.paid = False
+        db.session.commit()
+        flash(f"Betaling {order.id + 10000} gereset", "success")
+        return redirect(url_for('orders'))
+
+    if request.form.get('action') == "delete":
+        id = request.form.get('id')
+        order = Order.query.get(id)
+        db.session.delete(order)
+        db.session.commit()
+        flash(f"Bestelling {order.id + 10000} verwijderd", "success")
+        return redirect(url_for('orders'))
+
+    if request.form.get('action') == "export":
+        id = request.form.get('id')
+        order = Order.query.get(id)
+        message = "De betaling van uw bestelling bij Studio 't Landje is verwerkt, u hoeft verder niets meer te doen. Hieronder de details van uw afgeronde bestelling."
+        sender = "Studio 't Landje"
+        options={'page-size':'A4', 'dpi':400, 'disable-smart-shrinking': ''}
+        return render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender)
+
 @app.route('/dashboard/productwijzigen/<product_id>', methods=["GET", "POST"])
 @login_required
 @role_required('Owner')
 def createproduct(product_id):
     product = None
+    categories = Category.query.all()
     if not product_id == 0:
         product = Product.query.get(product_id)
 
     if request.method == "GET":
-        return render_template('createproduct.html', product=product)
+        return render_template('createproduct.html', product=product, categories=categories)
     name = request.form.get('name')
     description = request.form.get('description')
     stock = request.form.get('stock')
     price = float(request.form.get('price'))
     file = request.files.get('file')
+    if request.form.get('donation'):
+        donation = True
+    else:
+        donation = False
     image = file.filename if file else None
 
     if not product:
-        product = Product(name=name, description=description, stock=stock, price=price, image=image)
+        product = Product(name=name, description=description, stock=stock, price=price, image=image, donation=donation)
         oldfile = None
         db.session.add(product)
         db.session.commit()
@@ -380,6 +443,7 @@ def createproduct(product_id):
         if image:
             oldfile = product.image
             product.image = image
+        product.donation = donation
         db.session.commit()
 
     if file and allowed_file(file.filename):

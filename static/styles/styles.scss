@@ -91,6 +91,10 @@ nav {
   border-radius: 10px;
   background-color: $blue;
 }
+.namecolumn {
+	max-width: 150px;
+	overflow-x: scroll;
+}
 .listitem {
 	.thumbnail {
 		width: 100%;
