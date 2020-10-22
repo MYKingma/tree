@@ -23,7 +23,7 @@ Website homepage layout
         <div class="form-group">
             <label>Categorie</label>
             {% if categories %}
-            <select class="form-control" id="exampleFormControlSelect1">
+            <select class="form-control" name="category">
                 <option value="">Geen categorie</option>
                 {% for category in categories %}
                 {% if product %}
@@ -39,7 +39,7 @@ Website homepage layout
             </select>
             {% endif %}
             <br>
-            <input class="form-control" type="text" name="category">
+            <input class="form-control" type="text" name="newcategory">
             <p class="inputhelp">Voeg hier een nieuwe categorie toe, deze is dan geselecteerd</p>
         </div>
         <div class="form-group">

@@ -429,12 +429,17 @@ def createproduct(product_id):
     else:
         donation = False
     image = file.filename if file else None
+    category = request.form.get('category')
+    newcategory = request.form.get('newcategory')
+
 
     if not product:
         product = Product(name=name, description=description, stock=stock, price=price, image=image, donation=donation)
         oldfile = None
         db.session.add(product)
         db.session.commit()
+        if category:
+            category = Category.query.filter_by(name=category).first()
     else:
         product.name = name
         product.description = description
@@ -444,7 +449,6 @@ def createproduct(product_id):
             oldfile = product.image
             product.image = image
         product.donation = donation
-        db.session.commit()
 
     if file and allowed_file(file.filename):
         try:
@@ -466,9 +470,21 @@ def createproduct(product_id):
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
                 job = queue.enqueue('task.send_mail_tree', msg)
 
+    if category:
+        databasecategory = Category.query.filter_by(name=category).first()
+        product.categories = databasecategory
+    else:
+        product.categories = None
+    if newcategory:
+        newccategory = Category(name=newcategory)
+        db.session.add(newccategory)
+        db.session.commit()
+        product.categories = newccategory
+    db.session.commit()
+
     if request.form.get('action') == "save":
-        flash("Wijzigingen opgeslagen", "succes")
-        return render_template('createproduct.html', product=product)
+        flash("Wijzigingen opgeslagen", "success")
+        return redirect(url_for('createproduct', product_id=product.id))
     if request.form.get('action') == "delete":
         if product.image:
             try:
@@ -484,7 +500,7 @@ def createproduct(product_id):
                 job = queue.enqueue('task.send_mail_tree', msg)
         db.session.delete(product)
         db.session.commit()
-        flash("Product verwijderd", "succes")
+        flash("Product verwijderd", "success")
         return redirect(url_for('dashshop'))
 
 @app.route('/dashboard/product/faq/<product_id>', methods=["GET", "POST"])

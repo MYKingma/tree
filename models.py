@@ -56,12 +56,13 @@ class Product(db.Model):
     faqs = db.relationship('FAQ', cascade="all, delete-orphan")
     categories = db.relationship('Category', back_populates="products")
 
-    def __init__(self, name, price, stock, description, image):
+    def __init__(self, name, price, stock, description, image, donation):
         self.name = name
         self.price = price
         self.stock = stock
         self.description = description
         self.image = image
+        self.donation = donation
 
     def get_sold_amount(self):
         amount = 0

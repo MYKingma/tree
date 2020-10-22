@@ -72,7 +72,7 @@ Migrate(app, db, compare_type=True, render_as_batch=True)
 # configure admin interface tabs
 admin = Admin(app, name='Dashboard', index_view=AdminView(User, db.session, url='/admin', endpoint='admin'))
 admin.add_view(AdminView(Role, db.session))
-admin.add_view(AdminView(UserRoles, db.session))
+admin.add_view(AdminView(Category, db.session))
 admin.add_view(AdminView(Order, db.session))
 admin.add_view(AdminView(Product, db.session))
 admin.add_view(AdminView(Item, db.session))
