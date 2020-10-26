@@ -17,12 +17,12 @@ Website homepage layout
         <div class="col-md-8">
             <div class="row">
                 <div class="col-12">
-                    <h3>Winkel</h3>
+                    <h3 id="top">Winkel</h3>
                     <p>{{ shopdescription }}</p>
                 </div>
             </div>
             <div class="boxnomar">
-                <p class="blue mr">Ga naar</p>
+                <p class="blue">Ga naar</p>
                 <div class="row ml">
                     {% for category in categories %}
                     <div class="smr smb">
@@ -33,21 +33,21 @@ Website homepage layout
             </div>
             {% if products %}
             {% for category in categories %}
-            <h5 id="{{ category.name }}" class="noborder mt nomb">{{ category.name }}</h5>
+            <h5 id="{{ category.name }}" class="mt mb">{{ category.name }}</h5>
             <div class="row nomt">
                 {% for product in products %}
                 {% if category.name in product.categories.name %}
                 {% if product.stock - product.sold > 0 %}
-                <div class="col-sm-6 smb">
-                    <div class="boxnomar">
+                <div class="col-sm-6 mb">
+                    <div class="boxnomar fullheight">
                         <img class="productimg mb" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
                         <h6 class="noborder">{{ product.name }}</h6>
                         <p>{{ product.description }}</p>
                         <p class="floatright info">€{{ '%0.2f'| format(product.price|float) }}</p>
-                        <p data-stock="{{ product.stock - product.sold }}" class="info">Voorraad: {{ product.stock - product.sold }}</p>
+                        <p data-currentstock="{{ product.id }}" class="info">Voorraad: {{ product.stock - product.sold }}</p>
                         <form class="productForm boxnomar noborder border-top" action="index.html" method="post">
                             <input type="hidden" name="orderstring" value="">
-                            <div class="btn btn-block btn-sm btn-outline-dark floatright" data-button="{{ product.id }}"><i class="fas fa-plus"></i> Toevoegen</div>
+                            <div class="btn btn-block btn-sm btn-dark btn-blue" data-button="{{ product.id }}" data-price="{{ product.price }}" data-name="{{ product.name }}" data-stock="{{ product.stock }}" data-sold="{{ product.sold }}"><i class="fas fa-plus"></i> Toevoegen</div>
                         </form>
                     </div>
                 </div>
@@ -56,9 +56,9 @@ Website homepage layout
                 {% endfor %}
                 {% for product in products %}
                 {% if category.name in product.categories.name %}
-                {% if product.stock - product.sold > 0 %}
-                <div class="col-sm-6 smb">
-                    <div class="boxnomar">
+                {% if product.stock - product.sold == 0 %}
+                <div class="col-sm-6 mb">
+                    <div class="boxnomar fullheight">
                         <img class="productimg mb shade" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
                         <h6 class="noborder">{{ product.name }}</h6>
                         <p>{{ product.description }}</p>
@@ -69,29 +69,34 @@ Website homepage layout
                 {% endif %}
                 {% endfor %}
             </div>
+            <a class="nodec floatright onlymobile light" href="#cart">Naar winkelwagen <i class="fas fa-shopping-basket"></i></a>
+            <a class="nodec light" href="#top"><i class="fas fa-long-arrow-alt-up"></i> Naar boven</a>
             {% endfor %}
             {% endif %}
         </div>
         <div class="col-md-4">
             <div class="sidebox emt">
-                <h6 id="cart" class="noborder">Winkelmandje</h6>
+                <h6 id="cart" class="noborder"><i class="fas fa-shopping-basket"></i> Winkelmandje</h6>
                 <div class="items">
                     <p class="empty">Het winkelmandje is nog leeg</p>
                 </div>
                 <br>
                 <div class="border-top mb"></div>
-                <p class="floatright total">€0.00</p>
+                <p class="floatright total info">€0.00</p>
                 <p class="info">Totaal</p>
-                <div class="floatright btn btn-outline-dark emptycart btn-sm">
+                <div class="floatright btn btn-dark btn-blue emptycart btn-sm">
                     Legen
                 </div>
                 <form action="{{ url_for('itemshop') }}" method="post">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <input class="orderdict" type="hidden" name="orderdict" value="">
-                    <input type="submit" class="buybutton btn btn-outline-dark btn-sm" value="Afrekenen" disabled>
+                    <input type="submit" class="buybutton btn btn-dark btn-green btn-sm" value="Afrekenen" disabled>
                 </form>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/shoppingcartproduct.js')}}"></script>
 {% endblock %}

@@ -102,6 +102,9 @@ nav {
 	color: $blue;
 	font-weight: bolder;
 }
+.fullheight {
+	height: 100%;
+}
 .smalltext {
 	font-size: 12px;
 }
@@ -126,6 +129,14 @@ nav {
 .btn-blue:hover {
 	background-color: $darkGreen;
 	border-color: $darkGreen;
+}
+.btn-green {
+	background-color: $darkGreen;
+	border-color: $darkGreen;
+}
+.btn-green:hover {
+	background-color: $blue;
+	border-color: $blue;
 }
 .listitem {
 	.thumbnail {
@@ -342,6 +353,15 @@ nav {
         font-size: 10px;
         color: grey;
     }
+}
+.light {
+	font-weight: 100;
+}
+.light:hover {
+	font-weight: 100;
+}
+.right {
+	text-align: right;
 }
 .menubutton {
 	font-family: 'Comfortaa', cursive;
@@ -601,6 +621,9 @@ $dot-diameter: 15px;
 	.mobile {
 		display: none;
 	}
+	.onlymobile {
+		display: block;
+	}
 	.smalltitle {
 		font-size: 5px;
 	}
@@ -613,6 +636,9 @@ $dot-diameter: 15px;
     }
 	.mobile {
 		display: block;
+	}
+	.onlymobile {
+		display: none;
 	}
 	.btn {
 		overflow: visible;

@@ -23,25 +23,40 @@ Website homepage layout
                 <p class="info">Naam</p>
                 <p class="floatright">{{ order.email }}</p>
                 <p class="info">E-mail</p>
+                {% if itemorder == True %}
+                {% if order.street %}
+                <p class="floatright right">{{ order.street }} {{ order.number }}<br>{{ order.zipcode }} {{ order.location }}</p>
+                <p class="info">Adres</p>
+                {% endif %}
+                {% endif %}
                 <br>
                 <div class="boxnomar">
                     <p class="info">Bestelling</p>
                     {% for item in order.items %}
                     <p class="floatright">€ {{ item.get_item_total() }}</p>
-                    <p>{{ item.amount }}x {{ item.name }} (€ {{ '%0.2f'| format(item.price|float) }} p/s)</p>
+                    <p>{{ item.amount }}x {{ item.name }} <br>(€ {{ '%0.2f'| format(item.price|float) }} p/s)</p>
                     {% endfor %}
                     <p class="info floatright">€ {{ order.get_total() }}</p>
                     <p class="info border-top">Totaal</p>
                 </div>
+                {% if itemorder == True %}
+                {% if order.street %}
+                <br>
+                <p class="ml">U heeft ervoor gekozen om de bestelling te laten bezorgen. Hiervoor worden €4,- aan verzendkosten in rekening gebracht. Deze worden aan het totaalbedrag in het Tikkie toegevoegd. Wij verzenden onze producten met PostNL en u ontvangt dan ook een verzendbevestiging inclusief Track&Trace code wanneer wij de bestelling hebben verzonden.</p>
+                {% else %}
+                <br>
+                <p>U heeft ervoor gekozen om de bestelling af te halen. Nadat de bestelling is betaald ontvangt u van ons een email met de mogelijkheid om hiervoor een afspraak te maken.</p>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
         <div class="col-md-4 emt">
             <div class="box">
-                <h6 class="noborder">Bevestigingse-mail verstuurd</h6>
+                <h6 class="noborder">E-mailbevestiging verstuurd</h6>
                 <p>Een bevestiging met een overzicht van uw bestelling is verzonden naar {{ order.email }}.</p>
                 <h6 class="noborder">En hoe nu verder?</h6>
                 <p>Nadat de bestelling is geplaatst en door ons is verwerkt ontvangt u een e-mail met de Tikkie betaallink van noreply@studio-t-landje.nl.</p>
-                <p>Na het betalen via deze link onvangt u een betaalbevestiging via e-mail en weet u zeker dat de bestelling is afgehandeld.</p>
+                <p>Na het betalen via deze link onvangt u een betaalbevestiging via e-mail en weet u zeker dat de bestelling is verwerkt.</p>
             </div>
         </div>
     </div>

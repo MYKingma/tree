@@ -19,6 +19,34 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#firstnameHelp').innerHTML = ""
 
         };
+        if (document.querySelector('#street').value.length == 0) {
+            document.querySelector('#street').setCustomValidity('invalid')
+            document.querySelector('#streetHelp').innerHTML = "Geef een straatnaam op"
+        } else {
+            document.querySelector('#street').setCustomValidity('')
+            document.querySelector('#streetHelp').innerHTML = ""
+        };
+        if (document.querySelector('#number').value.length == 0) {
+            document.querySelector('#number').setCustomValidity('invalid')
+            document.querySelector('#numberHelp').innerHTML = "Geef een huisnummer op"
+        } else {
+            document.querySelector('#number').setCustomValidity('')
+            document.querySelector('#numberHelp').innerHTML = ""
+        };
+        if (document.querySelector('#zipcode').value.length == 0) {
+            document.querySelector('#zipcode').setCustomValidity('invalid')
+            document.querySelector('#zipcodeHelp').innerHTML = "Geef een postcode op"
+        } else {
+            document.querySelector('#zipcode').setCustomValidity('')
+            document.querySelector('#zipcodeHelp').innerHTML = ""
+        };
+        if (document.querySelector('#location').value.length == 0) {
+            document.querySelector('#location').setCustomValidity('invalid')
+            document.querySelector('#locationHelp').innerHTML = "Geef een plaatsnaam op"
+        } else {
+            document.querySelector('#location').setCustomValidity('')
+            document.querySelector('#locationHelp').innerHTML = ""
+        };
         if (document.querySelector('#lastname').value.length == 0) {
             document.querySelector('#lastname').setCustomValidity('invalid')
             document.querySelector('#lastnamehelp').innerHTML = "Geef een achternaam op"

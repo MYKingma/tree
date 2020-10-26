@@ -16,7 +16,7 @@ Website homepage layout
     <div class="row">
         <div class="col-md-8">
             <h4 class="noborder ml">Bestelling bevestigen</h4>
-            <form class="needs-validation box" action="{{ url_for('confirm', orderstring=orderstring) }}" method="post" novalidate>
+            <form class="needs-validation box" action="{{ url_for('confirm', orderstring=orderstring, product=product) }}" method="post" novalidate>
                 <div class="boxnomar">
                     <h6 class="noborder">Bestelling</h6>
                     {% for key, value in order.items() %}
@@ -25,6 +25,9 @@ Website homepage layout
                     {% endfor %}
                     <p class="info floatright">€ {{ total }}</p>
                     <p class="info border-top">Totaal</p>
+                    {% if product == 'True' %}
+                    <p class="inputhelp">Dit is exclusief eventuele bezorgkosten à €4,- per geplaatste bestelling</p>
+                    {% endif %}
                 </div>
                 <br>
                 <div class="form-group">
@@ -47,18 +50,44 @@ Website homepage layout
                     <input id="email2" type="text" name="email2" value="" class="form-control" required>
                     <p id="email2Help" class="inputhelp"></p>
                 </div>
+                {% if product == "True" %}
+                <div class="row mb">
+                    <div class="col-6">
+                        <div data-nl="bezorgen" data-button="deliver" id="adressButton" class="btn btn-block btn-dark btn-blue">
+                            Bezorgen
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div data-nl="afhalen" data-button="pickup" id="adressButton" class="btn btn-block btn-dark btn-blue">
+                            Afhalen
+                        </div>
+                    </div>
+                </div>
+                <div class="adressform"></div>
+                {% endif %}
+                <br>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <p>Bij het plaatsen van de bestelling ga je akkoord met onze <a class="nodec" href="{{ url_for('policy')}}" target="_blank">algemene voorwaarden en privacyverklaring</a>.</p>
+                {% if product == "True" %}
+                <input id="orderbutton" type="submit" class="buybutton btn btn-outline-dark btn-sm" value="Bestelling plaatsen" disabled>
+                {% else %}
                 <input type="submit" class="buybutton btn btn-outline-dark btn-sm" value="Bestelling plaatsen">
+                {% endif %}
             </form>
         </div>
         <div class="col-md-4 emt">
             <div class="box">
-                <h6 class="noborder">Betaalinformatie</h6>
+                <h5 class="noborder">Betaalinformatie</h5>
                 <p>Wij gebruiken Tikkie voor het verwerken van betalingen. Dit is gratis voor zowel de afnemer als voor ons. Op deze manier kunnen we ervoor zorgen dat zoveel mogelijk geld gebruikt kan worden voor ons doel.</p>
                 <h6 class="noborder">Hoe gaat het in zijn werk?</h6>
                 <p>Nadat de bestelling is geplaatst en door ons is verwerkt ontvangt u een e-mail met de Tikkie betaallink van noreply@studio-t-landje.nl.</p>
                 <p>Na het betalen via deze link onvangt u een betaalbevestiging via e-mail en weet u zeker dat de bestelling is afgehandeld.</p>
+                {% if product == "True" %}
+                <br>
+                <h5 class="noborder">Bezorginformatie</h5>
+                <p>Wij versturen onze artikelen via PostNL, na het betalen van de bestelling wordt deze zo snel mogelijk verzonden. Zodra dit is gebeurt ontvangt u via e-mail de track & trace gegevens om uw bestelling te volgen. De verzendkosten bedragen €4,- welke bij het totaalbedrag wordt opgeteld.</p>
+                <p>Afhalen is ook mogelijk, geef dit dan via dit formulier aan. Er wordt dan contact met u opgenomen om een afspraak te maken om uw bestelling op te halen.</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -66,6 +95,7 @@ Website homepage layout
 {% endblock %}
 
 {% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/adressform.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/checkconfirm.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
 {% endblock %}

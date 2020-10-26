@@ -35,39 +35,13 @@ Website shop layout
                                 </div>
                                 <p>{{ product.description }}</p>
                                 <br>
+                                {% if product.faqs %}
                                 <a class="nodec" href="{{ url_for('faq', product_id=product.id, product_name=product.name) }}" target="_blank"><i class="far fa-external-link-alt"></i>  Vragen over {{ product.name }}?</a>
+                                {% endif %}
                         </div>
                         <div id="myProgress">
                             <div id="myBar" data-product="{{ product.id }}" data-percentage="{{ product.sold / product.stock * 100 }}"></div>
                         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        <!-- <div class="col-5">
-                            <div class="thumbnail" style="background-image: url('{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}');"></div>
-                        </div>
-                        <div class="col-7 list-body">
-                                <h5>{{ product.name }}</h5>
-                                <p>{{ product.description }}</p>
-                                <br>
-                                <a class="nodec" href="{{ url_for('faq', product_id=product.id, product_name=product.name) }}" target="_blank"><i class="far fa-external-link-alt"></i>  Vragen over {{ product.name }}?</a>
-                        </div>
-                        <div id="myProgress">
-                            <div id="myBar" data-product="{{ product.id }}" data-percentage="{{ product.sold / product.stock * 100 }}"></div>
-                        </div> -->
                     </div>
                     {% if product.sold %}
                     <p class="floatright info">Prijs per stuk <i class="fas fa-euro-sign"></i> {{'%0.2f'| format(product.price|float)}}</p>
@@ -104,7 +78,7 @@ Website shop layout
                         <div class="row">
                             <div class="col-12 mt">
                                 <input type="hidden" name="orderstring" value="">
-                                <div class="btn btn-block btn-sm btn-outline-dark floatright" data-button="{{ product.id }}"><i class="fas fa-plus"></i> Toevoegen</div>
+                                <div class="btn btn-block btn-sm btn-dark btn-blue" data-button="{{ product.id }}"><i class="fas fa-plus"></i> Toevoegen</div>
                             </div>
                         </div>
                     </form>
@@ -123,15 +97,15 @@ Website shop layout
                     </div>
                     <br>
                     <div class="border-top mb"></div>
-                    <p class="floatright total">€0.00</p>
+                    <p class="floatright total info">€0.00</p>
                     <p class="info">Totaal</p>
-                    <div class="floatright btn btn-outline-dark emptycart btn-sm">
+                    <div class="floatright btn btn-dark btn-blue emptycart btn-sm">
                         Legen
                     </div>
                     <form action="{{ url_for('shop') }}" method="post">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <input class="orderdict" type="hidden" name="orderdict" value="">
-                        <input type="submit" class="buybutton btn btn-outline-dark btn-sm" value="Afrekenen" disabled>
+                        <input type="submit" class="buybutton btn btn-dark btn-green btn-sm" value="Afrekenen" disabled>
                     </form>
                 </div>
             </div>

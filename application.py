@@ -70,7 +70,6 @@ def logout():
 # test routes
 @app.route('/test')
 def test():
-    
     return redirect(url_for('index'))
 
 # page routes
@@ -101,10 +100,10 @@ def shop():
 
     orderstring = request.form.get('orderdict')
 
-    return redirect(url_for('confirm', orderstring=orderstring))
+    return redirect(url_for('confirm', orderstring=orderstring, product=False))
 
-@app.route('/doneren/bevestigen/<orderstring>', methods=['GET', 'POST'])
-def confirm(orderstring):
+@app.route('/doneren/bevestigen/<orderstring>/<product>', methods=['GET', 'POST'])
+def confirm(orderstring, product):
     if request.method == "GET":
         orderdict = ast.literal_eval(orderstring)
         order = {}
@@ -112,15 +111,31 @@ def confirm(orderstring):
         for key, value in orderdict.items():
             item = Product.query.get(key)
             order[str(value) + 'x ' + item.name] = "€ " + str("{:.2f}".format(int(value) * int(item.price)))
-            total = "{:.2f}".format(total + (int(value) * int(item.price)))
-        return render_template('confirm.html', orderstring=orderstring, order=order, total=total)
+            subtotal = int(value) * int(item.price)
+            total = total + subtotal
+        total = "{:.2f}".format(total)
+        return render_template('confirm.html', orderstring=orderstring, order=order, total=total, product=product)
 
     orderdict = ast.literal_eval(orderstring)
     firstname = request.form.get('firstname')
     lastname = request.form.get('lastname')
     email = request.form.get('email')
+    street = request.form.get('street')
+    number = request.form.get('number')
+    zipcode = request.form.get('zipcode')
+    location = request.form.get('location')
+    if product == "False":
+        neworder = Order(firstname=firstname, lastname=lastname, email=email, pickup=None, street=street, number=number, zipcode=zipcode, location=location)
+        itemorder = False
 
-    neworder = Order(firstname=firstname, lastname=lastname, email=email)
+    elif street:
+        neworder = Order(firstname=firstname, lastname=lastname, email=email, pickup=False, street=street, number=number, zipcode=zipcode, location=location)
+        itemorder = True
+
+    else:
+        neworder = Order(firstname=firstname, lastname=lastname, email=email, pickup=True, street=street, number=number, zipcode=zipcode, location=location)
+        itemorder = True
+
     db.session.add(neworder)
     db.session.commit()
     for key, value in orderdict.items():
@@ -128,12 +143,14 @@ def confirm(orderstring):
         neworder.add_product(product, value)
         product.sell_product(value)
     db.session.commit()
+
     message = f"Bedankt voor uw bestelling bij Studio 't Landje. In deze e-mail ontvangt u een overzicht van uw bestelling. Zodra deze is verwerkt ontvangt u een aparte e-mail met de betaalinstructies. Verwerken van de bestelling duurt doorgaans een dag."
     sender = "Studio 't Landje"
     name = neworder.firstname
     msg = Message("Bevestiging van uw bestelling bij Studio 't Landje", recipients=[neworder.email])
-    msg.html = render_template('emailbase.html', name=name, message=message, sender=sender, order=neworder)
-    job = queue.enqueue('task.send_mail_tree', msg)
+    msg.html = render_template('emailbase.html', name=name, message=message, sender=sender, order=neworder, confirmation=itemorder)
+    mail.send(msg)
+    # job = queue.enqueue('task.send_mail_tree', msg)
 
     message = f"Er is zojuist een nieuwe bestelling geplaatst op de website van Studio 't Landje, klik op onderstaande link om een de betaling voor te bereiden."
     sender = "Studio 't Landje"
@@ -141,10 +158,10 @@ def confirm(orderstring):
     linktext = "Klik hier om naar het dashboard te gaan"
     msg = Message("Nieuwe bestelling bij Studio 't Landje", recipients=['jozien@studio-t-landje.nl'])
     msg.html = render_template('emailbase.html', name="Jozien", message=message, sender=sender, order=neworder, link=link, linktext=linktext)
-    job = queue.enqueue('task.send_mail_tree', msg)
+    # job = queue.enqueue('task.send_mail_tree', msg)
 
     socketio.emit("refresh", broadcast=True)
-    return render_template('confirmed.html', order=neworder)
+    return render_template('confirmed.html', order=neworder, itemorder=itemorder)
 
 @app.route('/faq/<product_id>/<product_name>')
 def faq(product_id, product_name):
@@ -707,11 +724,16 @@ def resetpass(token):
 @role_required('Owner')
 def itemshop():
     if request.method == "GET":
-        products = Product.query.all()
+        products = Product.query.order_by(Product.name).all()
         categories = Category.query.all()
         user = User.query.filter_by(firstname="Jozien").first()
         shopdescription = user.shopdescription
         return render_template('productshop.html', products=products, categories=categories, shopdescription=shopdescription)
+
+    orderstring = request.form.get('orderdict')
+
+    return redirect(url_for('confirm', orderstring=orderstring, product=True))
+
 
 @app.route('/dashboard/producten', methods=["GET", "POST"])
 @login_required

@@ -66,6 +66,9 @@ Base layout for other pages
             .white {
                 color: white;
             }
+            .right {
+                text-align: right;
+            }
         </style>
     </head>
     <body>
@@ -89,10 +92,16 @@ Base layout for other pages
             <div class="box">
                 <p>Naam:<span class="floatright">{{ order.firstname }} {{ order.lastname }}</span></p>
                 <p>E-mail:<span class="floatright">{{ order.email }}</span></p>
+                {% if confirmation == True %}
+                {% if order.street %}
+                <p>Adres:<span class="floatright right">{{ order.street }} {{ order.number }}<br>{{ order.zipcode }} {{ order.location }}</span></p>
+                {% endif %}
+                {% endif %}
+                <br>
                 <div class="box">
                     <p>Producten</p>
                     {% for item in order.items %}
-                    <p>{{ item.amount }}x {{ item.name }} (€ {{ '%0.2f'| format(item.price|float) }} p/s)<span class="floatright">€ {{ item.get_item_total() }}</span></p>
+                    <p>{{ item.amount }}x {{ item.name }} <br>(€ {{ '%0.2f'| format(item.price|float) }} p/s)<span class="floatright">€ {{ item.get_item_total() }}</span></p>
                     {% endfor %}
                     <div class="border-top">
                         <p class="floatright">€ {{ order.get_total() }}</p>
@@ -100,7 +109,13 @@ Base layout for other pages
                     </div>
                 </div>
             </div>
-
+            {% if confirmation == True %}
+            {% if order.street %}
+            <p>U heeft ervoor gekozen om de bestelling te laten bezorgen. Hiervoor worden €4,- aan verzendkosten in rekening gebracht. Deze worden aan het totaalbedrag in het Tikkie toegevoegd. Wij verzenden onze producten met PostNL en u ontvangt dan ook een verzendbevestiging inclusief Track&Trace code wanneer wij de bestelling hebben verzonden.</p>
+            {% else %}
+            <p>U heeft ervoor gekozen om de bestelling af te halen. Nadat de bestellig is betaald ontvangt u van ons een email met de mogelijkheid om hiervoor een afspraak te maken.</p>
+            {% endif %}
+            {% endif %}
             {% endif %}
             <br>
             <br>
