@@ -63,6 +63,9 @@ Base layout for other pages
                     {% for role in current_user.roles %}
                 	{% if role.name == 'Owner' %}
                     <li class="nav-item">
+                        <a id="productlink" class="nav-link" href="{{ url_for('itemshop') }}"><i class="fas fa-paw"></i>Knuffel voor een boom!</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                     </li>
                     {% endif %}

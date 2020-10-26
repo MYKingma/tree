@@ -23,7 +23,40 @@ Website shop layout
                 {% if product.donation %}
                 <li class="listitem">
                     <div class="row">
-                        <div class="col-5">
+                        <div class="d-block d-sm-none col-12">
+                            <h5>{{ product.name }}</h5>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="thumbnail" style="background-image: url('{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}');"></div>
+                        </div>
+                        <div class="col-sm-7 list-body">
+                                <div class="d-none d-xs-block d-sm-block">
+                                    <h5>{{ product.name }}</h5>
+                                </div>
+                                <p>{{ product.description }}</p>
+                                <br>
+                                <a class="nodec" href="{{ url_for('faq', product_id=product.id, product_name=product.name) }}" target="_blank"><i class="far fa-external-link-alt"></i>  Vragen over {{ product.name }}?</a>
+                        </div>
+                        <div id="myProgress">
+                            <div id="myBar" data-product="{{ product.id }}" data-percentage="{{ product.sold / product.stock * 100 }}"></div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <!-- <div class="col-5">
                             <div class="thumbnail" style="background-image: url('{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}');"></div>
                         </div>
                         <div class="col-7 list-body">
@@ -33,28 +66,49 @@ Website shop layout
                                 <a class="nodec" href="{{ url_for('faq', product_id=product.id, product_name=product.name) }}" target="_blank"><i class="far fa-external-link-alt"></i>  Vragen over {{ product.name }}?</a>
                         </div>
                         <div id="myProgress">
-                            <div id="myBar" data-product="{{ product.id }}" data-percentage="{{ product.get_percentage_sold() * 100 }}"></div>
-                        </div>
+                            <div id="myBar" data-product="{{ product.id }}" data-percentage="{{ product.sold / product.stock * 100 }}"></div>
+                        </div> -->
                     </div>
+                    {% if product.sold %}
                     <p class="floatright info">Prijs per stuk <i class="fas fa-euro-sign"></i> {{'%0.2f'| format(product.price|float)}}</p>
-                    <p class="info">Al {{ (product.get_percentage_sold() * 100)|round|int }}% verkocht!</p>
+                    {% endif %}
+                    {% if product.stock - product.sold < 50 %}
+                    <p class="info">Nog maar {{ product.stock - product.sold }} beschikbaar!</p>
+                    {% elif product.stock - product.sold == 0 %}
+                    <p class="info">Alle 700 bomen verkocht!</p>
+                    {% else %}
+                    <p class="info">Al {{ (product.sold / product.stock * 100)|round|int }}% verkocht!</p>
+                    {% endif %}
                     <br>
+                    {% if product.stock - product.sold == 0 %}
+                    <p>Uitverkocht!</p>
+                    {% else %}
                     <form class="productForm boxnomar noborder border-top" action="" method="">
                         <div class="row">
-                            <p class="info col-4 nomargin">Aantal</p>
-                            <input id="amount" type="number" name="amount" class="form-control-sm col-2 pl" data-id="{{ product.id }}" min=0>
-                            <p class="col-6"></p>
+                            <div class="col smt">
+                                <label class="info nomargin">Aantal</label>
+                            </div>
+                            <div class="col">
+                                <input id="amount" type="number" name="amount" class="form-control-sm col-6 numinput" data-id="{{ product.id }}" min=0>
+                            </div>
                         </div>
                         <br>
                         <div class="row">
-                            <p class="info col-4">Totaal</p>
-                            <p data-priceid="{{ product.id }}" class="col-2 info" data-price="{{ product.price }}" data-name="{{ product.name }}">€0.00</p>
-                            <div class="col-6">
+                            <div class="col smt">
+                                <p class="info">Totaal</p>
+                            </div>
+                            <div class="col">
+                                <p data-priceid="{{ product.id }}" class="info" data-price="{{ product.price }}" data-name="{{ product.name }}">€0.00</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt">
                                 <input type="hidden" name="orderstring" value="">
-                                <div class="btn btn-sm btn-outline-dark floatright" data-button="{{ product.id }}"><i class="fas fa-plus"></i> Toevoegen</div>
+                                <div class="btn btn-block btn-sm btn-outline-dark floatright" data-button="{{ product.id }}"><i class="fas fa-plus"></i> Toevoegen</div>
                             </div>
                         </div>
                     </form>
+                    {% endif %}
                 </li>
                 {% endif %}
                 {% endfor %}

@@ -135,7 +135,7 @@ Shop page layout
     		        <td>{{ product.name }}</td>
     				<td>{{ product.price }}</td>
                     <td>{{ product.stock }}</td>
-                    <td>{{ product.get_sold_amount() }}</td>
+                    <td>{{ product.sold }}</td>
                     <td><a href="{{ url_for('dashfaqs', product_id=product.id) }}">FAQ</a></td>
                     <td><a href="{{ url_for('createproduct', product_id=product.id) }}">Wijzigen</a></td>
     			</tr>

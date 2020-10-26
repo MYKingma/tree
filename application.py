@@ -70,6 +70,12 @@ def logout():
 # test routes
 @app.route('/test')
 def test():
+    products = Product.query.filter(Product.name=="Ik doneer een boom").all()
+    for product in products:
+        print(product.name)
+        product.sold = 618
+        db.session.commit()
+        print(product.sold)
     return redirect(url_for('index'))
 
 # page routes
@@ -92,7 +98,7 @@ def updates():
 def contact():
     return render_template('contact.html')
 
-@app.route('/winkel', methods=['GET', 'POST'])
+@app.route('/doneren', methods=['GET', 'POST'])
 def shop():
     if request.method == "GET":
         products = Product.query.all()
@@ -125,6 +131,7 @@ def confirm(orderstring):
     for key, value in orderdict.items():
         product = Product.query.get(key)
         neworder.add_product(product, value)
+        product.sell_product(value)
     db.session.commit()
     message = f"Bedankt voor uw bestelling bij Studio 't Landje. In deze e-mail ontvangt u een overzicht van uw bestelling. Zodra deze is verwerkt ontvangt u een aparte e-mail met de betaalinstructies. Verwerken van de bestelling duurt doorgaans een dag."
     sender = "Studio 't Landje"
@@ -308,6 +315,9 @@ def dashshop():
     if request.form.get('action') == "delete":
         id = request.form.get('id')
         order = Order.query.get(id)
+        for item in order.items:
+            product = Product.query.filter_by(name=item.name).first()
+            product.sold = product.sold + item.amount
         db.session.delete(order)
         db.session.commit()
         flash(f"Bestelling {order.id + 10000} verwijderd", "success")
@@ -429,17 +439,23 @@ def createproduct(product_id):
     else:
         donation = False
     image = file.filename if file else None
-    category = request.form.get('category')
-    newcategory = request.form.get('newcategory')
+    inputcategory = request.form.get('category')
+    inputnewcategory = request.form.get('newcategory')
 
+    if inputnewcategory:
+        category = Category(name=inputnewcategory)
+        db.session.add(category)
+        db.session.commit()
+    elif inputcategory:
+        category = Category.query.filter_by(name=inputcategory).first()
+    else:
+        category = None
 
     if not product:
-        product = Product(name=name, description=description, stock=stock, price=price, image=image, donation=donation)
+        product = Product(name=name, description=description, stock=stock, price=price, image=image, donation=donation, categories=category)
         oldfile = None
         db.session.add(product)
         db.session.commit()
-        if category:
-            category = Category.query.filter_by(name=category).first()
     else:
         product.name = name
         product.description = description
@@ -449,6 +465,7 @@ def createproduct(product_id):
             oldfile = product.image
             product.image = image
         product.donation = donation
+        product.categories = category
 
     if file and allowed_file(file.filename):
         try:
@@ -470,16 +487,6 @@ def createproduct(product_id):
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
                 job = queue.enqueue('task.send_mail_tree', msg)
 
-    if category:
-        databasecategory = Category.query.filter_by(name=category).first()
-        product.categories = databasecategory
-    else:
-        product.categories = None
-    if newcategory:
-        newccategory = Category(name=newcategory)
-        db.session.add(newccategory)
-        db.session.commit()
-        product.categories = newccategory
     db.session.commit()
 
     if request.form.get('action') == "save":
@@ -598,7 +605,9 @@ def dashboard():
 @role_required('Owner')
 def dashwebsite():
     if request.method == "GET":
-        return render_template('dashwebsite.html')
+        user = User.query.filter_by(firstname="Jozien").first()
+        shopdescription = user.shopdescription
+        return render_template('dashwebsite.html', shopdescription=shopdescription)
 
     if request.form.get('action') == "password":
         password1 = request.form.get('password1')
@@ -658,6 +667,11 @@ def dashwebsite():
         db.session.commit()
         flash("Youtube video toegevoegd", "success")
 
+    if request.form.get("action") == "shopdescription":
+        user = User.query.filter_by(firstname="Jozien").first()
+        user.shopdescription = request.form.get('shopdescription')
+        db.session.commit()
+
     return render_template('dashwebsite.html')
 
 @app.route('/dashboard/wachtwoordvergeten')
@@ -692,6 +706,17 @@ def resetpass(token):
     login_user(user)
     flash("Maak via onderstaand formulier een nieuw wachtwoord aan", "info")
     return redirect(url_for('dashwebsite'))
+
+@app.route('/winkel', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
+def itemshop():
+    if request.method == "GET":
+        products = Product.query.all()
+        categories = Category.query.all()
+        user = User.query.filter_by(firstname="Jozien").first()
+        shopdescription = user.shopdescription
+        return render_template('productshop.html', products=products, categories=categories, shopdescription=shopdescription)
 
 if __name__ == '__main__':
     socketio.run(app)

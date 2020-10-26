@@ -40,6 +40,15 @@ Website homepage layout
         <button class="btn btn-outline-secondary mt" type="submit" name="action" value="img"><i class="far fa-save"></i> Opslaan</button>
     </form>
     <br>
+    <form class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
+        <h6 class="noborder"><i class="far fa-file-alt"></i> Beschrijving winkelpagina</h6>
+        <div class="form-group">
+            <label>Beschrijving</label>
+            <textarea type="text" name="shopdescription" class="form-control">{{ shopdescription }}</textarea>
+            <p class="inputhelp">Wijzig hier de text die bij de productwinkel op de website wordt weergegeven</p>
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button class="btn btn-outline-secondary mt" type="submit" name="action" value="shopdescription"><i class="far fa-save"></i> Opslaan</button>
     <!-- <form class="boxnomar" action="{{ url_for('dashwebsite') }}" method="post">
         <h6 class="noborder"><i class="far fa-video"></i> Homepagina video</h6>
         <div class="form-group">

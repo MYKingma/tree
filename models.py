@@ -51,37 +51,24 @@ class Product(db.Model):
     description = db.Column(db.Text(), nullable=False)
     price = db.Column(db.Float(), nullable=False)
     stock = db.Column(db.Integer(), nullable=False)
+    sold = db.Column(db.Integer(), nullable=True)
     image = db.Column(db.String(128))
     donation = db.Column(db.Boolean(), nullable=False)
     faqs = db.relationship('FAQ', cascade="all, delete-orphan")
     categories = db.relationship('Category', back_populates="products")
 
-    def __init__(self, name, price, stock, description, image, donation):
+    def __init__(self, name, price, stock, description, image, donation, categories):
         self.name = name
         self.price = price
         self.stock = stock
         self.description = description
         self.image = image
         self.donation = donation
+        self.categories = categories
 
-    def get_sold_amount(self):
-        amount = 0
-        orders = Order.query.all()
-        for order in orders:
-            for item in order.items:
-                if item.name == self.name:
-                    amount = amount + item.amount
-        return amount
-
-    def get_percentage_sold(self):
-        amount = self.get_sold_amount()
-        percentage = amount / self.stock
-        return percentage
-
-    def get_current_stock(self):
-        amount = self.get_sold_amount()
-        current_stock = self.stock - amount
-        return current_stock
+    def sell_product(self, amount):
+        self.sold = self.sold + amount
+        db.session.commit()
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -111,6 +98,7 @@ class User(db.Model, UserMixin):
     website_img = db.Column(db.String(128))
     youtube_link = db.Column(db.String(128))
     youtube_length = db.Column(db.Integer())
+    shopdescription = db.Column(db.Text(), nullable=True)
     roles = db.relationship('Role', secondary='user_roles')
 
     def get_user_roles(self):
