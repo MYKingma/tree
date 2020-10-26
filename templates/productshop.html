@@ -21,15 +21,51 @@ Website homepage layout
                     <p>{{ shopdescription }}</p>
                 </div>
             </div>
+            <div class="boxnomar">
+                <p class="blue mr">Ga naar</p>
+                <div class="row ml">
+                    {% for category in categories %}
+                    <div class="smr smb">
+                        <a class="btn btn-sm btn-info btn-blue smalltext" href="#{{ category.name }}">{{ category.name }}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
             {% if products %}
             {% for category in categories %}
-            <h5 class="noborder">{{ category.name }}</h5>
-            <div class="row">
+            <h5 id="{{ category.name }}" class="noborder mt nomb">{{ category.name }}</h5>
+            <div class="row nomt">
                 {% for product in products %}
                 {% if category.name in product.categories.name %}
-                <div class="col-5 box">
-                    <img class="productimg smt mb" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
+                {% if product.stock - product.sold > 0 %}
+                <div class="col-sm-6 smb">
+                    <div class="boxnomar">
+                        <img class="productimg mb" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
+                        <h6 class="noborder">{{ product.name }}</h6>
+                        <p>{{ product.description }}</p>
+                        <p class="floatright info">€{{ '%0.2f'| format(product.price|float) }}</p>
+                        <p data-stock="{{ product.stock - product.sold }}" class="info">Voorraad: {{ product.stock - product.sold }}</p>
+                        <form class="productForm boxnomar noborder border-top" action="index.html" method="post">
+                            <input type="hidden" name="orderstring" value="">
+                            <div class="btn btn-block btn-sm btn-outline-dark floatright" data-button="{{ product.id }}"><i class="fas fa-plus"></i> Toevoegen</div>
+                        </form>
+                    </div>
                 </div>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if category.name in product.categories.name %}
+                {% if product.stock - product.sold > 0 %}
+                <div class="col-sm-6 smb">
+                    <div class="boxnomar">
+                        <img class="productimg mb shade" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
+                        <h6 class="noborder">{{ product.name }}</h6>
+                        <p>{{ product.description }}</p>
+                        <p class="boxnomar noborder border-top info center">Helaas uitverkocht</p>
+                    </div>
+                </div>
+                {% endif %}
                 {% endif %}
                 {% endfor %}
             </div>
@@ -38,7 +74,7 @@ Website homepage layout
         </div>
         <div class="col-md-4">
             <div class="sidebox emt">
-                <h6 class="noborder">Winkelmandje</h6>
+                <h6 id="cart" class="noborder">Winkelmandje</h6>
                 <div class="items">
                     <p class="empty">Het winkelmandje is nog leeg</p>
                 </div>

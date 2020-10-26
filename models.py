@@ -22,15 +22,21 @@ class Order(db.Model):
     date = db.Column(db.DateTime())
     paid = db.Column(db.Boolean(), nullable=False)
     sendpayment = db.Column(db.Boolean(), nullable=False)
+    pickup = db.Column(db.Boolean(), nullable=True)
     items = db.relationship('Item', cascade="all, delete-orphan")
 
-    def __init__(self, firstname, lastname, email):
+    def __init__(self, firstname, lastname, email, street, number, location, zipcode, pickup):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.date = datetime.datetime.now()
         self.paid = False
         self.sendpayment = False
+        self.street = street
+        self.number = number
+        self.location = location
+        self.zipcode = zipcode
+        self.pickup = pickup
 
     def add_product(self, product, amount):
         item = Item(order_id=self.id, name=product.name, amount=amount, price=product.price)

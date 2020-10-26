@@ -70,12 +70,7 @@ def logout():
 # test routes
 @app.route('/test')
 def test():
-    products = Product.query.filter(Product.name=="Ik doneer een boom").all()
-    for product in products:
-        print(product.name)
-        product.sold = 618
-        db.session.commit()
-        print(product.sold)
+    
     return redirect(url_for('index'))
 
 # page routes
@@ -108,7 +103,7 @@ def shop():
 
     return redirect(url_for('confirm', orderstring=orderstring))
 
-@app.route('/winkel/bevestigen/<orderstring>', methods=['GET', 'POST'])
+@app.route('/doneren/bevestigen/<orderstring>', methods=['GET', 'POST'])
 def confirm(orderstring):
     if request.method == "GET":
         orderdict = ast.literal_eval(orderstring)
@@ -298,10 +293,10 @@ def createpost(post_id):
 @role_required('Owner')
 def dashshop():
     if request.method == "GET":
-        products = Product.query.all()
+        products = Product.query.filter_by(donation=True).all()
         orders = Order.query.filter_by(paid=False).order_by(Order.date.desc()).all()
         amount = len(Order.query.filter_by(sendpayment=False).all())
-        return render_template('dashshop.html', products=products, orders=orders, amount=amount)
+        return render_template('dashshop.html', orders=orders, products=products, amount=amount)
 
     if request.form.get('action') == "undo":
         id = request.form.get('id')
@@ -717,6 +712,13 @@ def itemshop():
         user = User.query.filter_by(firstname="Jozien").first()
         shopdescription = user.shopdescription
         return render_template('productshop.html', products=products, categories=categories, shopdescription=shopdescription)
+
+@app.route('/dashboard/producten', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
+def dashproducts():
+    products = Product.query.filter_by(donation=False).all()
+    return render_template('products.html', products=products)
 
 if __name__ == '__main__':
     socketio.run(app)

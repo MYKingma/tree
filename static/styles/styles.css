@@ -101,9 +101,41 @@ nav img {
   min-width: 60px;
 }
 
+.blue {
+  color: #7284A0;
+  font-weight: bolder;
+}
+
+.smalltext {
+  font-size: 12px;
+}
+
 .productimg {
   width: 100%;
   border: 3px solid #7284A0;
+  border-radius: 3px;
+}
+
+.center {
+  text-align: center;
+}
+
+.smr {
+  margin-right: 3px;
+}
+
+.smb {
+  margin-bottom: 3px;
+}
+
+.btn-blue {
+  background-color: #7284A0;
+  border-color: #7284A0;
+}
+
+.btn-blue:hover {
+  background-color: #9AAFA4;
+  border-color: #9AAFA4;
 }
 
 .listitem {
@@ -243,8 +275,17 @@ nav img {
   margin-top: 0;
 }
 
+.nomb {
+  margin-bottom: 0;
+}
+
 .nopt {
   padding-top: 0;
+}
+
+.shade {
+  background-color: black;
+  opacity: 0.5;
 }
 
 .nodec:hover {

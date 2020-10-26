@@ -114,41 +114,42 @@ Shop page layout
     <a class="btn btn-sm btn-outline-dark noborder mt" href="{{ url_for('orders')}}">
         <i class="far fa-external-link-alt"></i> Alle bestellingen
     </a>
-    <br>
     {% endif %}
     <br>
-	<h6 class="noborder"><i class="far fa-shopping-basket"></i> Producten</h6>
+    <h6 class="noborder"><i class="far fa-shopping-basket"></i> Donatie-producten</h6>
     {% if products %}
-	<div class="tablediv">
+    <div class="tablediv">
         <table class="table table-responsive-xs">
-    		<thead class="thead-dark">
-    			<th scope="col"><i class="fas fa-box-open"></i></th>
-    			<th scope="col"><i class="fas fa-tag"></th>
-    			<th scope="col"><i class="fas fa-boxes"></i></th>
+            <thead class="thead-dark">
+                <th scope="col"><i class="fas fa-box-open"></i></th>
+                <th scope="col"><i class="fas fa-tag"></th>
+                <th scope="col"><i class="fas fa-boxes"></i></th>
                 <th scope="col"><i class="fas fa-cash-register"></i></th>
                 <th scope="col"><i class="fas fa-question-circle"></i></th>
                 <th scope="col"><i class="fas fa-edit"></i></th>
-    		</thead>
-    		<tbody>
-    			{% for product in products %}
-    			<tr>
-    		        <td>{{ product.name }}</td>
-    				<td>{{ product.price }}</td>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
                     <td>{{ product.stock }}</td>
                     <td>{{ product.sold }}</td>
                     <td><a href="{{ url_for('dashfaqs', product_id=product.id) }}">FAQ</a></td>
                     <td><a href="{{ url_for('createproduct', product_id=product.id) }}">Wijzigen</a></td>
-    			</tr>
-    			{% endfor %}
-    		</tbody>
-    	</table>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <a href="{{ url_for('dashproducts') }}" class=" floatright btn btn-sm btn-outline-dark">Naar alle andere producten <i class="far fa-external-link-alt"></i></a>
     <form action="{{ url_for('dashshop') }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <button name="action" value="newproduct" type="submit" class="btn btn-outline-dark btn-sm noborder nomargin"><i class="far fa-tag"></i> Nieuw</button>
     </form>
     {% else %}
-    <p>Nog geen producten aan winkel toegevoegd</p>
+    <a href="{{ url_for('dashproducts') }}" class=" floatright btn btn-sm btn-outline-dark">Naar alle andere producten <i class="far fa-external-link-alt"></i></a>
+    <p>Nog geen donatieproducten aan winkel toegevoegd</p>
     {% endif %}
 </div>
 {% endblock %}

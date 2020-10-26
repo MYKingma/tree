@@ -98,9 +98,34 @@ nav {
 .numinput {
 	min-width: 60px;
 }
+.blue {
+	color: $blue;
+	font-weight: bolder;
+}
+.smalltext {
+	font-size: 12px;
+}
 .productimg {
 	width: 100%;
 	border: 3px solid $blue;
+	border-radius: 3px;
+}
+.center {
+	text-align: center;
+}
+.smr {
+	margin-right: 3px;
+}
+.smb {
+	margin-bottom: 3px;
+}
+.btn-blue {
+	background-color: $blue;
+	border-color: $blue;
+}
+.btn-blue:hover {
+	background-color: $darkGreen;
+	border-color: $darkGreen;
 }
 .listitem {
 	.thumbnail {
@@ -216,8 +241,15 @@ nav {
 .nomt {
     margin-top: 0;
 }
+.nomb {
+    margin-bottom: 0;
+}
 .nopt {
     padding-top: 0;
+}
+.shade {
+	background-color: black;
+	opacity: 0.5;
 }
 .nodec:hover {
     color: $darkGreen;
