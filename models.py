@@ -38,7 +38,7 @@ class Order(db.Model):
         self.location = location
         self.zipcode = zipcode
         self.pickup = pickup
-        if self.pickup is False:
+        if not self.pickup is None:
             self.delivered = False
 
     def add_product(self, product, amount):
