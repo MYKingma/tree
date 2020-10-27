@@ -77,7 +77,7 @@ Base layout for other pages
 			{%- with messages = get_flashed_messages(with_categories=true, category_filter=["success", "warning", "info", "danger"]) -%}
 				{%- if messages -%}
 					{%- for category, message in messages -%}
-			<div class="alert alert-{{ category }} alert-dismissible fade show">
+			<div id="alert" class="alert alert-{{ category }} alert-dismissible fade show">
 			  <a href="#" class="close noZensmooth" data-dismiss="alert" aria-label="close"><i class="fas fa-times"></i></a>
 			  {{ message }}
 			</div>
@@ -114,6 +114,7 @@ Base layout for other pages
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
         {% block script %}{% endblock %}
         <script src="{{ url_for('static', filename='js/zenscroll-min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/hidealert.js')}}"></script>
         <script type="text/javascript">
 			var defaultDuration = 777 // ms
 			var edgeOffset = 100 // px

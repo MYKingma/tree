@@ -76,6 +76,10 @@ nav img {
   border: 0;
 }
 
+.keepwhitespace {
+  white-space: pre-wrap;
+}
+
 #myProgress {
   margin: 10px;
   margin-left: 15px;
@@ -481,6 +485,10 @@ nav img {
   margin-right: 10px;
 }
 
+.slideaway {
+  animation: 0.2s ease-out 0s 1 slideAway;
+}
+
 .postbody {
   text-align: center;
 }
@@ -656,6 +664,14 @@ nav img {
   }
   100% {
     transform: translateY(0);
+  }
+}
+@keyframes slideAway {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
   }
 }
 @media (max-width: 489px) {

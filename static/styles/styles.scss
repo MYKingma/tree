@@ -75,6 +75,9 @@ nav {
 	    border: 0;
 	}
 }
+.keepwhitespace {
+	white-space: pre-wrap;
+}
 
 #myProgress {
 	margin: 10px;
@@ -422,6 +425,9 @@ nav {
 	margin-left: 10px;
 	margin-right: 10px;
 }
+.slideaway {
+	animation: 0.2s ease-out 0s 1 slideAway;
+}
 
 /// post body
 .postbody {
@@ -603,6 +609,14 @@ $dot-diameter: 15px;
   }
   100% {
     transform: translateY(0);
+  }
+}
+@keyframes slideAway {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
   }
 }
 

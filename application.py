@@ -729,6 +729,8 @@ def dashwebsite():
         user = User.query.filter_by(firstname="Jozien").first()
         user.shopdescription = request.form.get('shopdescription')
         db.session.commit()
+        flash("Beschrijving winkelpagina aangepast", "success")
+        return redirect(url_for('dashwebsite'))
 
     return render_template('dashwebsite.html')
 
