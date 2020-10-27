@@ -69,6 +69,9 @@ Base layout for other pages
             .right {
                 text-align: right;
             }
+            .message {
+                white-space: pre-wrap;
+            }
         </style>
     </head>
     <body>
@@ -79,7 +82,7 @@ Base layout for other pages
         <div class="body">
             <p>Beste {{ name }},</p>
             <br>
-            <p>{{ message|safe }}</p>
+            <p class="message">{{ message|safe }}</p>
             <br>
             {% if link %}
             <a class="link" href="{{ link }}">{{ linktext }}</a>
