@@ -142,6 +142,9 @@ def confirm(orderstring, product):
         product = Product.query.get(key)
         neworder.add_product(product, value)
         product.sell_product(value)
+    if neworder.pickup is False:
+        item = Item(order_id=neworder.id, name="Verzendkosten", amount=1, price=4.00)
+        db.session.add(item)
     db.session.commit()
 
     message = f"Bedankt voor uw bestelling bij Studio 't Landje. In deze e-mail ontvangt u een overzicht van uw bestelling. Zodra deze is verwerkt ontvangt u een aparte e-mail met de betaalinstructies. Verwerken van de bestelling duurt doorgaans een dag."
@@ -158,7 +161,6 @@ def confirm(orderstring, product):
     msg = Message("Nieuwe bestelling bij Studio 't Landje", recipients=['jozien@studio-t-landje.nl'])
     msg.html = render_template('emailbase.html', name="Jozien", message=message, sender=sender, order=neworder, link=link, linktext=linktext)
     job = queue.enqueue('task.send_mail_tree', msg)
-
     socketio.emit("refresh", broadcast=True)
     return render_template('confirmed.html', order=neworder, itemorder=itemorder)
 
@@ -310,17 +312,25 @@ def createpost(post_id):
 def dashshop():
     if request.method == "GET":
         products = Product.query.filter_by(donation=True).all()
-        orders = Order.query.filter_by(paid=False).order_by(Order.date.desc()).all()
+        orders = Order.query.filter_by(paid=False).filter_by(delivered=None).order_by(Order.date.desc()).all()
+        orders2 = Order.query.filter_by(delivered=False).order_by(Order.date.desc()).all()
+        orders = orders + orders2
         amount = len(Order.query.filter_by(sendpayment=False).all())
-        return render_template('dashshop.html', orders=orders, products=products, amount=amount)
+        deliveramount = len(Order.query.filter_by(paid=True).filter_by(delivered=False).all())
+        return render_template('dashshop.html', orders=orders, products=products, amount=amount, deliveramount=deliveramount)
 
     if request.form.get('action') == "undo":
         id = request.form.get('id')
         order = Order.query.get(id)
-        if order.sendpayment:
+        if order.delivered is False:
+            if order.paid is False:
+                order.sendpayment = False
+            else:
+                order.paid = False
+        elif order.sendpayment:
             order.sendpayment = False
-            db.session.commit()
-            flash(f"Bestelling {order.id + 10000} gereset", "success")
+        flash(f"Bestelling {order.id + 10000} gereset", "success")
+        db.session.commit()
         return redirect(url_for('dashshop'))
 
     if request.form.get('action') == "delete":
@@ -328,7 +338,8 @@ def dashshop():
         order = Order.query.get(id)
         for item in order.items:
             product = Product.query.filter_by(name=item.name).first()
-            product.sold = product.sold + item.amount
+            if product:
+                product.sold = product.sold - item.amount
         db.session.delete(order)
         db.session.commit()
         flash(f"Bestelling {order.id + 10000} verwijderd", "success")
@@ -339,6 +350,8 @@ def dashshop():
         order = Order.query.get(id)
         order.sendpayment = True
         order.paid = True
+        if not order.pickup == None:
+            order.delivered = True
         db.session.commit()
         flash(f"Bestelling {order.id + 10000} verwerkt", "success")
         return redirect(url_for('dashshop'))
@@ -360,15 +373,32 @@ def dashshop():
             flash("Van deze bestelling is nog geen betaallink verzonden, verstuur eerst de betaallink. Hierna kan je de betaling verwerken.", "warning")
             return redirect(url_for('dashshop'))
 
-        order.paid = True
-        db.session.commit()
-        message = "De betaling van uw bestelling bij Studio 't Landje is verwerkt, u hoeft verder niets meer te doen. Hieronder de details van uw afgeronde bestelling."
-        sender = "Studio 't Landje"
-        msg = Message("Betaling verwerkt van uw bestelling bij Studio 't Landje", recipients=[order.email])
+    if request.form.get('action') == "sendpickup":
+        order_id = request.form.get('order')
+        order = Order.query.get(order_id)
+        message = request.form.get('message')
+        sender = "Jozien van Studio 't Landje"
+        msg = Message("Betaling verwerkt van uw bestelling bij Studio 't Landje", recipients=[order.email], sender=("Jozien van Studio 't Landje", "jozien@studio-t-landje.nl"))
         msg.html = render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender)
         job = queue.enqueue('task.send_mail_tree', msg)
-        flash(f"Betaling van de bestelling van {order.firstname} is verwerkt", "success")
+        flash(f"Betaling van de bestelling van {order.firstname} is verwerkt, email verstuurd voor afhalen", "success")
         return redirect(url_for('dashshop'))
+
+    order.paid = True
+    db.session.commit()
+    if not order.pickup is None:
+        if order.pickup is True:
+            return render_template('sendpickuprequest.html', order=order)
+        else:
+            message = "De betaling van uw bestelling bij Studio 't Landje is verwerkt, u hoeft verder niets meer te doen. Hieronder de details van uw afgeronde bestelling.<br><br>Wij gaan uw bestelling zo snel mogelijk verzenden met PostNL. Zodra de Track&Trace informatie beschikbaar is ontvangt u deze per e-mail."
+    else:
+        message = "De betaling van uw bestelling bij Studio 't Landje is verwerkt, u hoeft verder niets meer te doen. Hieronder de details van uw afgeronde bestelling."
+    sender = "Studio 't Landje"
+    msg = Message("Betaling verwerkt van uw bestelling bij Studio 't Landje", recipients=[order.email])
+    msg.html = render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender)
+    job = queue.enqueue('task.send_mail_tree', msg)
+    flash(f"Betaling van de bestelling van {order.firstname} is verwerkt", "success")
+    return redirect(url_for('dashshop'))
 
 @app.route('/dashboard/winkel/stuurlink', methods=["GET", "POST"])
 @login_required
@@ -402,13 +432,22 @@ def sendpayment():
 @role_required('Owner')
 def orders():
     if request.method == "GET":
-        orders = Order.query.filter_by(paid=True).order_by(Order.id.desc()).all()
+        orders = []
+        orders2 = Order.query.filter_by(paid=True).order_by(Order.id.desc()).all()
+        for order in orders2:
+            if not order.delivered == False:
+                orders.append(order)
+
         return render_template('orders.html', orders=orders)
 
     if request.form.get('action') == "undo":
         id = request.form.get('id')
         order = Order.query.get(id)
-        order.paid = False
+        if not order.pickup == None:
+            order.delivered = False
+            print(order.delivered)
+        else:
+            order.paid = False
         db.session.commit()
         flash(f"Betaling {order.id + 10000} gereset", "success")
         return redirect(url_for('orders'))
@@ -416,6 +455,10 @@ def orders():
     if request.form.get('action') == "delete":
         id = request.form.get('id')
         order = Order.query.get(id)
+        for item in order.items:
+            product = Product.query.filter_by(name=item.name).first()
+            if product:
+                product.sold = product.sold - item.amount
         db.session.delete(order)
         db.session.commit()
         flash(f"Bestelling {order.id + 10000} verwijderd", "success")
@@ -424,10 +467,14 @@ def orders():
     if request.form.get('action') == "export":
         id = request.form.get('id')
         order = Order.query.get(id)
+        if not order.pickup is None:
+            itemorder = True
+        else:
+            itemorder = False
         message = "De betaling van uw bestelling bij Studio 't Landje is verwerkt, u hoeft verder niets meer te doen. Hieronder de details van uw afgeronde bestelling."
         sender = "Studio 't Landje"
         options={'page-size':'A4', 'dpi':400, 'disable-smart-shrinking': ''}
-        return render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender)
+        return render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender, confirmation=itemorder)
 
 @app.route('/dashboard/productwijzigen/<product_id>', methods=["GET", "POST"])
 @login_required
@@ -734,12 +781,43 @@ def itemshop():
     return redirect(url_for('confirm', orderstring=orderstring, product=True))
 
 
-@app.route('/dashboard/producten', methods=["GET", "POST"])
+@app.route('/dashboard/producten')
 @login_required
 @role_required('Owner')
 def dashproducts():
     products = Product.query.filter_by(donation=False).all()
     return render_template('products.html', products=products)
+
+@app.route('/dashboard/bestellingverzenden', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
+def delivery():
+    deliveries = Order.query.filter_by(paid=True).filter_by(delivered=False).all()
+    if request.method == "GET":
+        return render_template('delivery.html', deliveries=deliveries)
+    order_id = request.form.get('order')
+    order = Order.query.get(order_id)
+    if order.pickup == False:
+        link = request.form.get('link')
+        message = "Uw bestelling bij Studio 't Landje is verzonden. Klik op onderstaande link om uw bestelling te traceren via PostNL Track&Trace."
+        footer = f"Werkt de link niet? Kopieer dan de volgende link en plak deze in uw browser: {link}"
+        linktext = "Klik hier om uw bestelling te traceren"
+        sender = "Studio 't Landje"
+        msg = Message("Verzendbevestiging van uw bestelling bij Studio 't Landje", recipients=[order.email])
+        msg.html = render_template('emailbase.html', name=order.firstname, link=link, message=message, order=order, linktext=linktext, sender=sender, footer=footer, confirmation=False)
+        job = queue.enqueue('task.send_mail_tree', msg)
+        flash(f"Verzendbevestiging voor bestelling {order.id + 10000} verstuurd", "success")
+    else:
+        message = "Uw bestelling bij Studio 't Landje is afgehaald, u hoeft verder niets te doen. Veel plezier met uw bestelling!"
+        sender = "Studio 't Landje"
+        msg = Message("Uw bestelling bij Studio 't Landje is afgehaald", recipients=[order.email])
+        msg.html = render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender, confirmation=False)
+        job = queue.enqueue('task.send_mail_tree', msg)
+        flash(f"Afhaalbevestiging voor bestelling {order.id + 10000} verstuurd", "success")
+
+    order.delivered = True
+    db.session.commit()
+    return redirect(url_for('delivery'))
 
 if __name__ == '__main__':
     socketio.run(app)

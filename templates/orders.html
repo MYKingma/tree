@@ -25,6 +25,7 @@ Website homepage layout
                 <th scope="col"><i class="fas fa-euro-sign"></i></th>
                 <th scope="col"><i class="fas fa-paper-plane"></i></th>
                 <th scope="col"><i class="fas fa-receipt"></i></th>
+                <th scope="col"><i class="fas fa-truck-loading"></i></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -51,6 +52,15 @@ Website homepage layout
                     <td>
                         {% if order.paid %}
                         <i class="fas fa-check-circle green smt"></i>
+                        {% else %}
+                        <i class="fas fa-times-circle red smt"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order.delivered %}
+                        <i class="fas fa-check-circle green smt"></i>
+                        {% elif order.pickup == None %}
+
                         {% else %}
                         <i class="fas fa-times-circle red smt"></i>
                         {% endif %}

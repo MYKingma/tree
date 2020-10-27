@@ -33,8 +33,13 @@ Website homepage layout
                 <div class="boxnomar">
                     <p class="info">Bestelling</p>
                     {% for item in order.items %}
+                    {% if item.name == "Verzendkosten" %}
+                    <p class="floatright">€ {{ item.get_item_total() }}</p>
+                    <p>{{ item.name }}</p>
+                    {% else %}
                     <p class="floatright">€ {{ item.get_item_total() }}</p>
                     <p>{{ item.amount }}x {{ item.name }} <br>(€ {{ '%0.2f'| format(item.price|float) }} p/s)</p>
+                    {% endif %}
                     {% endfor %}
                     <p class="info floatright">€ {{ order.get_total() }}</p>
                     <p class="info border-top">Totaal</p>

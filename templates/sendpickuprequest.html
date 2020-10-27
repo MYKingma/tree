@@ -1,0 +1,49 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <div class="box">
+        <h5><i class="fa fas-people-carry"></i>Maak afspraak voor afhalen</h5>
+        <p class="info">Stuur hieronder een bericht naar {{ order.firstname }}. Hierbij is geen aanhef of afluiting nodig, dit wordt door de applicatie automatisch toegevoegd.</p>
+        <div class="boxnomar">
+            <h6 class="noborder">Details van de bestelling</h6>
+            <p class="floatright">{{ order.firstname }} {{ order.lastname }}</p>
+            <p>Naam:</p>
+            <p class="floatright">{{ order.email }}</p>
+            <p>E-mail:</p>
+            <p class="border-top"> </p>
+            {% for item in order.items %}
+            {% if not item.name == "Verzendkosten" %}
+            <p class="ml">{{ item.amount }}x {{ item.name }}<br></p>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <br>
+        <form class="needs-validation" action="{{ url_for('dashshop') }}" method="post" novalidate>
+            <div class="form-group">
+                <label>Bericht</label>
+                <textarea class="form-control" name="message" rows="8" cols="80"></textarea>
+            </div>
+            <input type="hidden" name="order" value="{{ order.id }}"/>
+            <input type="hidden" name="action" value="sendpickup"/>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input class="btn btn-block btn-dark btn-blue" type="submit" value="Verstuur bericht">
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
+{% endblock %}

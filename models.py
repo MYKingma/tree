@@ -21,6 +21,7 @@ class Order(db.Model):
     zipcode = db.Column(db.String(128), nullable=True)
     date = db.Column(db.DateTime())
     paid = db.Column(db.Boolean(), nullable=False)
+    delivered = db.Column(db.Boolean(), nullable=True)
     sendpayment = db.Column(db.Boolean(), nullable=False)
     pickup = db.Column(db.Boolean(), nullable=True)
     items = db.relationship('Item', cascade="all, delete-orphan")
@@ -37,6 +38,8 @@ class Order(db.Model):
         self.location = location
         self.zipcode = zipcode
         self.pickup = pickup
+        if self.pickup is False:
+            self.delivered = False
 
     def add_product(self, product, amount):
         item = Item(order_id=self.id, name=product.name, amount=amount, price=product.price)
@@ -71,6 +74,7 @@ class Product(db.Model):
         self.image = image
         self.donation = donation
         self.categories = categories
+        self.sold = 0
 
     def sell_product(self, amount):
         self.sold = self.sold + amount

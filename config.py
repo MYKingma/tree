@@ -62,7 +62,7 @@ app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = "noreply@studio-t-landje.nl"
+app.config['MAIL_DEFAULT_SENDER'] = ("Studio 't Landje", "noreply@studio-t-landje.nl")
 app.config['SECURITY_PASSWORD_SALT'] = os.getenv("SECURITY_PASSWORD_SALT")
 mail = Mail(app)
 

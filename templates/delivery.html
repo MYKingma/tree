@@ -1,0 +1,77 @@
+<!-- sendpayment.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+send payment link page layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+	<h6><a class="nodec" href="{{ url_for('dashshop') }}"><i class="fas fa-long-arrow-alt-left"></i> Winkel</a></h6>
+	<h5 class="noborder"><i class="far fa-truck-loading"></i> Bevestig verzending</h5>
+    {% if deliveries %}
+	<div class="tablediv">
+		<table class="table table-responsive-xs">
+			<thead class="thead-dark">
+				<th scope="col"><i class="fas fa-terminal"></i></th>
+				<th scope="col"><i class="fas fa-home"></i></th>
+				<th scope="col"><i class="fas fa-box-open"></i></th>
+				<th scope="col"><i class="fas fa-link"></i></th>
+			</thead>
+			<tbody>
+				{% for order in deliveries %}
+				<tr>
+	                <td>{{ order.id + 10000 }}</td>
+					{% if not order.street == None %}
+					<td>
+						{{ order.firstname }} {{ order.lastname }}<br>{{ order.street }} {{ order.number }}<br>{{ order.zipcode }} {{ order.location }}
+					</td>
+					{% else %}
+					<td>{{ order.firstname }} {{ order.lastname }}<br><span class="info"><i class="fas fa-people-carry"></i> Gekozen voor afhalen</span></td>
+					{% endif %}
+					<td>
+						{% for item in order.items %}
+						{% if not item.name == "Verzendkosten" %}
+						{{ item.amount }}x {{ item.name }}<br>
+						{% endif %}
+						{% endfor %}
+					</td>
+					{% if not order.street == None %}
+					<td>
+						<form class="needs-validation" action="{{ url_for('delivery') }}" method="post" novalidate>
+							<input class="form-control form-control-sm" type="text" name="link" required>
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+							<input type="hidden" name="order" value="{{ order.id }}"/>
+						</form>
+					</td>
+					{% else %}
+					<td>
+						<form class="" action="{{ url_for('delivery') }}" method="post">
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+							<input type="hidden" name="order" value="{{ order.id }}"/>
+							<input type="submit" class="btn btn-block btn-dark btn-blue" value="Bevestig afhalen">
+						</form>
+					</td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+    {% else %}
+    <p>Nog geen onverwerkte bezorging</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/socket.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
+{% endblock %}
