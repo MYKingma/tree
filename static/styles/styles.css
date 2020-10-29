@@ -61,6 +61,12 @@ nav img {
   padding: 0;
 }
 
+.carousel-item {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .videobox {
   position: relative;
   overflow: hidden;
