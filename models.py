@@ -62,6 +62,8 @@ class Product(db.Model):
     stock = db.Column(db.Integer(), nullable=False)
     sold = db.Column(db.Integer(), nullable=True)
     image = db.Column(db.String(128))
+    image2 = db.Column(db.String(128))
+    image3 = db.Column(db.String(128))
     donation = db.Column(db.Boolean(), nullable=False)
     faqs = db.relationship('FAQ', cascade="all, delete-orphan")
     categories = db.relationship('Category', back_populates="products")

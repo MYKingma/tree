@@ -48,6 +48,11 @@ def forbidden(e):
     message = "De pagina die je probeert te bezoeken is niet voor jou toegankelijk."
     return render_template('error.html', status_code=403, message=message), 403
 
+@app.errorhandler(413)
+def forbidden(e):
+    flash("Bestand te groot, maximaal 0.3 Mb", "danger")
+    return redirect(request.referrer)
+
 @app.errorhandler(410)
 def gone(e):
     message = "De pagina die je probeert te bezoeken bestaat niet meer."
@@ -484,19 +489,22 @@ def createproduct(product_id):
     categories = Category.query.all()
     if not product_id == 0:
         product = Product.query.get(product_id)
-
     if request.method == "GET":
         return render_template('createproduct.html', product=product, categories=categories)
     name = request.form.get('name')
     description = request.form.get('description')
     stock = request.form.get('stock')
-    price = float(request.form.get('price'))
+    price = float(request.form.get('price').replace(",", "."))
     file = request.files.get('file')
+    file2 = request.files.get('file2')
+    file3 = request.files.get('file3')
     if request.form.get('donation'):
         donation = True
     else:
         donation = False
     image = file.filename if file else None
+    image2 = file2.filename if file2 else None
+    image3 = file3.filename if file3 else None
     inputcategory = request.form.get('category')
     inputnewcategory = request.form.get('newcategory')
 
@@ -522,8 +530,16 @@ def createproduct(product_id):
         if image:
             oldfile = product.image
             product.image = image
+        if image2:
+            oldfile2 = product.image2
+            product.image2 = image2
+        if image3:
+            oldfile3 = product.image3
+            product.image3 = image3
         product.donation = donation
         product.categories = category
+
+    db.session.commit()
 
     if file and allowed_file(file.filename):
         try:
@@ -538,6 +554,46 @@ def createproduct(product_id):
                 repo.delete_file("static/img/uploads/products/" + str(product.id) + "/" + oldfile, "delete uploaded file", contents.sha)
             except:
                 message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file.filename} als foto bij {product.name}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                linktext = "Klik hier om naar de GitHub map te gaan"
+                sender = "Het brein van de website"
+                link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
+                msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                job = queue.enqueue('task.send_mail_tree', msg)
+
+    if file2 and allowed_file(file2.filename):
+        try:
+            repo.create_file("static/img/uploads/products/" + str(product.id) + "/" + file2.filename, "file upload", file2.read(), branch='master')
+        except:
+            flash(f"Fout bij uploaden {file2.filename}, naam bestaat al in uploadmap.", "danger")
+            return redirect(url_for('createproduct', product_id=0))
+
+        if oldfile2:
+            try:
+                contents = repo.get_contents("static/img/uploads/products/" + str(product.id) + "/" + oldfile2)
+                repo.delete_file("static/img/uploads/products/" + str(product.id) + "/" + oldfile2, "delete uploaded file", contents.sha)
+            except:
+                message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file2.filename} als foto bij {product.name}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                linktext = "Klik hier om naar de GitHub map te gaan"
+                sender = "Het brein van de website"
+                link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
+                msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                job = queue.enqueue('task.send_mail_tree', msg)
+
+    if file3 and allowed_file(file3.filename):
+        try:
+            repo.create_file("static/img/uploads/products/" + str(product.id) + "/" + file3.filename, "file upload", file3.read(), branch='master')
+        except:
+            flash(f"Fout bij uploaden {file3.filename}, naam bestaat al in uploadmap.", "danger")
+            return redirect(url_for('createproduct', product_id=0))
+
+        if oldfile3:
+            try:
+                contents = repo.get_contents("static/img/uploads/products/" + str(product.id) + "/" + oldfile3)
+                repo.delete_file("static/img/uploads/products/" + str(product.id) + "/" + oldfile3, "delete uploaded file", contents.sha)
+            except:
+                message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file3.filename} als foto bij {product.name}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
                 linktext = "Klik hier om naar de GitHub map te gaan"
                 sender = "Het brein van de website"
                 link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)

@@ -96,6 +96,7 @@ csrf = CSRFProtect(app)
 # configure file upload
 app.config['UPLOAD_FOLDER'] = os.getenv("UPLOAD_FOLDER")
 app.config['ALLOWED_EXTENSIONS'] = os.getenv("ALLOWED_EXTENSIONS")
+app.config['MAX_CONTENT_LENGTH'] = 0.3 * 1024 * 1024
 
 # set up GitHub for file upload
 g = Github(os.getenv("GITHUB_ACCESS_TOKEN"))

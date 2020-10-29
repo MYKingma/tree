@@ -39,8 +39,10 @@ Website homepage layout
                 {% if category.name in product.categories.name %}
                 {% if product.stock - product.sold > 0 %}
                 <div class="col-sm-6 mb">
-                    <div class="boxnomar fullheight">
+                    <div class="boxnomar fullheight background">
+                        {% if product.image %}
                         <img class="productimg mb" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
+                        {% endif %}
                         <h6 class="noborder">{{ product.name }}</h6>
                         <p>{{ product.description }}</p>
                         <p class="floatright info">€{{ '%0.2f'| format(product.price|float) }}</p>
@@ -58,8 +60,10 @@ Website homepage layout
                 {% if category.name in product.categories.name %}
                 {% if product.stock - product.sold == 0 %}
                 <div class="col-sm-6 mb">
-                    <div class="boxnomar fullheight">
+                    <div class="boxnomar fullheight background">
+                        {% if product.image %}
                         <img class="productimg mb shade" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
+                        {% endif %}
                         <h6 class="noborder">{{ product.name }}</h6>
                         <p>{{ product.description }}</p>
                         <p class="boxnomar noborder border-top info center">Helaas uitverkocht</p>

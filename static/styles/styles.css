@@ -110,6 +110,10 @@ nav img {
   font-weight: bolder;
 }
 
+.background {
+  background-color: #ebf2ef;
+}
+
 .fullheight {
   height: 100%;
 }
