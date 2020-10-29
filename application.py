@@ -843,7 +843,7 @@ def itemshop():
 @login_required
 @role_required('Owner')
 def dashproducts():
-    products = Product.query.filter_by(donation=False).all()
+    products = Product.query.filter_by(donation=False).order_by(Product.category_id).all()
     return render_template('products.html', products=products)
 
 @app.route('/dashboard/bestellingverzenden', methods=["GET", "POST"])

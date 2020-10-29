@@ -48,3 +48,8 @@ Website homepage layout
     {% endif %}
 </div>
 {% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/tablesort.js')}}"></script>
+
+{% endblock %}
