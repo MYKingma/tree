@@ -15,11 +15,12 @@ Shop page layout
 <div class="container mt">
     <h6 class="emb"><a class="nodec" href="{{ url_for('dashboard') }}"><i class="fas fa-long-arrow-alt-left"></i> Dashboard</a></h6>
     <h6 class="noborder"><i class="far fa-euro-sign"></i> Betalingen</h6>
-    <form class="boxnomar" action="{{ url_for('dashshop') }}" method="post">
+    <form class="needs-validation boxnomar" action="{{ url_for('dashshop') }}" method="post" novalidate>
         <label>Betaling verwerken</label>
         <div class="row">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input class="form-control ml mr" type="text" name="paycode" placeholder="Tikkie code">
+            <input class="form-control ml mr" type="text" name="paycode" placeholder="Tikkie code" required>
+            <p class="ml invalid-feedback">Geen code opgegeven</p>
         </div>
         <div class="row mt">
             <button name="action" value="paycode" type="submit" class="btn btn-outline-dark btn-sm ml smb"><i class="far fa-cash-register"></i> Verwerken</button>
@@ -174,4 +175,5 @@ Shop page layout
 <script type="text/javascript" src="{{ url_for('static', filename='js/socket.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/unlock.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/tablesort.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
 {% endblock %}
