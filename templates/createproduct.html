@@ -51,29 +51,115 @@ Website homepage layout
                 <h6 class="noborder sml">Upload productafbeeldingen</h6>
                 <p class="inputhelp">Maximaal 0,3 Mb, afbeeldingen 2 en 3 zijn alleen zichtbaar bij producten in de productenwinkel</p>
             </div>
-            <div class="form-group ml">
+            <div class="form-group ml boxnomar">
                 <label>Hoofdafbeelding</label>
-                {% if product.image %}
-                <p class="small">Huidige afbeelding: {{ product.image }}</p>
-                {% endif %}
-                <input id="file" class="form-control-file" type="file" name="file">
+                <div class="row">
+                    <div class="col-md-6 mb">
+                        <p class="info small">Maximaal 0,3 Mb, geaccepteerde formaten: png, jpg, jpeg, svg</p>
+                        <input id="file" class="form-control-file" type="file" name="file">
+                        {% if product.image %}
+                        <br>
+                        <div class="sml">
+                            <label>Wijzig positie afbeelding</label>
+                            <p class="small info">Kan alleen gewijzigd worden bij reeds geuploadde afbeeldingen</p>
+                            <div class="form-check form-check-inline ml">
+                                <input data-pos="1" class="form-check-input" type="radio" name="position1" id="radioinput" value="1">
+                                <label class="form-check-label" for="inlineRadio1">1</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input data-pos="2" class="form-check-input" type="radio" name="position1" id="radioinput" value=2">
+                                <label class="form-check-label" for="inlineRadio2">2</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input data-pos="3" class="form-check-input" type="radio" name="position1" id="radioinput" value="3">
+                                <label class="form-check-label" for="inlineRadio3">3</label>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if product.image %}
+                    <div class="col-md-6">
+                        <p class="small nomargin">Huidige afbeelding:</p>
+                        <div class="preview" style="background-image: url({{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }});">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
                 <input id="images" type="hidden" name="images" value="{{ '' if product.image == None else product.image }}">
             </div>
-            <div class="form-group ml">
+            <br>
+            <div class="form-group ml boxnomar">
                 <label>Afbeelding 2</label>
-                {% if product.image2 %}
-                <p class="small">Huidige afbeelding: {{ product.image2 }}</p>
-                {% endif %}
-                <input id="file2" class="form-control-file" type="file" name="file2">
+                <div class="row">
+                    <div class="col-md-6 mb">
+                        <p class="info small">Maximaal 0,3 Mb, geaccepteerde formaten: png, jpg, jpeg, svg</p>
+                        <input id="file2" class="form-control-file" type="file" name="file2">
+                        {% if product.image2 %}
+                        <br>
+                        <div class="sml">
+                            <label>Wijzig positie afbeelding</label>
+                            <p class="small info">Kan alleen gewijzigd worden bij reeds geuploadde afbeeldingen</p>
+                            <div class="form-check form-check-inline ml">
+                                <input data-pos="1" class="form-check-input" type="radio" name="position2" id="radioinput" value="1">
+                                <label class="form-check-label" for="inlineRadio1">1</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input data-pos="2" class="form-check-input" type="radio" name="position2" id="radioinput" value="2">
+                                <label class="form-check-label" for="inlineRadio2">2</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input data-pos="3" class="form-check-input" type="radio" name="position2" id="radioinput" value="3">
+                                <label class="form-check-label" for="inlineRadio3">3</label>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if product.image2 %}
+                    <div class="col-md-6">
+                        <p class="small nomargin">Huidige afbeelding:</p>
+                        <div class="preview" style="background-image: url({{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image2 }});">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
                 <input id="images" type="hidden" name="images" value="{{ '' if product.image2 == None else product.image2 }}">
             </div>
-            <div class="form-group ml">
+            <br>
+            <div class="form-group ml boxnomar">
                 <label>Afbeelding 3</label>
-                {% if product.image3 %}
-                <p class="small">Huidige afbeelding: {{ product.image3 }}</p>
-                {% endif %}
-                <input id="file3" class="form-control-file" type="file" name="file3">
-                <input id="images" type="hidden" name="images" value="{{ '' if product.image3 == None else product.image3 }}">
+                <div class="row">
+                    <div class="col-md-6 mb">
+                        <p class="info small">Maximaal 0,3 Mb, geaccepteerde formaten: png, jpg, jpeg, svg</p>
+                        <input id="file3" class="form-control-file" type="file" name="file3">
+                        {% if product.image3 %}
+                        <br>
+                        <div class="sml">
+                            <label>Wijzig positie afbeelding</label>
+                            <p class="small info">Kan alleen gewijzigd worden bij reeds geuploadde afbeeldingen</p>
+                            <div class="form-check form-check-inline ml">
+                                <input data-pos="1" class="form-check-input" type="radio" name="position3" id="radioinput" value="1">
+                                <label class="form-check-label" for="inlineRadio1">1</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input data-pos="2" class="form-check-input" type="radio" name="position3" id="radioinput" value="2">
+                                <label class="form-check-label" for="inlineRadio2">2</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input data-pos="3" class="form-check-input" type="radio" name="position3" id="radioinput" value="3">
+                                <label class="form-check-label" for="inlineRadio3">3</label>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if product.image3 %}
+                    <div class="col-md-6">
+                        <p class="small nomargin">Huidige afbeelding:</p>
+                        <div class="preview" style="background-image: url({{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image3 }});">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <input id="images" type="hidden" name="images" value="{{ '' if product.image == None else product.image }}">
             </div>
         </div>
         <div class="form-group mt">
@@ -105,4 +191,5 @@ Website homepage layout
 
 {% block script %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/unlock.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/lockradio.js')}}"></script>
 {% endblock %}

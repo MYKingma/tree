@@ -639,7 +639,36 @@ def createproduct(product_id):
     db.session.commit()
 
     if request.form.get('action') == "save":
-        flash("Wijzigingen opgeslagen", "success")
+        if request.form.get('position1') and request.form.get('position2') and request.form.get('position3'):
+            image1Position = int(request.form.get('position1'))
+            image2Position = int(request.form.get('position2'))
+            image3Position = int(request.form.get('position3'))
+
+            image1Title = product.image
+            image2Title = product.image2
+            image3Title = product.image3
+
+            if image1Position is 2:
+                product.image2 = image1Title
+            elif image1Position is 3:
+                product.image3 = image1Title
+
+            if image2Position is 1:
+                product.image = image2Title
+            elif image2Position is 3:
+                product.image3 = image2Title
+
+            if image3Position is 1:
+                product.image = image3Title
+            elif image3Position is 2:
+                product.image2 = image3Title
+            db.session.commit()
+            flash("Wijzigingen opgeslagen", "success")
+        elif not request.form.get('position1') and not request.form.get('position2') and not request.form.get('position3'):
+            flash("Wijzigingen opgeslagen", "success")
+        else:
+            flash("Niet alle positievelden ingevuld", "success")
+            return redirect(url_for('createproduct', product_id=product.id))
         if donation is False:
             return redirect(url_for('dashproducts'))
         return redirect(url_for('dashshop'))
