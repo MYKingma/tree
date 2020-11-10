@@ -74,6 +74,10 @@ nav img {
   margin-bottom: 0;
 }
 
+.addlink {
+  color: white;
+}
+
 .productrow {
   margin: 0;
   padding: 0;
@@ -87,6 +91,8 @@ nav img {
   width: 100%;
   min-height: 100%;
   margin-bottom: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .videobox {

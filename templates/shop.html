@@ -63,7 +63,7 @@ Website shop layout
                                 <label class="info nomargin">Aantal</label>
                             </div>
                             <div class="col">
-                                <input id="amount" type="number" name="amount" class="form-control-sm col-6 numinput" data-id="{{ product.id }}" min=0>
+                                <input id="amount" type="number" name="amount" max="{{ product.stock - product.sold }}" class="form-control-sm col-6 numinput" data-id="{{ product.id }}" min=0>
                             </div>
                         </div>
                         <br>

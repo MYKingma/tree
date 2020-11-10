@@ -52,19 +52,43 @@ nav {
 	min-height: 100%;
 	padding-top: 87px;
 	z-index: 1;
-	background-color: white;
 	padding-bottom: 8rem;
 }
 .titleFont {
-    font-family: 'Nothing You Could Do', cursive;
-	font-weight: bold;
-    margin: 0;
-    padding: 0;
+  font-family: "Nothing You Could Do", cursive;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
 }
-.carousel-item {
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center;
+.imgproduct {
+  object-fit: cover;
+  height: 250px;
+}
+.titleback {
+	border: 2px solid lightgrey;
+	border-radius: 5px;
+	padding: 10px;
+	background-color: $blue;
+	color: white;
+	margin-bottom: 0;
+}
+.addlink {
+	color: white;
+}
+.productrow {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+.productcol {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	min-height: 100%;
+	margin-bottom: 15px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 .videobox {
 	position: relative;
@@ -82,6 +106,14 @@ nav {
 }
 .keepwhitespace {
 	white-space: pre-wrap;
+}
+.preview {
+	height: 120px;
+	width: 120px;
+	background-size: cover;
+	background-position: center;
+	margin-bottom: 5px;
+	margin-top: 5px;
 }
 
 #myProgress {
@@ -111,7 +143,9 @@ nav {
 	font-weight: bolder;
 }
 .background {
-	background-color: #ebf2ef;
+	// background-color: #ebf2ef;
+	background-color: #cbd5d0;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='53' height='53' viewBox='0 0 90 90'%3E%3Ccircle fill='%237284a0' cx='45' cy='45' r='10'/%3E%3Cg fill='%239aafa4' fill-opacity='1'%3E%3Ccircle cx='0' cy='90' r='6'/%3E%3Ccircle cx='90' cy='90' r='6'/%3E%3Ccircle cx='90' cy='0' r='6'/%3E%3Ccircle cx='0' cy='0' r='6'/%3E%3C/g%3E%3C/svg%3E");
 }
 .fullheight {
 	height: 100%;
@@ -309,6 +343,9 @@ nav {
 		margin-bottom: 0;
 	}
 }
+.hide {
+	display: none;
+}
 .postlink, .postlink:active, .postlink:visited {
 	p {
 		color: black;
@@ -333,6 +370,7 @@ nav {
     border-radius: 3px;
     padding: 20px;
     margin: 0;
+	background-color: white;
 }
 .smallbox {
     border: 1px solid lightgrey;
@@ -477,6 +515,7 @@ nav {
 .red {
 	color: red;
 }
+
 /// timeline
 $gutter: 5px;
 $border-width: 8px;
@@ -597,6 +636,10 @@ $dot-diameter: 15px;
     }
 }
 
+.nohover:hover {
+	background-color: $darkGreen;
+	border-color: $darkGreen;
+}
 /// footer
 .footer {
     position: absolute;

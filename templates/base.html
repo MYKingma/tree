@@ -27,7 +27,7 @@ Base layout for other pages
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <body id="body">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
 			<div class="navbar-brand">
                 <a href="/">
@@ -116,7 +116,7 @@ Base layout for other pages
         <script src="{{ url_for('static', filename='js/zenscroll-min.js')}}"></script>
         <script src="{{ url_for('static', filename='js/hidealert.js')}}"></script>
         <script type="text/javascript">
-			var defaultDuration = 777 // ms
+			var defaultDuration = 4000 // ms
 			var edgeOffset = 100 // px
 			zenscroll.setup(defaultDuration, edgeOffset)
 		</script>

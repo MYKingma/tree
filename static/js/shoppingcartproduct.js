@@ -24,7 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.dataset.stock = stock - 1;
                 document.querySelector('[data-currentstock="' + id + '"]').innerHTML = "Voorraad: " + button.dataset.stock;
                 if (button.dataset.stock == 0) {
+                    var div = document.createElement('DIV');
+                    var icon = document.createElement('I');
+                    icon.className = "fas fa-check"
+                    div.appendChild(icon)
+                    div.className = "btn btn-block btn-sm btn-dark btn-green nohover"
+                    div.innerHTML = div.innerHTML + " Toegevoegd"
                     button.style.display = "none";
+                    button.parentNode.insertBefore(div, button)
+                    setTimeout(function(){
+                        div.style.display = "none";
+                    }, 2000);
                 }
                 var itemdiv = document.querySelector('.items');
                 if (id in orderdict) {
