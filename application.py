@@ -157,7 +157,10 @@ def confirm(orderstring, product):
     name = neworder.firstname
     msg = Message("Bevestiging van uw bestelling bij Studio 't Landje", recipients=[neworder.email])
     msg.html = render_template('emailbase.html', name=name, message=message, sender=sender, order=neworder, confirmation=itemorder)
-    job = queue.enqueue('task.send_mail_tree', msg)
+    if os.getenv("PRODUCTION_SERVER") == "True":
+        job = queue.enqueue('task.send_mail_tree', msg)
+    else:
+        mail.send(msg)
 
     message = f"Er is zojuist een nieuwe bestelling geplaatst op de website van Studio 't Landje, klik op onderstaande link om een de betaling voor te bereiden."
     sender = "Studio 't Landje"
@@ -165,7 +168,10 @@ def confirm(orderstring, product):
     linktext = "Klik hier om naar het dashboard te gaan"
     msg = Message("Nieuwe bestelling bij Studio 't Landje", recipients=['jozien@studio-t-landje.nl'])
     msg.html = render_template('emailbase.html', name="Jozien", message=message, sender=sender, order=neworder, link=link, linktext=linktext)
-    job = queue.enqueue('task.send_mail_tree', msg)
+    if os.getenv("PRODUCTION_SERVER") == "True":
+        job = queue.enqueue('task.send_mail_tree', msg)
+    else:
+        mail.send(msg)
     socketio.emit("refresh", broadcast=True)
     return render_template('confirmed.html', order=neworder, itemorder=itemorder)
 
@@ -236,7 +242,10 @@ def createupdate(update_id):
                     link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/updates/" + str(update.id)
                     msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
                     msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
-                    job = queue.enqueue('task.send_mail_tree', msg)
+                    if os.getenv("PRODUCTION_SERVER") == "True":
+                        job = queue.enqueue('task.send_mail_tree', msg)
+                    else:
+                        mail.send(msg)
 
         db.session.delete(update)
         db.session.commit()
@@ -304,7 +313,10 @@ def createpost(post_id):
                     link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/posts/" + str(post.id)
                     msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
                     msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
-                    job = queue.enqueue('task.send_mail_tree', msg)
+                    if os.getenv("PRODUCTION_SERVER") == "True":
+                        job = queue.enqueue('task.send_mail_tree', msg)
+                    else:
+                        mail.send(msg)
 
         db.session.delete(post)
         db.session.commit()
@@ -357,6 +369,10 @@ def dashshop():
         order.paid = True
         if not order.pickup == None:
             order.delivered = True
+            order.street = None
+            order.number = None
+            order.location = None
+            order.zipcode = None
         db.session.commit()
         flash(f"Bestelling {order.id + 10000} verwerkt", "success")
         return redirect(url_for('dashshop'))
@@ -385,7 +401,10 @@ def dashshop():
         sender = "Jozien van Studio 't Landje"
         msg = Message("Betaling verwerkt van uw bestelling bij Studio 't Landje", recipients=[order.email], sender=("Jozien van Studio 't Landje", "jozien@studio-t-landje.nl"))
         msg.html = render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender)
-        job = queue.enqueue('task.send_mail_tree', msg)
+        if os.getenv("PRODUCTION_SERVER") == "True":
+            job = queue.enqueue('task.send_mail_tree', msg)
+        else:
+            mail.send(msg)
         flash(f"Betaling van de bestelling van {order.firstname} is verwerkt, email verstuurd voor afhalen", "success")
         return redirect(url_for('dashshop'))
 
@@ -401,7 +420,10 @@ def dashshop():
     sender = "Studio 't Landje"
     msg = Message("Betaling verwerkt van uw bestelling bij Studio 't Landje", recipients=[order.email])
     msg.html = render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender)
-    job = queue.enqueue('task.send_mail_tree', msg)
+    if os.getenv("PRODUCTION_SERVER") == "True":
+        job = queue.enqueue('task.send_mail_tree', msg)
+    else:
+        mail.send(msg)
     flash(f"Betaling van de bestelling van {order.firstname} is verwerkt", "success")
     return redirect(url_for('dashshop'))
 
@@ -426,7 +448,10 @@ def sendpayment():
     sender = "Studio 't Landje"
     msg = Message("Betaalverzoek voor uw bestelling bij Studio 't Landje", recipients=[order.email])
     msg.html = render_template('emailbase.html', name=order.firstname, link=link, message=message, order=order, linktext=linktext, sender=sender, footer=footer)
-    job = queue.enqueue('task.send_mail_tree', msg)
+    if os.getenv("PRODUCTION_SERVER") == "True":
+        job = queue.enqueue('task.send_mail_tree', msg)
+    else:
+        mail.send(msg)
     flash("Betaallink verstuurd", "success")
     order.sendpayment = True
     db.session.commit()
@@ -546,7 +571,7 @@ def createproduct(product_id):
             repo.create_file("static/img/uploads/products/" + str(product.id) + "/" + file.filename, "file upload", file.read(), branch='master')
         except:
             flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap.", "danger")
-            return redirect(url_for('createproduct', product_id=0))
+            return redirect(url_for('createproduct', product_id=product.id))
 
         if oldfile:
             try:
@@ -559,14 +584,17 @@ def createproduct(product_id):
                 link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
                 msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
-                job = queue.enqueue('task.send_mail_tree', msg)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
 
     if file2 and allowed_file(file2.filename):
         try:
             repo.create_file("static/img/uploads/products/" + str(product.id) + "/" + file2.filename, "file upload", file2.read(), branch='master')
         except:
             flash(f"Fout bij uploaden {file2.filename}, naam bestaat al in uploadmap.", "danger")
-            return redirect(url_for('createproduct', product_id=0))
+            return redirect(url_for('createproduct', product_id=product.id))
 
         if oldfile2:
             try:
@@ -579,14 +607,17 @@ def createproduct(product_id):
                 link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
                 msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
-                job = queue.enqueue('task.send_mail_tree', msg)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
 
     if file3 and allowed_file(file3.filename):
         try:
             repo.create_file("static/img/uploads/products/" + str(product.id) + "/" + file3.filename, "file upload", file3.read(), branch='master')
         except:
             flash(f"Fout bij uploaden {file3.filename}, naam bestaat al in uploadmap.", "danger")
-            return redirect(url_for('createproduct', product_id=0))
+            return redirect(url_for('createproduct', product_id=product.id))
 
         if oldfile3:
             try:
@@ -599,13 +630,19 @@ def createproduct(product_id):
                 link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
                 msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
-                job = queue.enqueue('task.send_mail_tree', msg)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
 
+    time.sleep(3)
     db.session.commit()
 
     if request.form.get('action') == "save":
         flash("Wijzigingen opgeslagen", "success")
-        return redirect(url_for('createproduct', product_id=product.id))
+        if donation is False:
+            return redirect(url_for('dashproducts'))
+        return redirect(url_for('dashshop'))
     if request.form.get('action') == "delete":
         if product.image:
             try:
@@ -618,7 +655,10 @@ def createproduct(product_id):
                 link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/products/" + str(product.id)
                 msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
-                job = queue.enqueue('task.send_mail_tree', msg)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
         db.session.delete(product)
         db.session.commit()
         flash("Product verwijderd", "success")
@@ -760,7 +800,10 @@ def dashwebsite():
                 link = "https://github.com/MYKingma/tree/tree/master/static/img"
                 msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
                 msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
-                job = queue.enqueue('task.send_mail_tree', msg)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
             flash("Nieuwe homepagina afbeelding opgeslagen", "success")
 
     if request.form.get('action') == "video":
@@ -803,7 +846,10 @@ def forgot():
     msg = Message("Reset je wachtwoord", recipients=["mauricekingma@me.com"])
     msg.html = render_template('emailbase.html', name=user.firstname, link=link, message=message, linktext=linktext, sender=sender)
 
-    job = queue.enqueue('task.send_mail_tree', msg)
+    if os.getenv("PRODUCTION_SERVER") == "True":
+        job = queue.enqueue('task.send_mail_tree', msg)
+    else:
+        mail.send(msg)
 
     flash("Link verstuurd naar jozien@studio-t-landje.nl voor het resetten van het emailadres", "success")
     return redirect(url_for('login'))
@@ -863,14 +909,24 @@ def delivery():
         sender = "Studio 't Landje"
         msg = Message("Verzendbevestiging van uw bestelling bij Studio 't Landje", recipients=[order.email])
         msg.html = render_template('emailbase.html', name=order.firstname, link=link, message=message, order=order, linktext=linktext, sender=sender, footer=footer, confirmation=False)
-        job = queue.enqueue('task.send_mail_tree', msg)
+        if os.getenv("PRODUCTION_SERVER") == "True":
+            job = queue.enqueue('task.send_mail_tree', msg)
+        else:
+            mail.send(msg)
         flash(f"Verzendbevestiging voor bestelling {order.id + 10000} verstuurd", "success")
+        order.street = None
+        order.number = None
+        order.location = None
+        order.zipcode = None
     else:
         message = "Uw bestelling bij Studio 't Landje is afgehaald, u hoeft verder niets te doen. Veel plezier met uw bestelling!"
         sender = "Studio 't Landje"
         msg = Message("Uw bestelling bij Studio 't Landje is afgehaald", recipients=[order.email])
         msg.html = render_template('emailbase.html', name=order.firstname, message=message, order=order, sender=sender, confirmation=False)
-        job = queue.enqueue('task.send_mail_tree', msg)
+        if os.getenv("PRODUCTION_SERVER") == "True":
+            job = queue.enqueue('task.send_mail_tree', msg)
+        else:
+            mail.send(msg)
         flash(f"Afhaalbevestiging voor bestelling {order.id + 10000} verstuurd", "success")
 
     order.delivered = True

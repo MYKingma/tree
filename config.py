@@ -13,6 +13,7 @@ import locale
 import shutil
 import base64
 import requests
+import time
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
