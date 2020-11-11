@@ -648,19 +648,19 @@ def createproduct(product_id):
             image2Title = product.image2
             image3Title = product.image3
 
-            if image1Position is 2:
+            if image1Position == 2:
                 product.image2 = image1Title
-            elif image1Position is 3:
+            elif image1Position == 3:
                 product.image3 = image1Title
 
-            if image2Position is 1:
+            if image2Position == 1:
                 product.image = image2Title
-            elif image2Position is 3:
+            elif image2Position == 3:
                 product.image3 = image2Title
 
-            if image3Position is 1:
+            if image3Position == 1:
                 product.image = image3Title
-            elif image3Position is 2:
+            elif image3Position == 2:
                 product.image2 = image3Title
             db.session.commit()
             flash("Wijzigingen opgeslagen", "success")
@@ -862,9 +862,18 @@ def dashwebsite():
 
     return render_template('dashwebsite.html')
 
-@app.route('/dashboard/wachtwoordvergeten')
+@app.route('/dashboard/wachtwoordvergeten', methods=['GET', 'POST'])
 def forgot():
-    user = User.query.filter_by(username="Jozien").first()
+    if request.method == "GET":
+        return render_template('forgot.html')
+
+    email = request.form.get('email')
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        flash("E-mail niet bekend bij gebruiker van Studio 't Landje", "warning")
+        return render_template('forgot.html')
+
     # generate token reset password email
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     token = serializer.dumps(user.firstname, salt=app.config['SECURITY_PASSWORD_SALT'])
@@ -872,7 +881,7 @@ def forgot():
     linktext = "Klik hier om je wachtwoord te resetten"
     sender = "Het brein van de website"
     link = request.url_root + "dashboard/wachtwoordherstellen/" + token
-    msg = Message("Reset je wachtwoord", recipients=["mauricekingma@me.com"])
+    msg = Message("Reset je wachtwoord", recipients=[user.email])
     msg.html = render_template('emailbase.html', name=user.firstname, link=link, message=message, linktext=linktext, sender=sender)
 
     if os.getenv("PRODUCTION_SERVER") == "True":
@@ -880,7 +889,7 @@ def forgot():
     else:
         mail.send(msg)
 
-    flash("Link verstuurd naar jozien@studio-t-landje.nl voor het resetten van het emailadres", "success")
+    flash(f"Link verstuurd naar {user.email} voor het resetten van het emailadres", "success")
     return redirect(url_for('login'))
 
 @app.route('/dashboard/wachtwoordherstellen/<token>')
@@ -961,6 +970,149 @@ def delivery():
     order.delivered = True
     db.session.commit()
     return redirect(url_for('delivery'))
+
+@app.route('/dashboard/nieuwsbrieven', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
+def dashnewsletter():
+    newsletters = Newsletter.query.all()
+    if request.method == "GET":
+        return render_template('newsletters.html', newsletters=newsletters)
+
+    if request.form.get('action') == "newnewsletter":
+        return redirect(url_for('createnewsletter', newsletter_id=0))
+
+@app.route('/dashboard/nieuwsbrieven/wijzigen/<newsletter_id>', methods=["GET", "POST"])
+@login_required
+@role_required('Owner')
+def createnewsletter(newsletter_id):
+    newsletter = None
+    if not newsletter_id == "0":
+        newsletter = Newsletter.query.get(newsletter_id)
+    if request.method == "GET":
+        return render_template('createnewsletter.html', newsletter=newsletter)
+
+    subject = request.form.get('subject')
+    body = request.form.get('editor1')
+    files = request.files.getlist('file')
+
+    if newsletter_id == "0":
+        newsletter = Newsletter(subject=subject, body=body)
+        db.session.add(newsletter)
+    else:
+        newsletter.subject = subject
+        newsletter.body = body
+    db.session.commit()
+
+    for file in files:
+        if file and allowed_file(file.filename):
+            try:
+                repo.create_file("static/img/uploads/newsletter/" + str(newsletter.id) + '/' + file.filename, "file upload", file.read(), branch='master')
+            except:
+                flash(f"Fout bij uploaden {file.filename}, naam bestaat al in uploadmap bij deze post.", "danger")
+                return render_template('createnewsletter.html', newsletter=newsletter)
+
+    for image in request.form.get('images').split(','):
+        if newsletter.images == None:
+            newsletter.images = image
+        elif image not in newsletter.images.split(','):
+            newsletter.images = newsletter.images + ',' + image
+
+    db.session.commit()
+
+    if request.form.get('action') == "save":
+        flash("Wijzigingen opgeslagen", "success")
+        return redirect(url_for('createnewsletter', newsletter_id=newsletter.id))
+
+    if request.form.get('action') == "delete":
+        if newsletter.images:
+            for image in newsletter.images.split(','):
+                try:
+                    contents = repo.get_contents("static/img/uploads/newsletter/" + str(newsletter.id) + '/' + image)
+                    repo.delete_file("static/img/uploads/newsletter/" + str(newsletter.id) + '/' + image, "delete uploaded file", contents.sha)
+                except:
+                    message = f"Er is een fout ontstaan bij het verwijderen van een geuploade afbeelding, namelijk {file.filename} van nieuwsbrief {newsletter.id}. Je kunt op onderstaande link klikken om naar de GitHub pagina te gaan en het bestand handmatig te verwijderen."
+                    linktext = "Klik hier om naar de GitHub map te gaan"
+                    sender = "Het brein van de website"
+                    link = "https://github.com/MYKingma/tree/tree/master/static/img/uploads/newsletter/" + str(newsletter.id)
+                    msg = Message("Fout bij verwijderen afbeelding van GitHub", recipients=["mauricekingma@me.com"])
+                    msg.html = render_template('emailbase.html', name="Maurice", link=link, message=message, linktext=linktext, sender=sender)
+                    if os.getenv("PRODUCTION_SERVER") == "True":
+                        job = queue.enqueue('task.send_mail_tree', msg)
+                    else:
+                        mail.send(msg)
+
+        db.session.delete(newsletter)
+        db.session.commit()
+        flash("Nieuwsbrief verwijderd", "success")
+        return redirect(url_for('dashnewsletter'))
+
+    if request.form.get('action') == "send":
+        recipients = request.form.get('recipients')
+        if recipients == "test":
+            msg = Message(newsletter.subject, recipients=[current_user.email], sender=("Studio 't Landje", "noreply@studio-t-landje.nl"))
+            message = newsletter.body
+            sender = "Studio 't Landje"
+            msg.html = render_template('emailbase.html', name=current_user.firstname, message=message, sender=sender)
+            if os.getenv("PRODUCTION_SERVER") == "True":
+                job = queue.enqueue('task.send_mail_tree', msg)
+            else:
+                mail.send(msg)
+
+        if recipients == "donation":
+            orders = Order.query.all()
+            filteredorders = []
+            for order in orders:
+                if order.pickup == None:
+                    filteredorders.append(order)
+            for order in orders:
+                msg = Message(newsletter.subject, recipients=[order.email], sender=("Studio 't Landje", "noreply@studio-t-landje.nl"))
+                message = newsletter.body
+                sender = "Studio 't Landje"
+                msg.html = render_template('emailbase.html', name=order.firstname, message=message, sender=sender)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
+
+        if recipients == "products":
+            orders = Order.query.all()
+            filteredorders = []
+            for order in orders:
+                if not order.pickup == None:
+                    filteredorders.append(order)
+            for order in filteredorders:
+                msg = Message(newsletter.subject, recipients=[order.email], sender=("Studio 't Landje", "noreply@studio-t-landje.nl"))
+                message = newsletter.body
+                sender = "Studio 't Landje"
+                msg.html = render_template('emailbase.html', name=order.firstname, message=message, sender=sender)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
+
+        if recipients == "everyone":
+            orders = Order.query.all()
+            for order in orders:
+                msg = Message(newsletter.subject, recipients=[order.email], sender=("Studio 't Landje", "noreply@studio-t-landje.nl"))
+                message = newsletter.body
+                sender = "Studio 't Landje"
+                msg.html = render_template('emailbase.html', name=order.firstname, message=message, sender=sender)
+                if os.getenv("PRODUCTION_SERVER") == "True":
+                    job = queue.enqueue('task.send_mail_tree', msg)
+                else:
+                    mail.send(msg)
+        if recipients == "everyone":
+            recipients = "Iedereen"
+        if recipients == "test":
+            recipients = "Test"
+        if recipients == "donation":
+            recipients = "Donateurs"
+        if recipients == "products":
+            recipients = "Productbestellers"
+        flash(f"Nieusbrief verstuurd - Ontvangers: {recipients}", "success")
+
+    return redirect(url_for('createnewsletter', newsletter_id=newsletter.id))
 
 if __name__ == '__main__':
     socketio.run(app)

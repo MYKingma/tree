@@ -12,6 +12,7 @@ db = SQLAlchemy()
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer(), primary_key=True)
+    newsletter_id = db.Column(db.Integer(), db.ForeignKey('newsletters.id'))
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
@@ -24,6 +25,7 @@ class Order(db.Model):
     delivered = db.Column(db.Boolean(), nullable=True)
     sendpayment = db.Column(db.Boolean(), nullable=False)
     pickup = db.Column(db.Boolean(), nullable=True)
+    newsletters = db.relationship('Newsletter', back_populates="recipients")
     items = db.relationship('Item', cascade="all, delete-orphan")
 
     def __init__(self, firstname, lastname, email, street, number, location, zipcode, pickup):
@@ -107,6 +109,7 @@ class User(db.Model, UserMixin):
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(128), nullable=False)
     website_img = db.Column(db.String(128))
     youtube_link = db.Column(db.String(128))
     youtube_length = db.Column(db.Integer())
@@ -153,6 +156,14 @@ class Post(db.Model):
 
     def __init__(self):
         self.date = datetime.datetime.now()
+
+class Newsletter(db.Model):
+    __tablename__ = 'newsletters'
+    id = db.Column(db.Integer(), primary_key=True)
+    subject = db.Column(db.String(128), nullable=False)
+    body = db.Column(db.Text(), nullable=False)
+    images = db.Column(db.String(128))
+    recipients = db.relationship('Order', back_populates="newsletters")
 
 class FAQ(db.Model):
     __tablename__ = 'faqs'

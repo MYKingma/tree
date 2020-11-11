@@ -51,8 +51,9 @@ nav {
 .container {
 	min-height: 100%;
 	padding-top: 87px;
-	z-index: 1;
 	padding-bottom: 8rem;
+	position: relative;
+	z-index: 20;
 }
 .titleFont {
   font-family: "Nothing You Could Do", cursive;
@@ -183,6 +184,29 @@ nav {
 	background-color: $blue;
 	border-color: $blue;
 }
+.backDrop2 {
+	background-image: url("/static/img/sheep-back.jpg");
+	background-size: cover;
+    background-position: center center;
+	min-height: 40vh;
+	margin-top: 87px;
+	z-index: 0;
+	position: relative;
+}
+.overlay {
+	color: white;
+	z-index: 10;
+	position: fixed;
+	bottom: 10px;
+	left: 48.5vw;
+	font-size: 40px;
+}
+.backVideo {
+	margin-top: 87px;
+	// min-width: 100%;
+	max-width: 100%;
+	min-height: 100%;
+}
 .listitem {
 	.thumbnail {
 		width: 100%;
@@ -231,19 +255,6 @@ nav {
     background-size: cover;
     background-position: center center;
 	overflow: hidden;
-}
-.backDrop2 {
-	background-image: url("/static/img/sheep-back.jpg");
-	background-size: cover;
-    background-position: center center;
-	min-height: 40vh;
-	margin-top: 87px;
-}
-.backVideo {
-	margin-top: 87px;
-	// min-width: 100%;
-	max-width: 100%;
-	min-height: 100%;
 }
 .mt {
     margin-top: 15px;
@@ -464,7 +475,7 @@ nav {
 	position: fixed;
 	top: 100px;
 	width: 100%;
-	z-index: 10;
+	z-index: 100;
 }
 .alert-dismissible {
 	animation: 0.2s ease-out 0s 1 slideInFromLeft;
@@ -652,6 +663,7 @@ $dot-diameter: 15px;
     img {
         max-height: 55px;
     }
+	z-index: 20
 }
 // animations
 @keyframes slideInFromLeft {

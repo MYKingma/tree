@@ -1,0 +1,33 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h5 class="ml">Wachtwoord opnieuw instellen</h5>
+    <form class="needs-validation box" action="{{ url_for('forgot') }}" method="post" novalidate>
+        <div class="form-group">
+            <p>Voer hier het e-mailadres gekoppeld aan het gebruikersaccount in. Via een e-mail kan je vervolgens het wachtwoord opnieuw instellen.</p>
+            <br>
+            <label>E-mail</label>
+            <input class="form-control" type="email" name="email" required>
+            <div class="invalid-feedback">Voer een e-mailadres in</div>
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button class="btn btn-sm btn-dark btn-green" type="submit">Vraag link aan</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/validator.js')}}"></script>
+{% endblock %}

@@ -23,21 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
         div.appendChild(br);
         div.appendChild(label);
         for (var i = 0; i < uploadedImages.length; ++i) {
-            var path = 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads' + type + updateId + '/' + uploadedImages[i];
-            pName = document.createElement('P');
-            sPath = document.createElement('SPAN');
-            sPath.id = "sPath"
-            pName.innerHTML = uploadedImages[i];
-            icon = document.createElement("I");
-            icon.className = "fas fa-copy";
-            text = document.createTextNode(" Kopieer link")
-            sPath.appendChild(icon);
-            sPath.appendChild(text);
-            sPath.dataset.link = path
-            sPath.className = 'floatright';
-            sPath.style.cursor = "pointer";
-            pName.appendChild(sPath);
-            div.appendChild(pName);
+            if (uploadedImages[i].length > 0) {
+                var path = 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads' + type + updateId + '/' + uploadedImages[i];
+                pName = document.createElement('P');
+                sPath = document.createElement('SPAN');
+                sPath.id = "sPath"
+                pName.innerHTML = uploadedImages[i];
+                icon = document.createElement("I");
+                icon.className = "fas fa-copy";
+                text = document.createTextNode(" Kopieer link")
+                sPath.appendChild(icon);
+                sPath.appendChild(text);
+                sPath.dataset.link = path
+                sPath.className = 'floatright';
+                sPath.style.cursor = "pointer";
+                pName.appendChild(sPath);
+                div.appendChild(pName);
+            }
         }
         newLink()
     }
@@ -96,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sPath.className = 'floatright';
             sPath.style.cursor = "pointer";
 
-            
+
             pName.appendChild(sPath);
             div.appendChild(pName);
             if (images.value.length == 0) {

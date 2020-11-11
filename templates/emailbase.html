@@ -18,9 +18,13 @@ Base layout for other pages
                 text-decoration: none;
                 color: black;
             }
-            img {
+            .logo {
                 max-width: 60px;
                 float: right;
+            }
+            input {
+                max-width: 100%;
+                max-height: 300px;
             }
             h1, h2, h3, h4, h5 {
                 font-family: 'Comfortaa', cursive;
@@ -76,7 +80,7 @@ Base layout for other pages
     </head>
     <body>
         <div class="header">
-            <img src="{{ request.url_root }}static/img/forest-white.svg" alt="logo">
+            <img class="logo" src="{{ request.url_root }}static/img/forest-white.svg" alt="logo">
             <h1 class="titlefont white">Studio 't Landje</h1>
         </div>
         <div class="body">

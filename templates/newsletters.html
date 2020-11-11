@@ -1,0 +1,52 @@
+<!-- index.html for implementing a tree-buy webapp
+
+Maurice Kingma
+
+Website homepage layout
+-->
+
+{% extends "base.html" %}
+
+<!-- page title -->
+{% block title %}Studio 't Landje{% endblock %}
+
+<!-- page content -->
+{% block content %}
+<div class="container mt">
+    <h6 class="noborder"><i class="far fa-mail-bulk"></i> Nieuwsbrieven</h6>
+    {% if newsletters %}
+    <div class="tablediv">
+        <table class="table table-responsive-xs">
+            <thead class="thead-dark">
+                <th scope="col"><i class="fas fa-fingerprint"></th>
+                <th scope="col"><i class="fas fa-heading"></i></th>
+                <th scope="col"><i class="fas fa-edit"></i></th>
+            </thead>
+            <tbody>
+                {% for newsletter in newsletters %}
+                <tr>
+                    <td>{{ newsletter.id }}</td>
+                    <td>{{ newsletter.subject }}</td>
+                    <td><a href="{{ url_for('createnewsletter', newsletter_id=newsletter.id) }}">Wijzigen</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="{{ url_for('dashnewsletter') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button name="action" value="newnewsletter" type="submit" class="btn btn-outline-dark btn-sm noborder nomargin"><i class="far fa-tag"></i> Nieuw</button>
+    </form>
+    {% else %}
+    <p>Nog geen nieuwsbrieven aan database toegevoegd</p>
+    <form action="{{ url_for('dashnewsletter') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button name="action" value="newnewsletter" type="submit" class="btn btn-outline-dark btn-sm noborder nomargin"><i class="far fa-tag"></i> Nieuw</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/tablesort.js')}}"></script>
+{% endblock %}

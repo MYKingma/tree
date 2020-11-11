@@ -49,8 +49,9 @@ nav img {
 .container {
   min-height: 100%;
   padding-top: 87px;
-  z-index: 1;
   padding-bottom: 8rem;
+  position: relative;
+  z-index: 20;
 }
 
 .titleFont {
@@ -204,6 +205,31 @@ nav img {
   border-color: #7284A0;
 }
 
+.backDrop2 {
+  background-image: url("/static/img/sheep-back.jpg");
+  background-size: cover;
+  background-position: center center;
+  min-height: 40vh;
+  margin-top: 87px;
+  z-index: 0;
+  position: relative;
+}
+
+.overlay {
+  color: white;
+  z-index: 10;
+  position: fixed;
+  bottom: 10px;
+  left: 48.5vw;
+  font-size: 40px;
+}
+
+.backVideo {
+  margin-top: 87px;
+  max-width: 100%;
+  min-height: 100%;
+}
+
 .listitem {
   padding: 15px;
   border: 0.5px solid grey;
@@ -257,20 +283,6 @@ nav img {
   background-size: cover;
   background-position: center center;
   overflow: hidden;
-}
-
-.backDrop2 {
-  background-image: url("/static/img/sheep-back.jpg");
-  background-size: cover;
-  background-position: center center;
-  min-height: 40vh;
-  margin-top: 87px;
-}
-
-.backVideo {
-  margin-top: 87px;
-  max-width: 100%;
-  min-height: 100%;
 }
 
 .mt {
@@ -529,7 +541,7 @@ nav img {
   position: fixed;
   top: 100px;
   width: 100%;
-  z-index: 10;
+  z-index: 100;
 }
 
 .alert-dismissible {
@@ -711,6 +723,7 @@ nav img {
   padding: 20px;
   background-color: #9AAFA4;
   color: white;
+  z-index: 20;
 }
 .footer img {
   max-height: 55px;
