@@ -61,7 +61,7 @@ Website homepage layout
                         <br>
                         <div class="sml">
                             <label>Wijzig positie afbeelding</label>
-                            <p class="small info">Kan alleen gewijzigd worden bij reeds geuploadde afbeeldingen</p>
+                            <p class="small info">Kan alleen gewijzigd worden bij 3 reeds geuploadde afbeeldingen</p>
                             <div class="form-check form-check-inline ml">
                                 <input data-pos="1" class="form-check-input" type="radio" name="position1" id="radioinput" value="1">
                                 <label class="form-check-label" for="inlineRadio1">1</label>
@@ -83,6 +83,8 @@ Website homepage layout
                         <div class="preview" style="background-image: url({{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }});">
                         </div>
                     </div>
+                    <input type="hidden" name="imgToDelete" value="1">
+                    <button class="btn btn-outline-secondary btn-sm mt ml" type="submit" name="action" value="deleteImg"><i class="far fa-trash-alt"></i> Afbeelding verwijderen</button>
                     {% endif %}
                 </div>
                 <input id="images" type="hidden" name="images" value="{{ '' if product.image == None else product.image }}">
@@ -98,7 +100,7 @@ Website homepage layout
                         <br>
                         <div class="sml">
                             <label>Wijzig positie afbeelding</label>
-                            <p class="small info">Kan alleen gewijzigd worden bij reeds geuploadde afbeeldingen</p>
+                            <p class="small info">Kan alleen gewijzigd worden bij 3 reeds geuploadde afbeeldingen</p>
                             <div class="form-check form-check-inline ml">
                                 <input data-pos="1" class="form-check-input" type="radio" name="position2" id="radioinput" value="1">
                                 <label class="form-check-label" for="inlineRadio1">1</label>
@@ -120,6 +122,8 @@ Website homepage layout
                         <div class="preview" style="background-image: url({{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image2 }});">
                         </div>
                     </div>
+                    <input type="hidden" name="imgToDelete" value="2">
+                    <button class="btn btn-outline-secondary btn-sm mt ml" type="submit" name="action" value="deleteImg"><i class="far fa-trash-alt"></i> Afbeelding verwijderen</button>
                     {% endif %}
                 </div>
                 <input id="images" type="hidden" name="images" value="{{ '' if product.image2 == None else product.image2 }}">
@@ -135,7 +139,7 @@ Website homepage layout
                         <br>
                         <div class="sml">
                             <label>Wijzig positie afbeelding</label>
-                            <p class="small info">Kan alleen gewijzigd worden bij reeds geuploadde afbeeldingen</p>
+                            <p class="small info">Kan alleen gewijzigd worden bij 3 reeds geuploadde afbeeldingen</p>
                             <div class="form-check form-check-inline ml">
                                 <input data-pos="1" class="form-check-input" type="radio" name="position3" id="radioinput" value="1">
                                 <label class="form-check-label" for="inlineRadio1">1</label>
@@ -157,6 +161,8 @@ Website homepage layout
                         <div class="preview" style="background-image: url({{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image3 }});">
                         </div>
                     </div>
+                    <input type="hidden" name="imgToDelete" value="3">
+                    <button class="btn btn-outline-secondary btn-sm mt ml" type="submit" name="action" value="deleteImg"><i class="far fa-trash-alt"></i> Afbeelding verwijderen</button>
                     {% endif %}
                 </div>
                 <input id="images" type="hidden" name="images" value="{{ '' if product.image == None else product.image }}">

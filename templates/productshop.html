@@ -14,11 +14,11 @@ Website homepage layout
 {% block content %}
 <div class="container mt">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-lg-8">
             <div class="row">
                 <div class="col-12">
                     <div class="boxnomar">
-                        <h3 id="top">Winkel</h3>
+                        <h3 id="top"><i class="fas fa-paw"></i> Knuffel Webwinkel</h3>
                         <p class="keepwhitespace">{{ shopdescription|safe }}</p>
                     </div>
                 </div>
@@ -43,7 +43,7 @@ Website homepage layout
                     {% for product in products %}
                     {% if category.name in product.categories.name %}
                     {% if product.stock - product.sold > 0 %}
-                    <div class="col-sm-6 productcol">
+                    <div class="col-md-6 productcol">
                         <div class="boxnomar fullheight whiteback">
                             {% if product.image %}
                             <div id="carousel{{ product.id }}" class="carousel slide" data-ride="carousel">
@@ -99,7 +99,7 @@ Website homepage layout
                     {% for product in products %}
                     {% if category.name in product.categories.name %}
                     {% if product.stock - product.sold == 0 %}
-                    <div class="col-sm-6 productcol">
+                    <div class="col-md-6 productcol">
                         <div class="boxnomar fullheight whiteback">
                             {% if product.image %}
                             <img class="productimg mb shade" src="{{ 'https://raw.githubusercontent.com/MYKingma/tree/master/static/img/uploads/products/' + product.id|string + '/' + product.image }}">
@@ -118,7 +118,7 @@ Website homepage layout
             {% endif %}
         <br>
         </div>
-        <div class="col-md-4">
+        <div class="col-lg-4">
             <div class="sidebox emt boxnomar">
                 <h6 id="cart" class="noborder"><i class="fas fa-shopping-basket"></i> Winkelmandje</h6>
                 <div class="items">

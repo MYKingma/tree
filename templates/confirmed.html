@@ -30,6 +30,12 @@ Website homepage layout
                 {% endif %}
                 {% endif %}
                 <br>
+                {% if itemorder == True %}
+                {% if not order.street %}
+                <p class="info">U heeft ervoor gekozen om de bestelling af te halen in Bussum. Nadat de bestelling is betaald ontvangt u van ons een email met de mogelijkheid om hiervoor een afspraak te maken.</p>
+                <br>
+                {% endif %}
+                {% endif %}
                 <div class="boxnomar">
                     <p class="info">Bestelling</p>
                     {% for item in order.items %}
@@ -47,10 +53,7 @@ Website homepage layout
                 {% if itemorder == True %}
                 {% if order.street %}
                 <br>
-                <p class="ml">U heeft ervoor gekozen om de bestelling te laten bezorgen. Hiervoor worden €4,- aan verzendkosten in rekening gebracht. Deze worden aan het totaalbedrag in het Tikkie toegevoegd. Wij verzenden onze producten met PostNL en u ontvangt dan ook een verzendbevestiging inclusief Track&Trace code wanneer wij de bestelling hebben verzonden.</p>
-                {% else %}
-                <br>
-                <p>U heeft ervoor gekozen om de bestelling af te halen. Nadat de bestelling is betaald ontvangt u van ons een email met de mogelijkheid om hiervoor een afspraak te maken.</p>
+                <p class="ml">U heeft ervoor gekozen om de bestelling te laten bezorgen. Hiervoor worden €6,95 aan verzendkosten in rekening gebracht. Deze worden aan het totaalbedrag in het Tikkie toegevoegd. Wij verzenden onze producten met PostNL en u ontvangt dan ook een verzendbevestiging inclusief Track&Trace code wanneer wij de bestelling hebben verzonden.</p>
                 {% endif %}
                 {% endif %}
             </div>
@@ -58,7 +61,7 @@ Website homepage layout
         <div class="col-md-4 emt">
             <div class="box">
                 <h6 class="noborder">E-mailbevestiging verstuurd</h6>
-                <p>Een bevestiging met een overzicht van uw bestelling is verzonden naar {{ order.email }}.</p>
+                <p>Een bevestiging met een overzicht van uw bestelling is verzonden naar {{ order.email }}. Niets ontvangen? Controleer dan uw spam-inbox.</p>
                 <h6 class="noborder">En hoe nu verder?</h6>
                 <p>Nadat de bestelling is geplaatst en door ons is verwerkt ontvangt u een e-mail met de Tikkie betaallink van noreply@studio-t-landje.nl.</p>
                 <p>Na het betalen via deze link onvangt u een betaalbevestiging via e-mail en weet u zeker dat de bestelling is verwerkt.</p>

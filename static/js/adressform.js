@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.adressform').appendChild(br)
                 infotext = document.createElement('P')
                 infotext.className = "info"
-                infotext.innerHTML = "U heeft gekozen voor afhalen, na de betaling van de bestelling wordt er contact met u opgenomen om een afspraak te maken"
+                infotext.innerHTML = "U heeft gekozen voor afhalen in Bussum, na de betaling van de bestelling wordt er contact met u opgenomen om een afspraak te maken"
                 document.querySelector('.adressform').appendChild(infotext)
                 document.querySelector('#infobutton').onclick = () => {
                     document.querySelector('.adressform').innerHTML = "";

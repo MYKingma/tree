@@ -70,12 +70,14 @@ class Product(db.Model):
     faqs = db.relationship('FAQ', cascade="all, delete-orphan")
     categories = db.relationship('Category', back_populates="products")
 
-    def __init__(self, name, price, stock, description, image, donation, categories):
+    def __init__(self, name, price, stock, description, image, image2, image3, donation, categories):
         self.name = name
         self.price = price
         self.stock = stock
         self.description = description
         self.image = image
+        self.image2 = image2
+        self.image3 = image3
         self.donation = donation
         self.categories = categories
         self.sold = 0
