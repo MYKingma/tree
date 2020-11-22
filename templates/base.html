@@ -58,13 +58,13 @@ Base layout for other pages
                         <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
                     </li>
                     <li class="nav-item">
+                        <a id="productlink" class="nav-link" href="{{ url_for('itemshop') }}"><i class="fas fa-paw"></i>Knuffel Webwinkel</a>
+                    </li>
+                    <li class="nav-item">
                         <a id="treelink" class="nav-link" href="{{ url_for('shop') }}"><i class="fab fa-pagelines"></i>Doneer een boom!</a>
                     </li>
                     {% for role in current_user.roles %}
                 	{% if role.name == 'Owner' %}
-                    <li class="nav-item">
-                        <a id="productlink" class="nav-link" href="{{ url_for('itemshop') }}"><i class="fas fa-paw"></i>Knuffel Webwinkel</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                     </li>

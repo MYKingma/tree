@@ -990,8 +990,6 @@ def resetpass(token):
     return redirect(url_for('dashwebsite'))
 
 @app.route('/winkel', methods=["GET", "POST"])
-@login_required
-@role_required('Owner')
 def itemshop():
     if request.method == "GET":
         products = Product.query.order_by(Product.name).all()
